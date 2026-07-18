@@ -1,0 +1,54 @@
+@import "tailwindcss";
+/* Pretendard is loaded via <link> in app/layout.tsx (parallel fetch + preconnect),
+   not a CSS @import, to avoid a render-blocking request waterfall. */
+
+@theme {
+  --font-sans:
+    "Pretendard Variable", Pretendard, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", "Apple SD Gothic Neo", sans-serif;
+
+  /* Surfaces */
+  --color-sys-bg: #ffffff;
+  --color-sys-bg-gray: #f9f9fb;
+  --color-sys-bg-violet: #f4f2ff;
+  --color-sys-dark-bg: #1a1a24;
+  --color-sys-line: #f1f1f5;
+
+  /* Text */
+  --color-sys-label-strong: #1a1a24;
+  --color-sys-label-normal: #313140;
+  --color-sys-label-neutral: #6a6a7d;
+  --color-sys-label-alt: #b2b2c0;
+  --color-sys-on-primary: #ffffff;
+
+  /* Brand */
+  --color-sys-primary: #7c5cfc;
+  --color-sys-primary-dark: #6a45e7;
+  --color-sys-primary-light: #b9a6fe;
+  --color-sys-primary-lighter: #eae4ff;
+  --color-sys-primary-normal: #9d80fc;
+  --color-sys-secondary: #15bad8;
+  --color-sys-secondary-lighter: #c8f4fb;
+
+  /* Priority accents */
+  --color-sys-pri-high: #f04438;
+  --color-sys-pri-high-bg: #feeceb;
+  --color-sys-pri-mid: #f79009;
+  --color-sys-pri-mid-bg: #fef3e6;
+  --color-sys-pri-low: #0b97b4;
+  --color-sys-pri-low-bg: #e5f7fb;
+  --color-sys-pri-none: #8a8a9a;
+}
+
+:root {
+  /* Backdrop behind the centered mobile-width column on wide screens */
+  --backdrop: #ebeaf3;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--backdrop);
+  color: var(--color-sys-label-strong);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
