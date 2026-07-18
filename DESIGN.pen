@@ -3221,7 +3221,7 @@
           "id": "A1aSP5",
           "name": "Label",
           "fill": "$sys-on-primary",
-          "content": "사전 등록하기",
+          "content": "소감 한 마디 남기기",
           "fontFamily": "$sys-font",
           "fontSize": 17,
           "fontWeight": "700"
@@ -3317,7 +3317,7 @@
               "id": "sEksw",
               "name": "Header CTA",
               "fill": "$sys-primary-dark",
-              "content": "사전 등록",
+              "content": "소감 남기기",
               "fontFamily": "$sys-font",
               "fontSize": 13,
               "fontWeight": "600"
@@ -3365,7 +3365,7 @@
                   "id": "eUfPC",
                   "name": "Pill Label",
                   "fill": "$sys-primary-dark",
-                  "content": "출시 예정 · 사전 등록 받는 중",
+                  "content": "베타 체험 진행 중",
                   "fontFamily": "$sys-font",
                   "fontSize": 12.5,
                   "fontWeight": "600"
@@ -3403,7 +3403,7 @@
         },
         {
           "type": "frame",
-          "id": "WJZ8T",
+          "id": "kaXy7",
           "name": "Experience",
           "width": "fill_container",
           "fill": "$sys-bg-violet",
@@ -3418,11 +3418,10 @@
           "children": [
             {
               "type": "frame",
-              "id": "K5NSq",
+              "id": "PhICY",
               "name": "Chat Window",
               "clip": true,
               "width": "fill_container",
-              "height": 524,
               "fill": "$sys-bg",
               "cornerRadius": 24,
               "stroke": "$sys-line",
@@ -3442,14 +3441,13 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "P86DqU",
+                  "id": "NbkqE",
                   "name": "Header",
                   "width": "fill_container",
                   "stroke": "$sys-line",
                   "strokeWidth": {
                     "bottom": 1
                   },
-                  "strokeAlignment": "inner",
                   "gap": 10,
                   "padding": [
                     14,
@@ -3459,8 +3457,8 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "qfGMQ",
-                      "name": "Avatar",
+                      "id": "LRN2m",
+                      "name": "Badge",
                       "width": 34,
                       "height": 34,
                       "fill": "$sys-primary",
@@ -3470,8 +3468,8 @@
                       "children": [
                         {
                           "type": "icon",
-                          "id": "uDxfe",
-                          "name": "Avatar Icon",
+                          "id": "uQQNW",
+                          "name": "i",
                           "width": 18,
                           "height": 18,
                           "icon": "sparkles",
@@ -3482,16 +3480,15 @@
                     },
                     {
                       "type": "frame",
-                      "id": "pCaxn",
-                      "name": "Head Text",
-                      "width": "fill_container",
+                      "id": "j2ujNm",
+                      "name": "Meta",
                       "layout": "vertical",
                       "gap": 3,
                       "children": [
                         {
                           "type": "text",
-                          "id": "uK8Ks",
-                          "name": "Name",
+                          "id": "Uykh3",
+                          "name": "n",
                           "fill": "$sys-label-strong",
                           "content": "Co-Planner",
                           "fontFamily": "$sys-font",
@@ -3500,23 +3497,24 @@
                         },
                         {
                           "type": "frame",
-                          "id": "KTQnL",
+                          "id": "w5TDTw",
                           "name": "Status",
                           "gap": 5,
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "ellipse",
-                              "id": "LGoTq",
-                              "name": "Online Dot",
-                              "fill": "#22C55E",
+                              "type": "frame",
+                              "id": "JLtyt",
+                              "name": "dot",
                               "width": 6,
-                              "height": 6
+                              "height": 6,
+                              "fill": "#22C55E",
+                              "cornerRadius": 999
                             },
                             {
                               "type": "text",
-                              "id": "K2B4n",
-                              "name": "Status Text",
+                              "id": "OVFzj",
+                              "name": "t",
                               "fill": "$sys-label-neutral",
                               "content": "온라인",
                               "fontFamily": "$sys-font",
@@ -3531,114 +3529,9 @@
                 },
                 {
                   "type": "frame",
-                  "id": "QDN1a",
-                  "name": "Mode Switch",
-                  "width": "fill_container",
-                  "padding": [
-                    12,
-                    16,
-                    2,
-                    16
-                  ],
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "iEJSg",
-                      "name": "Segmented",
-                      "width": "fill_container",
-                      "fill": "$sys-bg-gray",
-                      "cornerRadius": 12,
-                      "gap": 4,
-                      "padding": 4,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "jyYlp",
-                          "name": "Seg Brain",
-                          "width": "fill_container",
-                          "height": 38,
-                          "fill": "$sys-bg",
-                          "cornerRadius": 9,
-                          "effect": {
-                            "type": "shadow",
-                            "shadowType": "outer",
-                            "color": "#1A1A2414",
-                            "offset": {
-                              "x": 0,
-                              "y": 2
-                            },
-                            "blur": 6,
-                            "spread": -1
-                          },
-                          "gap": 6,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "P3SoHf",
-                              "name": "Brain Icon",
-                              "width": 15,
-                              "height": 15,
-                              "icon": "brain",
-                              "library": "lucide",
-                              "fill": "$sys-primary-dark"
-                            },
-                            {
-                              "type": "text",
-                              "id": "TMyzg",
-                              "name": "Brain Label",
-                              "fill": "$sys-primary-dark",
-                              "content": "브레인덤프",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 13.5,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "dCyGV",
-                          "name": "Seg Split",
-                          "width": "fill_container",
-                          "height": 38,
-                          "cornerRadius": 9,
-                          "gap": 6,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "jNSxi",
-                              "name": "Split Icon",
-                              "width": 15,
-                              "height": 15,
-                              "icon": "scissors",
-                              "library": "lucide",
-                              "fill": "$sys-label-neutral"
-                            },
-                            {
-                              "type": "text",
-                              "id": "P9NSq",
-                              "name": "Split Label",
-                              "fill": "$sys-label-neutral",
-                              "content": "쪼개기",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 13.5,
-                              "fontWeight": "600"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "x5WuuR",
+                  "id": "Ahp5e",
                   "name": "Conversation",
                   "width": "fill_container",
-                  "height": "fill_container",
                   "fill": "$sys-bg",
                   "layout": "vertical",
                   "gap": 12,
@@ -3646,15 +3539,57 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "J7gnR",
-                      "name": "AI Message",
+                      "id": "MFYGF",
+                      "name": "User Row",
+                      "width": "fill_container",
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "FUGiS",
+                          "name": "Bubble",
+                          "width": 250,
+                          "fill": "$sys-primary-dark",
+                          "cornerRadius": [
+                            14,
+                            4,
+                            14,
+                            14
+                          ],
+                          "layout": "vertical",
+                          "padding": [
+                            10,
+                            13
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "AWcAL",
+                              "name": "t",
+                              "fill": "$sys-on-primary",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "발표 자료 만들어야 하고, 운동도 가야 하고, 이메일 답장도 밀렸어…",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$sys-font",
+                              "fontSize": 13.5,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "dLfDX",
+                      "name": "AI Row",
                       "width": "fill_container",
                       "gap": 8,
                       "children": [
                         {
                           "type": "frame",
-                          "id": "E9zmGg",
-                          "name": "Msg Avatar",
+                          "id": "HbkVm",
+                          "name": "Avatar",
                           "width": 24,
                           "height": 24,
                           "fill": "$sys-primary",
@@ -3664,8 +3599,8 @@
                           "children": [
                             {
                               "type": "icon",
-                              "id": "cCnFX",
-                              "name": "Msg Avatar Icon",
+                              "id": "y1dPCd",
+                              "name": "i",
                               "width": 13,
                               "height": 13,
                               "icon": "sparkles",
@@ -3676,8 +3611,8 @@
                         },
                         {
                           "type": "frame",
-                          "id": "ISa1l",
-                          "name": "AI Bubble",
+                          "id": "phmVW",
+                          "name": "Bubble",
                           "fill": "$sys-bg-gray",
                           "cornerRadius": [
                             4,
@@ -3685,19 +3620,18 @@
                             14,
                             14
                           ],
+                          "layout": "vertical",
                           "padding": [
-                            11,
-                            14
+                            10,
+                            13
                           ],
                           "children": [
                             {
                               "type": "text",
-                              "id": "A6p9Wx",
-                              "name": "Greeting",
+                              "id": "h5qHj4",
+                              "name": "t",
                               "fill": "$sys-label-strong",
-                              "textGrowth": "fixed-width",
-                              "width": 240,
-                              "content": "안녕하세요, Co-Planner예요.\n무엇을 도와드릴까요?",
+                              "content": "오늘은 이 3가지에 집중해봐요.",
                               "lineHeight": 1.5,
                               "fontFamily": "$sys-font",
                               "fontSize": 13.5,
@@ -3706,32 +3640,176 @@
                           ]
                         }
                       ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bqDWW",
+                      "name": "Task",
+                      "width": "fill_container",
+                      "fill": "$sys-bg",
+                      "cornerRadius": 12,
+                      "stroke": "$sys-line",
+                      "strokeWidth": 1,
+                      "gap": 9,
+                      "padding": [
+                        11,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "IF9uh",
+                          "name": "chk",
+                          "width": 20,
+                          "height": 20,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 6,
+                          "stroke": "$sys-label-alt",
+                          "strokeWidth": 1.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "n35BYO",
+                          "name": "t",
+                          "fill": "$sys-label-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "팀 발표 자료 초안 작성",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 13.5,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rBgx1",
+                          "name": "badge",
+                          "fill": "$sys-pri-mid-bg",
+                          "cornerRadius": 999,
+                          "padding": [
+                            2,
+                            7
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "D95qN",
+                              "name": "t",
+                              "fill": "$sys-pri-mid",
+                              "content": "큰 일",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 10.5,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KGwTo",
+                      "name": "Task",
+                      "width": "fill_container",
+                      "fill": "$sys-bg",
+                      "cornerRadius": 12,
+                      "stroke": "$sys-line",
+                      "strokeWidth": 1,
+                      "gap": 9,
+                      "padding": [
+                        11,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "u4WgT",
+                          "name": "chk",
+                          "width": 20,
+                          "height": 20,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 6,
+                          "stroke": "$sys-label-alt",
+                          "strokeWidth": 1.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "lRg3H",
+                          "name": "t",
+                          "fill": "$sys-label-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "헬스장 가서 30분 운동",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 13.5,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RLgN0",
+                      "name": "Task",
+                      "width": "fill_container",
+                      "fill": "$sys-bg",
+                      "cornerRadius": 12,
+                      "stroke": "$sys-line",
+                      "strokeWidth": 1,
+                      "gap": 9,
+                      "padding": [
+                        11,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "nK2AO",
+                          "name": "chk",
+                          "width": 20,
+                          "height": 20,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 6,
+                          "stroke": "$sys-label-alt",
+                          "strokeWidth": 1.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "YaA5E",
+                          "name": "t",
+                          "fill": "$sys-label-strong",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "중요한 이메일 3개 답장",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 13.5,
+                          "fontWeight": "500"
+                        }
+                      ]
                     }
                   ]
                 },
                 {
                   "type": "frame",
-                  "id": "allUk",
-                  "name": "Input Bar",
+                  "id": "lPX5P",
+                  "name": "Input",
                   "width": "fill_container",
                   "stroke": "$sys-line",
                   "strokeWidth": {
                     "top": 1
                   },
-                  "strokeAlignment": "inner",
                   "gap": 10,
                   "padding": [
                     12,
-                    16,
-                    16,
                     16
                   ],
                   "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "zBm5X",
-                      "name": "Input Field",
+                      "id": "h2hcDt",
+                      "name": "pill",
                       "width": "fill_container",
                       "height": 46,
                       "fill": "$sys-bg-gray",
@@ -3744,10 +3822,10 @@
                       "children": [
                         {
                           "type": "text",
-                          "id": "fihvv",
-                          "name": "Placeholder",
+                          "id": "V2QCu5",
+                          "name": "t",
                           "fill": "$sys-label-alt",
-                          "content": "머릿속에 있는 걸 자유롭게 적어보세요",
+                          "content": "오늘 떠오르는 일들을 편하게 적어보세요",
                           "fontFamily": "$sys-font",
                           "fontSize": 14,
                           "fontWeight": "normal"
@@ -3756,8 +3834,8 @@
                     },
                     {
                       "type": "frame",
-                      "id": "qyvee",
-                      "name": "Send",
+                      "id": "Bhlt2",
+                      "name": "send",
                       "width": 44,
                       "height": 44,
                       "fill": "$sys-primary",
@@ -3767,8 +3845,8 @@
                       "children": [
                         {
                           "type": "icon",
-                          "id": "M6DPs0",
-                          "name": "Send Icon",
+                          "id": "EDOfQ",
+                          "name": "i",
                           "width": 20,
                           "height": 20,
                           "icon": "arrow-up",
@@ -3782,10 +3860,10 @@
               ]
             },
             {
-              "id": "iJhSl",
+              "id": "D3h5O",
               "type": "ref",
               "ref": "mXwkh",
-              "name": "Hero CTA",
+              "name": "CTA",
               "width": "fill_container"
             }
           ]
@@ -4369,7 +4447,7 @@
               "fill": "$sys-label-strong",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "지금, 첫 칸을 같이 만들어요",
+              "content": "오늘 써본 느낌, 같이 나눠요",
               "lineHeight": 1.36,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -4384,7 +4462,7 @@
               "fill": "$sys-label-neutral",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "출시되면 등록하신 번호로 가장 먼저 알려드릴게요.",
+              "content": "짧은 소감 하나가 다음 걸음을 더 다정하게 만들어요.",
               "lineHeight": 1.6,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -5257,7 +5335,7 @@
               "id": "iVTkY",
               "name": "Eyebrow",
               "fill": "$sys-primary-dark",
-              "content": "사전 등록",
+              "content": "체험 소감",
               "fontFamily": "$sys-font",
               "fontSize": 13,
               "fontWeight": "600",
@@ -5270,7 +5348,7 @@
               "fill": "$sys-label-strong",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "사전 등록하기",
+              "content": "방금 함께한 첫 걸음, 어땠어요?",
               "lineHeight": 1.3,
               "fontFamily": "$sys-font",
               "fontSize": 30,
@@ -5284,7 +5362,7 @@
               "fill": "$sys-label-neutral",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "출시되면 가장 먼저 알려드릴게요.",
+              "content": "같이 첫 칸을 만들어봐 주셔서 고마워요. 지금 느낌만 살짝 들려주시면, 다음 걸음을 더 다정하게 만들어볼게요.",
               "lineHeight": 1.5,
               "fontFamily": "$sys-font",
               "fontSize": 15,
@@ -5309,54 +5387,505 @@
             {
               "type": "frame",
               "id": "q1Jwq",
-              "name": "Fields",
+              "name": "Feedback Fields",
               "width": "fill_container",
               "layout": "vertical",
-              "gap": 18,
+              "gap": 24,
               "children": [
                 {
                   "type": "frame",
-                  "id": "pWXo9",
-                  "name": "휴대폰 번호",
+                  "id": "MBUMa",
+                  "name": "Rating",
                   "width": "fill_container",
                   "layout": "vertical",
-                  "gap": 8,
+                  "gap": 12,
                   "children": [
                     {
                       "type": "text",
-                      "id": "iv01i",
-                      "name": "Label",
+                      "id": "xxMDh",
+                      "name": "Rating Label",
                       "fill": "$sys-label-strong",
-                      "content": "휴대폰 번호",
+                      "content": "방금 체험, 어떠셨어요?",
                       "fontFamily": "$sys-font",
                       "fontSize": 14,
                       "fontWeight": "600"
                     },
                     {
                       "type": "frame",
-                      "id": "gmgnt",
-                      "name": "Input",
+                      "id": "w66RB",
+                      "name": "Rating Buttons",
                       "width": "fill_container",
-                      "height": 52,
-                      "fill": "$sys-bg",
-                      "cornerRadius": 12,
-                      "stroke": "$sys-line",
-                      "strokeWidth": 1,
-                      "padding": [
-                        0,
-                        16
-                      ],
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "BGoDt",
+                          "name": "Score 1",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "oBJ7e",
+                              "name": "Num",
+                              "fill": "$sys-label-strong",
+                              "content": "1",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mXLdm",
+                          "name": "Score 2",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$sys-primary",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-primary",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J2aTv0",
+                              "name": "Num",
+                              "fill": "$sys-on-primary",
+                              "content": "2",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uz2Pf",
+                          "name": "Score 3",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "zV9uJ",
+                              "name": "Num",
+                              "fill": "$sys-label-strong",
+                              "content": "3",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Wx7eT",
+                          "name": "Score 4",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "g7hVb",
+                              "name": "Num",
+                              "fill": "$sys-label-strong",
+                              "content": "4",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xvonM",
+                          "name": "Score 5",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "BSkpa",
+                              "name": "Num",
+                              "fill": "$sys-label-strong",
+                              "content": "5",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aTKxQ",
+                      "name": "Scale Labels",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IsMRY",
+                          "name": "Low",
+                          "fill": "$sys-label-alt",
+                          "content": "아쉬웠어요",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "C9sFD",
+                          "name": "High",
+                          "fill": "$sys-label-alt",
+                          "content": "정말 좋았어요",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "f3ATS",
+                      "name": "Selected Label",
+                      "fill": "$sys-primary-dark",
+                      "content": "그저 그랬어요",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wf5yx",
+                  "name": "Reason",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "QCvQ3",
+                      "name": "Reason Label",
+                      "width": "fill_container",
+                      "gap": 6,
                       "alignItems": "center",
                       "children": [
                         {
                           "type": "text",
-                          "id": "vGJJR",
-                          "name": "Placeholder",
-                          "fill": "$sys-label-alt",
-                          "content": "010-0000-0000",
+                          "id": "epUGJ",
+                          "name": "Label",
+                          "fill": "$sys-label-strong",
+                          "content": "어떤 점이 아쉬우셨어요?",
                           "fontFamily": "$sys-font",
-                          "fontSize": 15,
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "bu0Qg",
+                          "name": "Optional",
+                          "fill": "$sys-label-alt",
+                          "content": "(선택)",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 14,
                           "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KsXcO",
+                      "name": "Reason Options",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "AbkCx",
+                          "name": "어디에 도움이 될지 모르겠어요",
+                          "width": "fill_container",
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ySmN0",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "QbFEj",
+                              "name": "Text",
+                              "fill": "$sys-label-neutral",
+                              "content": "어디에 도움이 될지 모르겠어요",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lLbk3",
+                          "name": "AI 답변이 내 상황과 안 맞았어요",
+                          "width": "fill_container",
+                          "fill": "$sys-primary-lighter",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-primary",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ItgB5",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-primary",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-primary",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ellipse",
+                                  "id": "CKoL0",
+                                  "name": "Inner",
+                                  "fill": "$sys-on-primary",
+                                  "width": 7,
+                                  "height": 7
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "sN7Hi",
+                              "name": "Text",
+                              "fill": "$sys-label-strong",
+                              "content": "AI 답변이 내 상황과 안 맞았어요",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZkHuB",
+                          "name": "할 일 쪼개기 결과가 아쉬웠어요",
+                          "width": "fill_container",
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "FOZJj",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "X2j4u",
+                              "name": "Text",
+                              "fill": "$sys-label-neutral",
+                              "content": "할 일 쪼개기 결과가 아쉬웠어요",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pYSto",
+                          "name": "쓰기가 번거롭거나 어려웠어요",
+                          "width": "fill_container",
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PstpC",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "IkERJ",
+                              "name": "Text",
+                              "fill": "$sys-label-neutral",
+                              "content": "쓰기가 번거롭거나 어려웠어요",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mXzS6",
+                          "name": "기대했던 것과 달랐어요",
+                          "width": "fill_container",
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "C69gO0",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ACftX",
+                              "name": "Text",
+                              "fill": "$sys-label-neutral",
+                              "content": "기대했던 것과 달랐어요",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "EMkil",
+                          "name": "기타",
+                          "width": "fill_container",
+                          "fill": "$sys-bg",
+                          "cornerRadius": 12,
+                          "stroke": "$sys-line",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": [
+                            12,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PEyzs",
+                              "name": "Radio",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 100,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "t5rHG",
+                              "name": "Text",
+                              "fill": "$sys-label-neutral",
+                              "content": "기타",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     }
@@ -5364,113 +5893,73 @@
                 },
                 {
                   "type": "frame",
-                  "id": "mpf0w",
-                  "name": "이메일 (선택)",
+                  "id": "oCGVW",
+                  "name": "Comment",
                   "width": "fill_container",
                   "layout": "vertical",
-                  "gap": 8,
+                  "gap": 10,
                   "children": [
                     {
-                      "type": "text",
-                      "id": "w2jW0u",
-                      "name": "Label",
-                      "fill": "$sys-label-strong",
-                      "content": "이메일 (선택)",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    },
-                    {
                       "type": "frame",
-                      "id": "L04Isq",
-                      "name": "Input",
+                      "id": "E1Gbs",
+                      "name": "Comment Label",
                       "width": "fill_container",
-                      "height": 52,
-                      "fill": "$sys-bg",
-                      "cornerRadius": 12,
-                      "stroke": "$sys-line",
-                      "strokeWidth": 1,
-                      "padding": [
-                        0,
-                        16
-                      ],
+                      "gap": 6,
                       "alignItems": "center",
                       "children": [
                         {
                           "type": "text",
-                          "id": "yrcHT",
+                          "id": "bSGhN",
+                          "name": "Label",
+                          "fill": "$sys-label-strong",
+                          "content": "하고 싶은 말이 있다면요",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "o5eP2",
+                          "name": "Optional",
+                          "fill": "$sys-label-alt",
+                          "content": "(선택)",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yK5KZ",
+                      "name": "Textarea",
+                      "width": "fill_container",
+                      "height": 92,
+                      "fill": "$sys-bg",
+                      "cornerRadius": 12,
+                      "stroke": "$sys-line",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "padding": [
+                        12,
+                        16
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "hpcUs",
                           "name": "Placeholder",
                           "fill": "$sys-label-alt",
-                          "content": "you@example.com",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "좋았던 점이든 바라는 점이든, 자유롭게 남겨주세요",
                           "fontFamily": "$sys-font",
-                          "fontSize": 15,
+                          "fontSize": 14,
                           "fontWeight": "normal"
                         }
                       ]
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "lXXRI",
-              "name": "Consent Row",
-              "width": "fill_container",
-              "gap": 10,
-              "padding": [
-                2,
-                0
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "CBuEJ",
-                  "name": "Checkbox",
-                  "width": 22,
-                  "height": 22,
-                  "fill": "$sys-primary",
-                  "cornerRadius": 6,
-                  "stroke": "$sys-primary",
-                  "strokeWidth": 1.5,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "tSnUL",
-                      "name": "Check",
-                      "width": 14,
-                      "height": 14,
-                      "icon": "check",
-                      "library": "lucide",
-                      "fill": "$sys-on-primary"
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "id": "jPFpG",
-                  "name": "Consent Text",
-                  "fill": "$sys-label-neutral",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "개인정보 수집·이용에 동의합니다",
-                  "lineHeight": 1.4,
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "I0xrWP",
-                  "name": "Link",
-                  "fill": "$sys-primary-dark",
-                  "content": "자세히",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "600"
                 }
               ]
             },
@@ -5501,7 +5990,7 @@
                   "id": "WREhY",
                   "name": "Submit Label",
                   "fill": "$sys-on-primary",
-                  "content": "사전 등록하기",
+                  "content": "소감 보낼게요",
                   "fontFamily": "$sys-font",
                   "fontSize": 16,
                   "fontWeight": "700"
@@ -5515,7 +6004,7 @@
               "fill": "$sys-label-alt",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "등록하신 정보는 출시 안내 용도로만 사용돼요.",
+              "content": "딱 10초면 끝나요. 남겨주신 한 마디로 더 나은 첫 걸음을 같이 만들어가요.",
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -5606,7 +6095,7 @@
               "id": "XouAR",
               "name": "Complete Headline",
               "fill": "$sys-label-strong",
-              "content": "사전 등록 완료!",
+              "content": "소감을 보냈어요",
               "fontFamily": "$sys-font",
               "fontSize": 28,
               "fontWeight": "700",
@@ -5619,7 +6108,7 @@
               "fill": "$sys-label-neutral",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "출시되면 등록하신 번호로 가장 먼저 안내드릴게요. 기다려 주셔서 고마워요.",
+              "content": "고마워요! 남겨주신 한 마디로 다음 걸음을 더 다정하게 만들어볼게요.",
               "lineHeight": 1.6,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -5633,7 +6122,7 @@
               "fill": "$sys-primary-dark",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "마음이 편해지는 Untangle, 곧 만나요.",
+              "content": "함께 만들어가는 Untangle, 고마워요.",
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "$sys-font",
