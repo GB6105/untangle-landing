@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun --bun next dev", 
-    "build": "bun --bun next build", 
-    "start": "bun --bun next start", 
+    "dev": "bun --bun next dev",
+    "build": "bun --bun next build",
+    "start": "bun --bun next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.112.3",
     "next": "16.2.10",
+    "openai": "^6.48.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
