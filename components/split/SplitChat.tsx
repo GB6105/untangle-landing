@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/analytics";
 import { Icon } from "@/components/Icon";
 import { ChatBubble } from "@/components/split/ChatBubble";
 import { OptionChips } from "@/components/split/OptionChips";
@@ -54,6 +55,19 @@ export function SplitChat() {
   const goalRef = useRef("");
   const answersRef = useRef<Answer[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
+  // Mirrors `provider` for async flows: the retry closures stored in setRetry
+  // are created in the render where the failure happened, so reading the
+  // `provider` state there would replay the request — and attribute its
+  // events — to a provider the user has since switched away from.
+  const providerRef = useRef<Provider>(provider);
+  const viewTracked = useRef(false); // StrictMode double-invokes effects in dev
+
+  // Funnel entry: how many people open the split chat at all.
+  useEffect(() => {
+    if (viewTracked.current) return;
+    viewTracked.current = true;
+    track("split_view");
+  }, []);
 
   // Hydrate the saved to-do list from localStorage after mount. A lazy
   // useState initializer can't do this — it runs during SSR where there is no
@@ -97,27 +111,42 @@ export function SplitChat() {
 
   async function runAdvance(goal: string, answers: Answer[]) {
     const gen = genRef.current;
+    const prov = providerRef.current; // not `provider`: retries replay this closure
     setLoading(true);
     setError(null);
     setRetry(null);
     try {
-      const data = await postSplit({ action: "advance", provider, goal, answers });
+      const data = await postSplit({ action: "advance", provider: prov, goal, answers });
       if (gen !== genRef.current) return; // a reset happened while we waited
       if ("error" in data) {
+        track("split_error", { provider: prov, action: "advance", kind: "api" });
         setError(data.error);
         setRetry(() => () => runAdvance(goal, answers));
         return;
       }
       if (data.status === "need_more") {
+        track("split_question_shown", {
+          provider: prov,
+          key: data.question.key,
+          turn: answers.length + 1,
+          optionCount: data.question.options.length,
+        });
         appendAi(data.message);
         appendAi(data.question.text);
         setPending(data.question);
       } else if (data.status === "ready") {
+        track("split_result_shown", {
+          provider: prov,
+          source: "advance",
+          turns: answers.length,
+          taskCount: data.tasks.length,
+        });
         appendAi(data.message);
         showResult(data.tasks, data.firstStep);
       }
     } catch {
       if (gen !== genRef.current) return;
+      track("split_error", { provider: prov, action: "advance", kind: "network" });
       setError(NETWORK_ERROR);
       setRetry(() => () => runAdvance(goal, answers));
     } finally {
@@ -125,9 +154,15 @@ export function SplitChat() {
     }
   }
 
-  function answerPending(answer: string) {
+  function answerPending(answer: string, method: "chip" | "input") {
     if (!pending || loading) return;
     const q = pending;
+    track("split_question_answered", {
+      provider,
+      key: q.key,
+      method,
+      answerLength: answer.length,
+    });
     appendUser(answer);
     setPending(null);
     const next = [...answersRef.current, { key: q.key, question: q.text, answer }];
@@ -142,20 +177,25 @@ export function SplitChat() {
       setInput("");
       goalRef.current = text;
       answersRef.current = [];
+      track("split_goal_submitted", { provider, goalLength: text.length });
       appendUser(text);
       setPhase("clarify");
       void runAdvance(text, []);
     } else if (phase === "clarify" && pending) {
       setInput("");
-      answerPending(text);
+      answerPending(text, "input");
     }
     // Otherwise keep the text: nothing to dispatch (e.g. an error is pending —
     // the "다시 시도" button is the recovery path).
   }
 
-  async function runResplit(task: ResultTask) {
+  async function runResplit(task: ResultTask, isRetry = false) {
     if (resplittingId) return;
+    // Track the intent once at the user's click; retries of the same intent
+    // replay the request but must not inflate the resplit usage count.
+    if (!isRetry) track("split_resplit", { provider: providerRef.current });
     const gen = genRef.current;
+    const prov = providerRef.current; // not `provider`: retries replay this closure
     setResplittingId(task.id);
     setError(null);
     setRetry(null);
@@ -163,7 +203,7 @@ export function SplitChat() {
     try {
       const data = await postSplit({
         action: "resplit",
-        provider,
+        provider: prov,
         goal: goalRef.current,
         answers: answersRef.current,
         taskToSplit: task.title,
@@ -171,11 +211,21 @@ export function SplitChat() {
       });
       if (gen !== genRef.current) return;
       if ("error" in data) {
+        track("split_error", { provider: prov, action: "resplit", kind: "api" });
         setError(data.error);
-        setRetry(() => () => runResplit(task));
+        setRetry(() => () => runResplit(task, true));
         return;
       }
-      if (data.status !== "resplit") return;
+      if (data.status !== "resplit") {
+        // Unexpected-but-JSON response: don't let it vanish from the funnel.
+        track("split_error", { provider: prov, action: "resplit", kind: "unexpected" });
+        return;
+      }
+      track("split_result_shown", {
+        provider: prov,
+        source: "resplit",
+        taskCount: data.tasks.length + remaining.length,
+      });
       appendAi(data.message);
       const subs = makeTasks(data.tasks);
       const fs = makeStep(data.firstStep);
@@ -190,8 +240,9 @@ export function SplitChat() {
       });
     } catch {
       if (gen !== genRef.current) return;
+      track("split_error", { provider: prov, action: "resplit", kind: "network" });
       setError(NETWORK_ERROR);
-      setRetry(() => () => runResplit(task));
+      setRetry(() => () => runResplit(task, true));
     } finally {
       if (gen === genRef.current) setResplittingId(null);
     }
@@ -206,6 +257,12 @@ export function SplitChat() {
     if (picked.length === 0) return;
     const next = Array.from(new Set([...confirmed, ...picked]));
     const added = next.length - confirmed.length;
+    track("split_tasks_confirmed", {
+      provider,
+      selectedCount: picked.length,
+      addedCount: added,
+      includesFirstStep: !!(firstStep && checked[firstStep.id]),
+    });
     setConfirmed(next);
     try {
       localStorage.setItem(TODOS_KEY, JSON.stringify(next));
@@ -220,6 +277,7 @@ export function SplitChat() {
   }
 
   function reset() {
+    track("split_reset", { provider });
     genRef.current++; // invalidate any in-flight advance/resplit response
     setLog([{ id: logCounter.current++, role: "ai", text: WELCOME }]);
     setPending(null);
@@ -252,7 +310,11 @@ export function SplitChat() {
               key={p}
               type="button"
               disabled={loading || !!resplittingId}
-              onClick={() => setProvider(p)}
+              onClick={() => {
+                if (p !== provider) track("split_provider_changed", { provider: p });
+                providerRef.current = p;
+                setProvider(p);
+              }}
               className={`rounded-full px-3 py-1 text-[12px] font-semibold transition-colors disabled:opacity-50 ${
                 provider === p
                   ? "bg-sys-bg text-sys-primary-dark shadow-[0_1px_3px_rgba(26,26,36,0.12)]"
@@ -277,7 +339,7 @@ export function SplitChat() {
             <div className="pt-0.5">
               <OptionChips
                 options={pending.options}
-                onPick={answerPending}
+                onPick={(option) => answerPending(option, "chip")}
                 disabled={loading}
               />
             </div>
