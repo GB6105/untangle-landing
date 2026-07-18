@@ -33,24 +33,6 @@ function ChatWindow() {
         </div>
       </div>
 
-      {/* Mode switch */}
-      <div className="px-4 pt-3 pb-[2px]">
-        <div className="flex gap-1 rounded-xl bg-sys-bg-gray p-1">
-          <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-[9px] bg-white shadow-[0_2px_6px_-1px_rgba(26,26,36,0.08)]">
-            <Icon name="brain" size={15} className="text-sys-primary-dark" />
-            <span className="text-[13.5px] font-bold text-sys-primary-dark">
-              브레인덤프
-            </span>
-          </div>
-          <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-[9px]">
-            <Icon name="scissors" size={15} className="text-sys-label-neutral" />
-            <span className="text-[13.5px] font-semibold text-sys-label-neutral">
-              쪼개기
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Conversation */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div className="flex items-start gap-2">
@@ -58,7 +40,7 @@ function ChatWindow() {
             <Icon name="sparkles" size={13} />
           </div>
           <div className="max-w-[240px] whitespace-pre-line rounded-[14px] rounded-tl-[4px] bg-sys-bg-gray px-[14px] py-[11px] text-[13.5px] leading-[1.5] text-sys-label-strong">
-            {"안녕하세요, Co-Planner예요.\n무엇을 도와드릴까요?"}
+            {"안녕하세요, Co-Planner예요.\n어떤 일을 쪼개볼까요?"}
           </div>
         </div>
       </div>
@@ -67,7 +49,7 @@ function ChatWindow() {
       <div className="flex items-center gap-2.5 border-t border-sys-line px-4 pt-3 pb-4">
         <div className="flex h-[46px] flex-1 items-center rounded-[14px] bg-sys-bg-gray px-4">
           <span className="text-[14px] text-sys-label-alt">
-            머릿속에 있는 걸 자유롭게 적어보세요
+            쪼개고 싶은 일을 적어보세요
           </span>
         </div>
         <div className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-sys-primary text-white">

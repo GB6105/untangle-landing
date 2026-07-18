@@ -1,9 +1,8 @@
 import { AccentRule } from "@/components/AccentRule";
 
 const CARDS = [
-  { n: "01", title: "머릿속을 쏟아내면,\n할 일들로 뽑아줘요" },
-  { n: "02", title: "오늘 뭐부터 할지는\n당신이 정해요" },
-  { n: "03", title: "고른 일을, 지금 할 수 있는\n작은 행동으로 쪼개줘요" },
+  { n: "01", title: "오늘 뭐부터 할지는\n당신이 정해요" },
+  { n: "02", title: "고른 일을, 지금 할 수 있는\n작은 행동으로 쪼개줘요" },
 ];
 
 export function Differentiation() {
