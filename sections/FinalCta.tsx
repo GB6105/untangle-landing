@@ -4,11 +4,11 @@ export function FinalCta() {
   return (
     <section className="flex flex-col items-center gap-[14px] bg-sys-bg px-6 pt-[50px] pb-[58px]">
       <h2 className="text-center text-[23px] font-bold leading-[1.36] tracking-[-0.3px] text-sys-label-strong">
-        지금, 첫 칸을 같이 만들어요
+        오늘 써본 느낌, 같이 나눠요
       </h2>
 
       <p className="text-center text-[14px] leading-[1.6] text-sys-label-neutral">
-        출시되면 등록하신 번호로 가장 먼저 알려드릴게요.
+        짧은 소감 하나가 다음 걸음을 더 다정하게 만들어요.
       </p>
 
       <div className="w-full pt-2.5">

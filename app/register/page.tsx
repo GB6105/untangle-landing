@@ -4,17 +4,18 @@ import { Icon } from "@/components/Icon";
 import { RegisterForm } from "@/app/register/RegisterForm";
 
 export const metadata: Metadata = {
-  title: "사전 등록 — Untangle",
-  description: "출시되면 가장 먼저 알려드릴게요. Untangle 사전 등록 페이지.",
+  title: "체험 소감 — Untangle",
+  description: "방금 체험한 Untangle, 어떠셨어요? 짧은 소감을 들려주세요.",
 };
 
 /**
- * Pre-registration form — the `Screen · Registration · System` frame in DESIGN.pen.
+ * Experience-feedback screen — the `/register` route, repurposed from
+ * pre-registration to a post-trial satisfaction survey.
  *
  * Stays a Server Component so it keeps its `metadata` export and server-renders
- * the static shell; the interactive form (validation, submit, success state) is
- * isolated in the `RegisterForm` Client Component. Submitting runs the
- * `submitRegistration` Server Action, which appends a row to the target sheet.
+ * the static shell; the interactive form (rating, conditional reason, submit,
+ * success state) is isolated in the `RegisterForm` Client Component. Submitting
+ * runs the `submitFeedback` Server Action, which appends a row to the target sheet.
  *
  * The shell uses `min-h-dvh` rather than the landing page's `min-h-full`: this
  * screen is shorter than the viewport, and a percentage min-height collapses
@@ -38,13 +39,14 @@ export default function Register() {
         {/* Form header */}
         <div className="flex flex-col gap-2.5 pt-2">
           <p className="text-[13px] font-semibold tracking-[2px] text-sys-primary-dark">
-            사전 등록
+            체험 소감
           </p>
           <h1 className="text-[30px] font-bold leading-[1.3] tracking-[-0.5px] text-sys-label-strong">
-            사전 등록하기
+            방금 함께한 첫 걸음, 어땠어요?
           </h1>
           <p className="text-[15px] leading-[1.5] text-sys-label-neutral">
-            출시되면 가장 먼저 알려드릴게요.
+            같이 첫 칸을 만들어봐 주셔서 고마워요. 지금 느낌만 살짝 들려주시면,
+            다음 걸음을 더 다정하게 만들어볼게요.
           </p>
         </div>
 

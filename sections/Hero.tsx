@@ -4,7 +4,7 @@ export function Hero() {
       <div className="flex w-fit items-center gap-[7px] rounded-full bg-sys-primary-lighter px-[13px] py-[7px]">
         <span className="h-[7px] w-[7px] rounded-full bg-sys-primary" />
         <span className="text-[12.5px] font-semibold text-sys-primary-dark">
-          출시 예정 · 사전 등록 받는 중
+          베타 체험 진행 중
         </span>
       </div>
 

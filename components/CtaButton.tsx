@@ -2,14 +2,14 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 
 /**
- * Primary "사전 등록하기" call-to-action. Leads to the pre-registration form.
+ * Primary "소감 한 마디 남기기" call-to-action. Leads to the experience-feedback form.
  *
  * Renders an anchor rather than a <button> because it navigates: that keeps the
  * component server-rendered and preserves native link affordances such as
  * middle-click and "open in new tab".
  */
 export function CtaButton({
-  label = "사전 등록하기",
+  label = "소감 한 마디 남기기",
   className = "",
 }: {
   label?: string;

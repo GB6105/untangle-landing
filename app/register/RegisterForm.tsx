@@ -1,26 +1,54 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import {
-  submitRegistration,
-  initialRegisterState,
+  submitFeedback,
+  initialFeedbackState,
 } from "@/app/register/actions";
 
 /**
- * Interactive part of the pre-registration screen.
+ * Interactive part of the experience-feedback screen (the `/register` route,
+ * repurposed from pre-registration to a satisfaction survey).
  *
- * Split out as a Client Component so the surrounding page can stay a Server
- * Component (keeping its `metadata` export). `useActionState` drives the
- * pending / error / success states; on success the form is replaced in place
- * with a confirmation, so there is no page navigation.
+ * Client Component so the page can stay a Server Component (keeping `metadata`).
+ * `useState` drives the conditional reason block — it only appears for low
+ * scores (1–3) — while `useActionState` drives submit / pending / success.
  */
+
+const RATINGS = [
+  { value: 1, label: "아쉬웠어요" },
+  { value: 2, label: "그저 그랬어요" },
+  { value: 3, label: "괜찮았어요" },
+  { value: 4, label: "좋았어요" },
+  { value: 5, label: "정말 좋았어요" },
+];
+
+// Shown only for low scores (1–3). Placeholder options — the final list is
+// still to be decided in a follow-up; keep this array as the single source.
+const LOW_REASONS = [
+  "어디에 도움이 될지 모르겠어요",
+  "AI 답변이 내 상황과 안 맞았어요",
+  "할 일 쪼개기 결과가 아쉬웠어요",
+  "쓰기가 번거롭거나 어려웠어요",
+  "기대했던 것과 달랐어요",
+  "기타",
+];
+
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState(
-    submitRegistration,
-    initialRegisterState,
+    submitFeedback,
+    initialFeedbackState,
   );
+  const [rating, setRating] = useState<number | null>(null);
+  const [reason, setReason] = useState<string>("");
+  // Controlled so a typed "기타" value survives the reason block unmounting when
+  // the score is briefly raised to 4–5 and lowered again — otherwise it would
+  // submit an empty reason despite "기타" still being selected.
+  const [reasonEtc, setReasonEtc] = useState<string>("");
+  const showReason = rating !== null && rating <= 3;
+  const ratingError = state.status === "error" ? state.errors?.rating : undefined;
 
   if (state.status === "success") {
     return (
@@ -29,12 +57,12 @@ export function RegisterForm() {
           <Icon name="check" size={28} strokeWidth={2.5} />
         </span>
         <h2 className="text-[22px] font-bold tracking-[-0.3px] text-sys-label-strong">
-          사전 등록이 완료됐어요
+          소감을 보냈어요
         </h2>
         <p className="text-[15px] leading-[1.6] text-sys-label-neutral">
-          출시되면 등록하신 번호로
+          고마워요! 남겨주신 한 마디로
           <br />
-          가장 먼저 알려드릴게요.
+          다음 걸음을 더 다정하게 만들어볼게요.
         </p>
         <Link
           href="/"
@@ -45,8 +73,6 @@ export function RegisterForm() {
       </div>
     );
   }
-
-  const { errors, values } = state;
 
   return (
     <form action={formAction} className="flex flex-col gap-7 pt-7">
@@ -59,79 +85,119 @@ export function RegisterForm() {
         aria-hidden="true"
         className="hidden"
       />
+      <input type="hidden" name="rating" value={rating ?? ""} />
 
-      {/* Fields */}
-      <div className="flex flex-col gap-[18px]">
-        <label className="flex flex-col gap-2">
-          <span className="text-[14px] font-semibold text-sys-label-strong">
-            휴대폰 번호
+      {/* Rating */}
+      <div className="flex flex-col gap-3">
+        <span className="text-[14px] font-semibold text-sys-label-strong">
+          방금 체험, 어떠셨어요?
+        </span>
+        <div
+          role="radiogroup"
+          aria-label="만족도"
+          aria-invalid={ratingError ? true : undefined}
+          aria-describedby={ratingError ? "rating-error" : undefined}
+          className="flex gap-2"
+        >
+          {RATINGS.map((r) => {
+            const selected = rating === r.value;
+            return (
+              <button
+                key={r.value}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onClick={() => setRating(r.value)}
+                aria-label={`${r.value}점 · ${r.label}`}
+                className={`flex h-[52px] flex-1 items-center justify-center rounded-xl border text-[17px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sys-primary focus-visible:ring-offset-2 ${
+                  selected
+                    ? "border-sys-primary bg-sys-primary text-sys-on-primary"
+                    : "border-sys-line bg-sys-bg text-sys-label-strong hover:border-sys-primary-lighter"
+                }`}
+              >
+                {r.value}
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex justify-between text-[12px] text-sys-label-alt">
+          <span>아쉬웠어요</span>
+          <span>정말 좋았어요</span>
+        </div>
+        {rating !== null && (
+          <p className="text-[13px] font-semibold text-sys-primary-dark">
+            {RATINGS.find((r) => r.value === rating)?.label}
+          </p>
+        )}
+        {ratingError && (
+          <span id="rating-error" role="alert" className="text-[13px] text-red-500">
+            {ratingError}
           </span>
-          <input
-            type="tel"
-            name="phone"
-            inputMode="tel"
-            autoComplete="tel"
-            required
-            defaultValue={values?.phone}
-            aria-invalid={errors?.phone ? true : undefined}
-            aria-describedby={errors?.phone ? "phone-error" : undefined}
-            placeholder="010-0000-0000"
-            className="h-[52px] rounded-xl border border-sys-line bg-sys-bg px-4 text-[15px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter aria-[invalid]:border-red-400 aria-[invalid]:focus:ring-red-200"
-          />
-          {errors?.phone && (
-            <span id="phone-error" className="text-[13px] text-red-500">
-              {errors.phone}
-            </span>
-          )}
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span className="text-[14px] font-semibold text-sys-label-strong">
-            이메일 (선택)
-          </span>
-          <input
-            type="email"
-            name="email"
-            autoComplete="email"
-            defaultValue={values?.email}
-            aria-invalid={errors?.email ? true : undefined}
-            aria-describedby={errors?.email ? "email-error" : undefined}
-            placeholder="you@example.com"
-            className="h-[52px] rounded-xl border border-sys-line bg-sys-bg px-4 text-[15px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter aria-[invalid]:border-red-400 aria-[invalid]:focus:ring-red-200"
-          />
-          {errors?.email && (
-            <span id="email-error" className="text-[13px] text-red-500">
-              {errors.email}
-            </span>
-          )}
-        </label>
+        )}
       </div>
 
-      {/* Consent */}
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center gap-2.5 py-0.5">
-          <label className="flex flex-1 items-center gap-2.5">
-            <input type="checkbox" name="consent" className="peer sr-only" />
-            {/* The tick is toggled with opacity, not color: forced-colors mode
-                overrides `color` but not `opacity`, so a transparent glyph would
-                paint there and make an unchecked box look checked. */}
-            <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md border-[1.5px] border-sys-label-alt bg-sys-bg text-sys-on-primary [&>svg]:opacity-0 peer-checked:border-sys-primary peer-checked:bg-sys-primary peer-checked:[&>svg]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-sys-primary peer-focus-visible:ring-offset-2">
-              <Icon name="check" size={14} strokeWidth={2.5} />
-            </span>
-            <span className="flex-1 text-[13px] leading-[1.4] text-sys-label-neutral">
-              개인정보 수집·이용에 동의합니다
-            </span>
-          </label>
-          <button
-            type="button"
-            className="text-[13px] font-semibold text-sys-primary-dark"
-          >
-            자세히
-          </button>
+      {/* Reason — only for low scores. Optional. */}
+      {showReason && (
+        <div className="flex flex-col gap-2.5">
+          <span className="text-[14px] font-semibold text-sys-label-strong">
+            어떤 점이 아쉬우셨어요?{" "}
+            <span className="font-normal text-sys-label-alt">(선택)</span>
+          </span>
+          <div className="flex flex-col gap-2">
+            {LOW_REASONS.map((opt) => {
+              const selected = reason === opt;
+              return (
+                <label
+                  key={opt}
+                  className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-4 py-3 text-[14px] transition-colors ${
+                    selected
+                      ? "border-sys-primary bg-sys-primary-lighter text-sys-label-strong"
+                      : "border-sys-line bg-sys-bg text-sys-label-neutral hover:border-sys-primary-lighter"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="reason"
+                    value={opt}
+                    checked={selected}
+                    onChange={() => setReason(opt)}
+                    className="peer sr-only"
+                  />
+                  <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-sys-label-alt peer-checked:border-sys-primary peer-checked:bg-sys-primary peer-focus-visible:ring-2 peer-focus-visible:ring-sys-primary peer-focus-visible:ring-offset-2">
+                    {selected && (
+                      <span className="h-[7px] w-[7px] rounded-full bg-sys-on-primary" />
+                    )}
+                  </span>
+                  {opt}
+                </label>
+              );
+            })}
+          </div>
+          {reason === "기타" && (
+            <input
+              type="text"
+              name="reasonEtc"
+              value={reasonEtc}
+              onChange={(e) => setReasonEtc(e.target.value)}
+              placeholder="어떤 점이 아쉬웠는지 적어주세요"
+              className="h-[48px] rounded-xl border border-sys-line bg-sys-bg px-4 text-[14px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
+            />
+          )}
         </div>
-        {errors?.consent && (
-          <span className="text-[13px] text-red-500">{errors.consent}</span>
-        )}
+      )}
+
+      {/* Free-form comment — always shown, always optional. */}
+      <div className="flex flex-col gap-2.5">
+        <span className="text-[14px] font-semibold text-sys-label-strong">
+          하고 싶은 말이 있다면요{" "}
+          <span className="font-normal text-sys-label-alt">(선택)</span>
+        </span>
+        <textarea
+          name="comment"
+          rows={3}
+          placeholder="좋았던 점이든 바라는 점이든, 자유롭게 남겨주세요"
+          className="min-h-[92px] resize-none rounded-xl border border-sys-line bg-sys-bg px-4 py-3 text-[14px] leading-[1.5] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
+        />
       </div>
 
       {state.status === "error" && state.message && (
@@ -148,11 +214,11 @@ export function RegisterForm() {
         disabled={pending}
         className="h-[54px] rounded-xl bg-sys-primary-dark text-[16px] font-bold text-sys-on-primary shadow-[0_9px_24px_-2px_rgba(106,69,231,0.25)] transition-shadow hover:shadow-[0_12px_28px_-2px_rgba(106,69,231,0.4)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {pending ? "등록 중…" : "사전 등록하기"}
+        {pending ? "보내는 중…" : "소감 보낼게요"}
       </button>
 
       <p className="text-center text-[12px] leading-[1.5] text-sys-label-alt">
-        등록하신 정보는 출시 안내 용도로만 사용돼요.
+        딱 10초면 끝나요. 남겨주신 한 마디로 더 나은 첫 걸음을 같이 만들어가요.
       </p>
     </form>
   );
