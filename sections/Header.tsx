@@ -14,7 +14,7 @@ export function Header() {
         href="/register"
         className="text-[13px] font-semibold text-sys-primary-dark"
       >
-        사전 등록
+        소감 남기기
       </Link>
     </header>
   );
