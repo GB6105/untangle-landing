@@ -33,7 +33,9 @@ async function postSplit(body: SplitRequest): Promise<SplitResponse> {
 }
 
 export function SplitChat() {
-  const [provider, setProvider] = useState<Provider>("claude");
+  // 인라인 체험 카드(DESIGN "Experience" 프레임)에는 모델 선택 UI가 없으므로
+  // 공급자는 Claude로 고정한다. (백엔드 /api/split은 두 공급자를 모두 지원한다.)
+  const provider: Provider = "claude";
   const [phase, setPhase] = useState<Phase>("intro");
   const [log, setLog] = useState<LogItem[]>([{ id: 0, role: "ai", text: WELCOME }]);
   const [pending, setPending] = useState<Question | null>(null);
@@ -243,28 +245,6 @@ export function SplitChat() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {/* AI 모델 선택 */}
-      <div className="flex items-center justify-between border-b border-sys-line px-5 py-2">
-        <span className="text-[12px] text-sys-label-neutral">AI 모델</span>
-        <div className="flex gap-0.5 rounded-full bg-sys-bg-gray p-0.5">
-          {(["claude", "gpt"] as const).map((p) => (
-            <button
-              key={p}
-              type="button"
-              disabled={loading || !!resplittingId}
-              onClick={() => setProvider(p)}
-              className={`rounded-full px-3 py-1 text-[12px] font-semibold transition-colors disabled:opacity-50 ${
-                provider === p
-                  ? "bg-sys-bg text-sys-primary-dark shadow-[0_1px_3px_rgba(26,26,36,0.12)]"
-                  : "text-sys-label-neutral"
-              }`}
-            >
-              {p === "claude" ? "Claude" : "GPT"}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto px-5 py-5">
         <div className="flex flex-col gap-3">
           {log.map((item) => (
