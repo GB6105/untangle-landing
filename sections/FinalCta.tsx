@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
+import { Icon } from "@/components/Icon";
 
 export function FinalCta() {
   return (
@@ -14,6 +16,14 @@ export function FinalCta() {
       <div className="w-full pt-2.5">
         <CtaButton />
       </div>
+
+      <Link
+        href="/split"
+        className="flex w-full items-center justify-center gap-2 rounded-[14px] border border-sys-primary px-[30px] py-[17px] text-[15px] font-bold text-sys-primary-dark transition-colors hover:bg-sys-primary-lighter"
+      >
+        <Icon name="scissors" size={17} strokeWidth={2.2} />
+        지금 쪼개기 체험해보기
+      </Link>
 
       <div className="flex justify-center gap-[18px] pt-1.5">
         <button type="button" className="text-[13px] text-sys-label-neutral">
