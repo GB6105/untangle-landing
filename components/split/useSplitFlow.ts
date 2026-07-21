@@ -15,8 +15,9 @@ import type {
  * demo can drive it with an injected goal (docs/features/03-demo-split.md §4).
  *
  * Differences from the old component: no intro phase (the goal is the card
- * title), `context` (브레인덤프 원문) rides along on every advance, and the
- * question cap (목표 1회·최대 2회) is actually enforced here:
+ * title), `context` (브레인덤프 원문) rides along on every advance. 질문은
+ * 항상 2개를 받은 뒤 분해한다(서버가 보장, "그냥 이대로 쪼개줘" 스킵만 예외)
+ * — 상한도 2개로 클라이언트가 지킨다:
  *  - soft guard: the 2nd answer is sent with an "assume the rest" suffix;
  *  - hard guard: a `need_more` after 2 answers is never shown — one silent
  *    skip-advance is retried, then an error banner. A 3rd question cannot

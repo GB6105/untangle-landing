@@ -148,7 +148,7 @@ export function TodayPhase({
   );
 }
 
-/** One TODO Card — 항상 펼쳐진 고정 카드 (접기/펼치기 없음). */
+/** One TODO Card — 기본 펼침. 쪼갠 카드만 헤드를 터치해 접었다 펼 수 있다. */
 function TodayCard({
   card,
   onFirstStep,
@@ -165,6 +165,17 @@ function TodayCard({
   const split = card.subtasks.length > 0;
   const done = isCardDone(card);
   const doneCount = card.subtasks.filter((s) => s.done).length;
+  const [collapsed, setCollapsed] = useState(false);
+
+  const title = (
+    <span
+      className={`min-w-0 flex-1 text-left text-[15px] font-medium leading-[1.4] ${
+        done ? "text-sys-primary-dark" : "text-sys-label-strong"
+      }`}
+    >
+      {card.title}
+    </span>
+  );
 
   return (
     <div
@@ -175,16 +186,14 @@ function TodayCard({
       }`}
     >
       {/* 헤드 행: 제목 + (쪼갠 카드: 진행 배지 / 미분해: 완료 체크박스) */}
-      <div className="flex items-center gap-2.5 px-[14px] py-3">
-        {!split && <CheckBox checked={card.done} onToggle={onCardDone} />}
-        <span
-          className={`min-w-0 flex-1 text-[15px] font-medium leading-[1.4] ${
-            done ? "text-sys-primary-dark" : "text-sys-label-strong"
-          }`}
+      {split ? (
+        <button
+          type="button"
+          onClick={() => setCollapsed((prev) => !prev)}
+          aria-expanded={!collapsed}
+          className="flex w-full items-center gap-2.5 px-[14px] py-3"
         >
-          {card.title}
-        </span>
-        {split && (
+          {title}
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold transition-colors ${
               done
@@ -194,8 +203,13 @@ function TodayCard({
           >
             {doneCount}/{card.subtasks.length}
           </span>
-        )}
-      </div>
+        </button>
+      ) : (
+        <div className="flex items-center gap-2.5 px-[14px] py-3">
+          <CheckBox checked={card.done} onToggle={onCardDone} />
+          {title}
+        </div>
+      )}
 
       {/* 카드 완료 — 따뜻한 1문장 (04 §3.3-2) */}
       {done && (
@@ -205,6 +219,8 @@ function TodayCard({
       )}
 
       {split ? (
+        // 터치로 접힌 동안엔 본문만 숨긴다 — 헤드·완료 문구는 유지
+        !collapsed && (
           <div className="flex flex-col gap-[9px] border-t border-sys-line px-[14px] pb-3.5 pt-3">
             {/* 지금 할 첫 단계 — 도착 시 시각적 포커스 (04 §3.1) */}
             {card.firstStep && (
@@ -258,7 +274,8 @@ function TodayCard({
               다시 쪼개기
             </button>
           </div>
-        ) : (
+        )
+      ) : (
           <div className="flex flex-col border-t border-sys-line px-[14px] py-3">
             {/* 미분해 카드 — 쪼개기 시작 */}
             <button
