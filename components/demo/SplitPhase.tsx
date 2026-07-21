@@ -13,9 +13,9 @@ import { SKIP_ANSWER, useSplitFlow } from "@/components/split/useSplitFlow";
 /**
  * Split phase screens (docs/features/03-demo-split.md).
  *
- * `splittingCardId === null` → pick-a-card screen (§3.1): one question, the
- * confirmed cards as chips + a skip chip, and a "가장 막막해 보여요" nudge when
- * a big card exists — never auto-selected (원칙 3).
+ * `splittingCardId === null` → pick-a-card screen (§3.1): one question and the
+ * confirmed cards as chips + a skip chip. AI가 카드를 대신 고르거나 추천하지
+ * 않는다 (원칙 3).
  * Otherwise → DemoSplitPanel keyed by card id so switching cards remounts the
  * flow. Clarify/result are driven by useSplitFlow; the result's include pills
  * deliberately look nothing like Today's done checkboxes (§3.2 — "내 선택이
@@ -76,7 +76,7 @@ export function SplitPhase({
   );
 }
 
-/** 쪼갤 카드 고르기 (03 §3.1) — big 카드는 추천 문구로만 민다, 자동 선택 금지. */
+/** 쪼갤 카드 고르기 (03 §3.1). */
 function SplitPicker({
   cards,
   onPick,
@@ -86,19 +86,11 @@ function SplitPicker({
   onPick: (cardId: string) => void;
   onSkip: () => void;
 }) {
-  const big = cards.find((c) => c.big);
-
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex-1 overflow-y-auto px-5 py-5">
         <div className="flex flex-col gap-3">
           <ChatBubble role="ai">{PICK_QUESTION}</ChatBubble>
-          {big && (
-            <ChatBubble role="ai">
-              <span className="font-semibold">{big.title}</span>
-              이(가) 가장 막막해 보여요.
-            </ChatBubble>
-          )}
 
           <div className="flex flex-col gap-[7px] pt-0.5">
             {cards.map((c) => (
