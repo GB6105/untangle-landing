@@ -7,6 +7,7 @@ import type {
   SplitResult,
   Task,
 } from "@/components/split/types";
+import { asRequestedProvider, resolveProvider } from "@/lib/llm";
 
 /**
  * 쪼개기(Split) feature backend — docs/features/03-demo-split.md.
@@ -224,26 +225,11 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "요청 형식이 올바르지 않아요." }, { status: 400 });
   }
 
-  const provider: Provider = body?.provider === "gpt" ? "gpt" : "claude";
-
-  if (provider === "claude" && !process.env.ANTHROPIC_API_KEY) {
-    return Response.json(
-      {
-        error:
-          "ANTHROPIC_API_KEY가 설정되지 않았어요. 프로젝트 루트의 .env.local에 키를 추가한 뒤 개발 서버를 다시 시작해 주세요.",
-      },
-      { status: 500 },
-    );
+  const resolved = resolveProvider(asRequestedProvider(body?.provider));
+  if ("error" in resolved) {
+    return Response.json({ error: resolved.error }, { status: 500 });
   }
-  if (provider === "gpt" && !process.env.OPENAI_API_KEY) {
-    return Response.json(
-      {
-        error:
-          "OPENAI_API_KEY가 설정되지 않았어요. 프로젝트 루트의 .env.local에 키를 추가한 뒤 개발 서버를 다시 시작해 주세요.",
-      },
-      { status: 500 },
-    );
-  }
+  const provider = resolved.provider;
 
   if (!body?.goal?.trim()) {
     return Response.json({ error: "쪼갤 일을 먼저 입력해 주세요." }, { status: 400 });

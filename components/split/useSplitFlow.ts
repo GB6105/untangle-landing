@@ -42,7 +42,7 @@ export type FlowTask = { id: string; title: string; done: boolean };
 export type FlowLogItem = { id: number; role: "user" | "ai"; text: string };
 
 export type UseSplitFlowArgs = {
-  /** 데모는 claude 고정. */
+  /** 미지정이면 서버가 결정한다 — LLM_PROVIDER 환경 변수 또는 키가 있는 쪽. */
   provider?: Provider;
   /** 카드 title이 주입된다 — 목표 입력(intro) 단계는 없다. */
   goal: string;
@@ -68,7 +68,7 @@ async function postSplit(body: SplitRequest): Promise<SplitResponse> {
 }
 
 export function useSplitFlow({
-  provider = "claude",
+  provider,
   goal,
   initialAnswers,
   initialResult,
