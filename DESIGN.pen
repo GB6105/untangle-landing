@@ -5821,7 +5821,7 @@
                   "id": "KWxRu",
                   "name": "Guide Text",
                   "fill": "$sys-label-normal",
-                  "content": "이 중에 오늘 반드시 끝내고 싶은 일이 있나요?",
+                  "content": "이 중에 오늘 반드시 끝내고 싶은 일들이 있나요?",
                   "lineHeight": 1.55,
                   "fontFamily": "$sys-font",
                   "fontSize": 14.5,
@@ -6355,35 +6355,6 @@
                   "fontFamily": "$sys-font",
                   "fontSize": 14,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "cbjLu",
-                  "name": "Resplit",
-                  "gap": 4,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "DtxUw",
-                      "name": "Resplit Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "scissors",
-                      "library": "lucide",
-                      "fill": "$sys-label-neutral"
-                    },
-                    {
-                      "type": "text",
-                      "id": "pmyE5",
-                      "name": "Resplit Label",
-                      "fill": "$sys-label-neutral",
-                      "content": "더 잘게",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 12,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             },
@@ -6449,35 +6420,6 @@
                   "fontFamily": "$sys-font",
                   "fontSize": 14,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "hFLiw",
-                  "name": "Resplit",
-                  "gap": 4,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "UhsbN",
-                      "name": "Resplit Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "scissors",
-                      "library": "lucide",
-                      "fill": "$sys-label-neutral"
-                    },
-                    {
-                      "type": "text",
-                      "id": "s8wlR",
-                      "name": "Resplit Label",
-                      "fill": "$sys-label-neutral",
-                      "content": "더 잘게",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 12,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             },
@@ -6543,35 +6485,6 @@
                   "fontFamily": "$sys-font",
                   "fontSize": 14,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "TagjH",
-                  "name": "Resplit",
-                  "gap": 4,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "amK8L",
-                      "name": "Resplit Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "scissors",
-                      "library": "lucide",
-                      "fill": "$sys-label-neutral"
-                    },
-                    {
-                      "type": "text",
-                      "id": "H6TZD",
-                      "name": "Resplit Label",
-                      "fill": "$sys-label-neutral",
-                      "content": "더 잘게",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 12,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             },
@@ -6637,35 +6550,6 @@
                   "fontFamily": "$sys-font",
                   "fontSize": 14,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "RLmT3",
-                  "name": "Resplit",
-                  "gap": 4,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "lCO8r",
-                      "name": "Resplit Icon",
-                      "width": 13,
-                      "height": 13,
-                      "icon": "scissors",
-                      "library": "lucide",
-                      "fill": "$sys-label-neutral"
-                    },
-                    {
-                      "type": "text",
-                      "id": "o2t1v",
-                      "name": "Resplit Label",
-                      "fill": "$sys-label-neutral",
-                      "content": "더 잘게",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 12,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             }
@@ -6731,8 +6615,38 @@
               "id": "PxU7A",
               "name": "Leave Row",
               "width": "fill_container",
+              "gap": 24,
               "justifyContent": "center",
               "children": [
+                {
+                  "type": "frame",
+                  "id": "BnksF",
+                  "name": "Regen Action",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "GIpwo",
+                      "name": "Regen Icon",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "scissors",
+                      "library": "lucide",
+                      "fill": "$sys-label-neutral"
+                    },
+                    {
+                      "type": "text",
+                      "id": "o2GDD",
+                      "name": "Regen Label",
+                      "fill": "$sys-label-neutral",
+                      "content": "다시 쪼개기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12.5,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
                 {
                   "type": "text",
                   "id": "K62y5w",
@@ -6805,35 +6719,6 @@
                   "fontFamily": "$sys-font",
                   "fontSize": 19,
                   "fontWeight": "700"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "U1LpwN",
-              "name": "Coach Bubble",
-              "fill": "$sys-bg-gray",
-              "cornerRadius": [
-                5,
-                16,
-                16,
-                16
-              ],
-              "padding": [
-                11,
-                15
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "fudei",
-                  "name": "Coach Text",
-                  "fill": "$sys-label-normal",
-                  "content": "이제 '지금 할 첫 단계' 하나만 체크해 보세요.",
-                  "lineHeight": 1.55,
-                  "fontFamily": "$sys-font",
-                  "fontSize": 14,
-                  "fontWeight": "normal"
                 }
               ]
             },
@@ -7239,7 +7124,7 @@
                           "id": "N5ZlSB",
                           "name": "More Label",
                           "fill": "$sys-label-neutral",
-                          "content": "더 쪼개기",
+                          "content": "다시 쪼개기",
                           "fontFamily": "$sys-font",
                           "fontSize": 12.5,
                           "fontWeight": "600"
