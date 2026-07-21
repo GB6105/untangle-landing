@@ -100,10 +100,12 @@ const asCandidates = (value: unknown): Candidate[] =>
   (Array.isArray(value) ? value : [])
     .filter(
       (c): c is { title: string; big?: unknown } =>
-        !!c && typeof (c as Candidate).title === "string",
+        !!c &&
+        typeof (c as Candidate).title === "string" &&
+        (c as Candidate).title.trim().length > 0,
     )
     .slice(0, MAX_CANDIDATES)
-    .map((c) => ({ title: c.title, big: c.big === true }));
+    .map((c) => ({ title: c.title.trim(), big: c.big === true }));
 
 const asExamples = (value: unknown): string[] => {
   const list = (Array.isArray(value) ? value : []).filter(

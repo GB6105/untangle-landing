@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
 import { Icon } from "@/components/Icon";
-import { ResumeNotice } from "@/components/demo/ResumeNotice";
+import { PreviewCta } from "@/components/demo/PreviewCta";
 
 /**
  * 체험 섹션 — 전체 플로우 데모(/demo)의 진입점 (docs/features/01-demo-shell.md §3.3).
@@ -97,16 +97,11 @@ export function Experience() {
           </div>
         </div>
 
-        {/* 카드 하단 진입 버튼(시각 요소 — 카드 전체가 링크) */}
+        {/* 카드 하단 진입 버튼 — 만들다 만 데모가 있으면 이어서 하기로 교체 (01 §3.3) */}
         <div className="px-5 pb-5">
-          <span className="flex w-full items-center justify-center gap-2 rounded-[12px] bg-sys-primary-dark py-[13px] text-[14.5px] font-bold text-sys-on-primary">
-            직접 해보기
-            <Icon name="arrow-right" size={16} strokeWidth={2.2} />
-          </span>
+          <PreviewCta />
         </div>
       </Link>
-
-      <ResumeNotice />
 
       <CtaButton label="지금 바로 체험해보기" href="/demo" />
     </section>

@@ -158,18 +158,20 @@ export function useSplitFlow({
 
       if (answers.length >= QUESTION_CAP) {
         // 하드 가드: 4번째 질문은 화면에 올리지 않는다 (03 §3.2-3).
-        const skipAnswers = [
-          ...answers,
-          { key: data.question.key, question: data.question.text, answer: SKIP_ANSWER },
-        ];
-        answersRef.current = skipAnswers;
         if (!autoSkipUsed.current) {
           autoSkipUsed.current = true;
+          const skipAnswers = [
+            ...answers,
+            { key: data.question.key, question: data.question.text, answer: SKIP_ANSWER },
+          ];
+          answersRef.current = skipAnswers;
           // await로 이어야 바깥 finally가 자동 스킵 요청 중에 loading을 끄지 않는다.
           await runAdvance(skipAnswers);
         } else {
+          // 같은 자동 스킵 호출을 그대로 재실행한다 — 재시도마다 합성 문답을
+          // 더 쌓지 않는다 (03 §6).
           setError(HARD_GUARD_ERROR);
-          setRetry(() => () => runAdvance(skipAnswers));
+          setRetry(() => () => runAdvance(answers));
         }
         return;
       }

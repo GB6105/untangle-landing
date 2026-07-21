@@ -90,10 +90,25 @@ function updateCard(
   };
 }
 
+/**
+ * 저장 상태를 이어하기로 되살릴 때의 정규화.
+ * - 쪼개기는 고르기 화면부터 재개한다 (03 §6) — 진행 중이던 clarify 문답은
+ *   의도적으로 유실을 허용하며, 패널로 직행하면 사용자 행동 없이 advance
+ *   호출이 나가므로 splittingCardId를 비운다.
+ * - 카드 없이 split/today에 도달한 손상 상태는 뒤로 되돌린다 (04 §5).
+ */
+function normalizeRestored(state: DemoState): DemoState {
+  const next: DemoState = { ...state, splittingCardId: null };
+  if ((next.phase === "split" || next.phase === "today") && next.cards.length === 0) {
+    next.phase = next.candidates.length > 0 ? "candidates" : "braindump";
+  }
+  return next;
+}
+
 export function demoReducer(state: DemoState, action: DemoAction): DemoState {
   switch (action.type) {
     case "restore":
-      return action.state;
+      return normalizeRestored(action.state);
     case "reset":
       return initialDemoState;
     case "candidatesReceived":
@@ -177,6 +192,42 @@ export function isResumable(state: DemoState): boolean {
   );
 }
 
+function isValidCandidate(value: unknown): value is Candidate {
+  if (!value || typeof value !== "object") return false;
+  const c = value as Candidate;
+  return typeof c.title === "string" && typeof c.big === "boolean";
+}
+
+function isValidSubtask(value: unknown): value is DemoSubtask {
+  if (!value || typeof value !== "object") return false;
+  const s = value as DemoSubtask;
+  return (
+    typeof s.id === "string" &&
+    typeof s.title === "string" &&
+    typeof s.done === "boolean"
+  );
+}
+
+function isValidCard(value: unknown): value is DemoCard {
+  if (!value || typeof value !== "object") return false;
+  const c = value as DemoCard;
+  return (
+    typeof c.id === "string" &&
+    typeof c.title === "string" &&
+    typeof c.big === "boolean" &&
+    typeof c.done === "boolean" &&
+    (c.firstStep === null ||
+      (!!c.firstStep &&
+        typeof c.firstStep.title === "string" &&
+        typeof c.firstStep.done === "boolean")) &&
+    Array.isArray(c.subtasks) &&
+    c.subtasks.every(isValidSubtask) &&
+    // 쪼갠 카드에 firstStep이 없는 상태는 성립하지 않는다 (00 §5).
+    (c.subtasks.length === 0 || c.firstStep !== null) &&
+    Array.isArray(c.splitAnswers)
+  );
+}
+
 function isValidDemoState(value: unknown): value is DemoState {
   if (!value || typeof value !== "object") return false;
   const s = value as DemoState;
@@ -185,7 +236,9 @@ function isValidDemoState(value: unknown): value is DemoState {
     ["braindump", "candidates", "split", "today"].includes(s.phase) &&
     typeof s.braindump === "string" &&
     Array.isArray(s.candidates) &&
+    s.candidates.every(isValidCandidate) &&
     Array.isArray(s.cards) &&
+    s.cards.every(isValidCard) &&
     (s.splittingCardId === null || typeof s.splittingCardId === "string") &&
     typeof s.slideupShown === "boolean"
   );
