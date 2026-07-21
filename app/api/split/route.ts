@@ -13,12 +13,13 @@ import { asRequestedProvider, resolveProvider } from "@/lib/llm";
  * 쪼개기(Split) feature backend — docs/features/03-demo-split.md.
  *
  * Drives the Co-Planner conversation with an LLM: on each `advance` turn it
- * decides which of the 5 context items are still unclear and either asks the
- * next adaptive question or decomposes the goal into ≤5 tasks plus an
- * immediate first step. `resplit` breaks one chosen task down further.
+ * either asks one freely-chosen clarify question or decomposes the goal into
+ * ≤5 tasks plus an immediate first step. `resplit` breaks one chosen task
+ * down further.
  *
- * Questions are hard-capped at 3 per conversation (PRD 5.2 "최대 2~3번") — the
- * prompt targets 2 and the client adds soft/hard guards on top (03 §3.2).
+ * Questions are hard-capped at 2 per conversation — the prompt targets 1,
+ * defaults to assuming-and-splitting, and the client adds soft/hard guards on
+ * top (03 §3.2). 무엇을 물을지는 모델이 정한다 — 고정된 맥락 체크리스트 없음.
  * `advance` optionally takes `context` (예: 브레인덤프 원문) so items already
  * evident there are never asked again.
  *
@@ -31,7 +32,6 @@ export const runtime = "nodejs";
 
 const CLAUDE_MODEL = "claude-sonnet-5";
 const OPENAI_MODEL = "gpt-4o"; // change here to use another GPT model
-const CONTEXT_KEYS = ["why", "current", "done", "capacity", "blocker"] as const;
 const MAX_TASKS = 5;
 
 const taskSchema = {
@@ -54,9 +54,8 @@ const ADVANCE_SCHEMA: Record<string, unknown> = {
         {
           type: "object",
           additionalProperties: false,
-          required: ["key", "text", "options"],
+          required: ["text", "options"],
           properties: {
-            key: { type: "string", enum: CONTEXT_KEYS },
             text: { type: "string" },
             options: { type: "array", items: { type: "string" } },
           },
@@ -79,27 +78,18 @@ const RESPLIT_SCHEMA: Record<string, unknown> = {
   },
 };
 
-const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '목표만 있는 큰 일'을 가져오면, 그 일을 실제로 시작할 수 있도록 맥락을 구체화한 뒤 작은 실행 단위로 쪼개주는 역할을 합니다.
-
-# 파악해야 하는 맥락 5가지 (key와 의미)
-- why (왜 하는가): 목적·동기. 우선순위와 의미의 기준.
-- current (지금 어디까지 왔나): 현재 진행 상태. 이미 한 일은 분해에서 제외한다.
-- done (무엇이 되면 끝인가): 완료 기준·원하는 결과물. 분해의 종착점과 범위를 정한다.
-- capacity (지금 낼 수 있는 여력): 가용 시간·에너지. 각 단계의 크기를 실제 가능한 분량으로 맞춘다.
-- blocker (시작을 막는 것): 걸림돌·막히는 지점. '지금 할 첫 단계'를 우회 설계하는 근거.
+const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '목표만 있는 큰 일'을 가져오면, 그 일을 실제로 시작할 수 있도록 작은 실행 단위로 쪼개주는 역할을 합니다.
 
 # 진행 방식
-1. 사용자의 목표와 지금까지의 답변을 보고, 5가지 항목 중 아직 불명확한 것이 있는지 판단하세요.
-2. 첫 입력만으로 이미 충분히 명확한 항목은 질문하지 마세요. [오늘의 맥락]이 주어지면 그 안에서 이미 드러난 항목도 질문하지 마세요. 처음부터 모두 충분하면 곧바로 분해하세요(status: "ready").
-3. 아직 불명확한 항목이 있으면 status를 "need_more"로 하고, 가장 도움이 되는 다음 질문 '하나만' 던지세요.
-   - 앞선 답변에 따라 질문과 선택지를 자연스럽게 조정하세요. 질문 순서는 고정이 아니에요.
+1. 목표, [오늘의 맥락], 지금까지의 문답을 보고 곧바로 분해할 수 있는지 판단하세요. 대부분의 경우 바로 분해할 수 있어요(status: "ready"). 모호한 부분은 합리적으로 가정하고, 그 가정을 결과에 자연스럽게 반영하세요.
+2. 분해에 꼭 필요한 정보가 정말로 빠져 있을 때만 status를 "need_more"로 하고, 가장 도움이 되는 질문 '하나만' 던지세요.
+   - 무엇을 물을지는 자유롭게 정하세요(예: 지금 어디까지 했는지, 무엇이 되면 끝인지, 지금 낼 수 있는 시간, 막히는 지점 등). 짧고 답하기 쉬운 질문이어야 해요.
    - 사용자가 바로 고를 수 있는 짧은 선택지(options)를 반드시 2~4개 함께 제시하세요. (options는 절대 빈 배열이면 안 됩니다.)
-   - 이미 답변된 항목(key)은 다시 묻지 마세요. question.key는 이번에 묻는 항목의 key여야 해요.
-4. 질문 수 상한: 질문은 이 대화 전체에서 2회를 목표로 하고, 3회를 절대 넘기지 마세요.
-   - 답변이 2개 이상 쌓였으면 남은 불명확한 항목은 합리적으로 가정하고 되도록 분해로 넘어가세요.
-   - 답변이 3개 쌓였다면 더 묻지 말고 반드시 분해하세요(status: "ready").
-   - 사용자가 "그냥 이대로 쪼개줘"처럼 바로 분해를 원하면, 즉시 남은 항목을 합리적으로 가정하고 분해하세요(status: "ready").
-5. 맥락이 충분히 파악되면 status를 "ready"로 하고, 그 일을 작은 실행 단위로 분해하세요.
+   - 이미 물어본 것과 [오늘의 맥락]에서 드러난 것은 다시 묻지 마세요.
+3. 질문 수 상한: 질문은 이 대화 전체에서 1회를 목표로 하고, 2회를 절대 넘기지 마세요.
+   - 답변이 2개 쌓였다면 더 묻지 말고 반드시 분해하세요(status: "ready").
+   - 사용자가 "그냥 이대로 쪼개줘"처럼 바로 분해를 원하면, 즉시 남은 것을 가정하고 분해하세요(status: "ready").
+4. 분해할 때(status: "ready"):
    - tasks: 5개 이하의, 한눈에 부담 없는 작은 할 일. 각 title은 구체적인 행동으로.
    - firstStep: 지금 당장 고민 없이 할 수 있는 아주 작은 첫 행동 하나. tasks와는 별개로, 걸림돌을 우회하는 행동이어야 해요. (예: "책상에 앉기", "노트북 펼치기", "OOO 검색해보기")
 
@@ -111,7 +101,7 @@ const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '
 {
   "status": "need_more" | "ready",
   "message": string,
-  "question": { "key": "why"|"current"|"done"|"capacity"|"blocker", "text": string, "options": string[] } | null,
+  "question": { "text": string, "options": string[] } | null,
   "tasks": [ { "title": string } ] | null,
   "firstStep": { "title": string } | null
 }
@@ -136,7 +126,7 @@ const RESPLIT_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 �
 function contextBlock(goal: string, answers: Answer[]): string {
   const lines = answers.length
     ? answers
-        .map((a) => `- (${a.key}) 질문: ${a.question}\n  답변: ${a.answer}`)
+        .map((a) => `- 질문: ${a.question}\n  답변: ${a.answer}`)
         .join("\n")
     : "아직 없음";
   return `[목표]\n${goal}\n\n[지금까지 파악된 맥락]\n${lines}`;
@@ -146,7 +136,7 @@ function advanceUser(goal: string, answers: Answer[], context?: string): string 
   const daily = context?.trim()
     ? `[오늘의 맥락]\n${context.trim()}\n\n`
     : "";
-  return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 아직 불명확한 맥락이 있으면 다음 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 충분히 명확하면 할 일로 분해하세요(status: "ready"). 질문 상한(전체 2~3회)을 지키세요.`;
+  return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 분해에 꼭 필요한 정보가 정말 빠져 있을 때만 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 그렇지 않으면 합리적으로 가정하고 할 일로 분해하세요(status: "ready"). 질문 상한(전체 1~2회)을 지키세요.`;
 }
 
 function resplitUser(
@@ -275,22 +265,14 @@ export async function POST(request: Request): Promise<Response> {
       return Response.json(result);
     }
 
-    const q = parsed.question as
-      | { key?: unknown; text?: unknown; options?: unknown }
-      | null;
-    if (
-      !q ||
-      typeof q.text !== "string" ||
-      typeof q.key !== "string" ||
-      !CONTEXT_KEYS.includes(q.key as (typeof CONTEXT_KEYS)[number])
-    ) {
+    const q = parsed.question as { text?: unknown; options?: unknown } | null;
+    if (!q || typeof q.text !== "string") {
       throw new Error("응답 형식이 올바르지 않아요.");
     }
     const result: SplitResult = {
       status: "need_more",
       message: typeof parsed.message === "string" ? parsed.message : "",
       question: {
-        key: q.key as (typeof CONTEXT_KEYS)[number],
         text: q.text,
         options: Array.isArray(q.options)
           ? q.options.filter((o): o is string => typeof o === "string")

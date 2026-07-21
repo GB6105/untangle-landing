@@ -1,29 +1,18 @@
 /**
- * Shared types for the 쪼개기 (Split) feature — FEATURE.md §3.
- * Used by both the client (`SplitChat`) and the API route (`app/api/split`).
+ * Shared types for the 쪼개기 (Split) feature — docs/features/03-demo-split.md.
+ * Used by both the client (`useSplitFlow`) and the API route (`app/api/split`).
+ *
+ * 질문 내용은 모델이 자유롭게 정한다 — 고정된 맥락 항목(key) 체계는 없다.
  */
-
-/** The 5 context items the Co-Planner clarifies before decomposing (F3-2). */
-export type ContextKey = "why" | "current" | "done" | "capacity" | "blocker";
-
-export const CONTEXT_LABELS: Record<ContextKey, string> = {
-  why: "왜 하는가",
-  current: "지금 어디까지 왔나",
-  done: "무엇이 되면 끝인가",
-  capacity: "지금 낼 수 있는 여력",
-  blocker: "시작을 막는 것",
-};
 
 /** One clarify turn the user has already answered. */
 export type Answer = {
-  key: ContextKey;
   question: string;
   answer: string;
 };
 
 /** A clarify question with pick-first options (free-text answers also allowed). */
 export type Question = {
-  key: ContextKey;
   text: string;
   options: string[];
 };

@@ -16,10 +16,10 @@ import type {
  *
  * Differences from the old component: no intro phase (the goal is the card
  * title), `context` (브레인덤프 원문) rides along on every advance, and the
- * PRD's "최대 2~3번" question cap is actually enforced here:
- *  - soft guard: the 3rd answer is sent with an "assume the rest" suffix;
- *  - hard guard: a `need_more` after 3 answers is never shown — one silent
- *    skip-advance is retried, then an error banner. A 4th question cannot
+ * question cap (목표 1회·최대 2회) is actually enforced here:
+ *  - soft guard: the 2nd answer is sent with an "assume the rest" suffix;
+ *  - hard guard: a `need_more` after 2 answers is never shown — one silent
+ *    skip-advance is retried, then an error banner. A 3rd question cannot
  *    reach the screen (03 §3.2).
  *
  * The caller must keep `goal`/`initialAnswers`/`initialResult`/`context`
@@ -34,7 +34,7 @@ const NETWORK_ERROR = "연결에 문제가 생겼어요. 잠시 후 다시 시�
 const HARD_GUARD_ERROR =
   "질문이 길어지지 않게 여기서 바로 쪼개볼게요. 다시 시도를 눌러 주세요.";
 
-const QUESTION_CAP = 3;
+const QUESTION_CAP = 2;
 const MAX_TASKS = 5;
 export const MAX_SELECTED = 5;
 
@@ -157,12 +157,12 @@ export function useSplitFlow({
       if (data.status !== "need_more") return;
 
       if (answers.length >= QUESTION_CAP) {
-        // 하드 가드: 4번째 질문은 화면에 올리지 않는다 (03 §3.2-3).
+        // 하드 가드: 상한을 넘는 질문은 화면에 올리지 않는다 (03 §3.2-3).
         if (!autoSkipUsed.current) {
           autoSkipUsed.current = true;
           const skipAnswers = [
             ...answers,
-            { key: data.question.key, question: data.question.text, answer: SKIP_ANSWER },
+            { question: data.question.text, answer: SKIP_ANSWER },
           ];
           answersRef.current = skipAnswers;
           // await로 이어야 바깥 finally가 자동 스킵 요청 중에 loading을 끄지 않는다.
@@ -202,13 +202,13 @@ export function useSplitFlow({
     const question = pending;
     appendUser(answer);
     setPending(null);
-    // 소프트 가드: 3번째 답변에는 "남은 건 가정" 문구를 실어 보낸다 (03 §3.2-2).
-    const isThird = answersRef.current.length >= QUESTION_CAP - 1;
+    // 소프트 가드: 마지막(2번째) 답변에는 "남은 건 가정" 문구를 실어 보낸다 (03 §3.2-2).
+    const isLast = answersRef.current.length >= QUESTION_CAP - 1;
     const sent =
-      isThird && answer !== SKIP_ANSWER ? `${answer}${SOFT_GUARD_SUFFIX}` : answer;
+      isLast && answer !== SKIP_ANSWER ? `${answer}${SOFT_GUARD_SUFFIX}` : answer;
     const next = [
       ...answersRef.current,
-      { key: question.key, question: question.text, answer: sent },
+      { question: question.text, answer: sent },
     ];
     answersRef.current = next;
     void runAdvance(next);
