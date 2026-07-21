@@ -52,7 +52,8 @@ export type DemoAction =
   | { type: "slideupShown" };
 
 const MAX_TODOS = 3;
-const MAX_SUBTASKS = 5;
+// 기본 제안은 5개 이하지만, 다시 쪼개기를 거치면 최대 10개까지 제안된다.
+const MAX_SUBTASKS = 10;
 
 function promote(candidate: Candidate, index: number): DemoCard {
   return {

@@ -23,19 +23,12 @@ import type { DemoState } from "@/components/demo/types";
  *
  * Owns the single reducer that drives braindump → candidates → split → today,
  * persists every transition to localStorage, and renders the shell chrome:
- * header with the 3-dot progress signal, the exit affordance, and the
- * resume-or-restart choice on re-entry.
+ * header, the exit affordance, and the resume-or-restart choice on re-entry.
+ * 소감(/register)은 체험을 끝냈을 때(TodayPhase 슬라이드업)와 중간에
+ * 그만뒀을 때(X 종료) 양쪽에서 이어진다.
  */
 
-const EXIT_TARGET = "/#experience";
-
-const STEPS = ["정하기", "쪼개기", "실행"] as const;
-
-function stepIndex(phase: DemoState["phase"]): number {
-  if (phase === "today") return 2;
-  if (phase === "split") return 1;
-  return 0;
-}
+const FEEDBACK_TARGET = "/register?from=demo";
 
 export function DemoFlow() {
   const router = useRouter();
@@ -46,8 +39,6 @@ export function DemoFlow() {
   // clobber a saved session before the user chooses (01 §3.4).
   const [ready, setReady] = useState(false);
   const exitPromptSeen = useRef(false);
-  // 방금 확정한 쪼개기의 카드 — Today 도착 시 자동으로 펼친다 (04 §3.1).
-  const [lastSplitCardId, setLastSplitCardId] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadDemoState();
@@ -63,7 +54,9 @@ export function DemoFlow() {
     if (ready) saveDemoState(state);
   }, [ready, state]);
 
-  const exit = () => router.push(EXIT_TARGET);
+  // 중간에 그만둘 때도 소감으로 잇는다 — 아무 진행 없이 닫은 방문만 랜딩으로.
+  const exit = () =>
+    router.push(isResumable(state) ? FEEDBACK_TARGET : "/");
 
   // TodayPhase의 슬라이드업 타이머 effect가 의존하는 콜백 — 렌더마다 새로
   // 만들어지면 타이머가 계속 리셋되므로 identity를 고정한다.
@@ -83,49 +76,15 @@ export function DemoFlow() {
     setExitSheet(true);
   };
 
-  // 쪼개기를 건너뛴 채 실행에 도착하면 ② 점은 흐림 처리 (01 §3.1)
-  const splitSkipped =
-    state.phase === "today" && state.cards.every((c) => c.subtasks.length === 0);
-  const active = stepIndex(state.phase);
-
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {/* Header: 로고+배지 / 진행 점 3개 / 닫기 (01 §3.1) */}
+      {/* Header: 로고+배지 / 닫기 */}
       <header className="flex items-center justify-between border-b border-sys-line px-4 py-3">
         <div className="flex items-center gap-2">
           <Logo size={26} />
           <span className="rounded-full bg-sys-primary-lighter px-2 py-[2px] text-[11px] font-semibold text-sys-primary-dark">
             데모
           </span>
-        </div>
-
-        <div className="flex items-center gap-3" aria-label="진행 단계">
-          {STEPS.map((label, i) => {
-            const dimmed = i === 1 && splitSkipped;
-            const current = i === active && !dimmed;
-            return (
-              <div key={label} className="flex items-center gap-[5px]">
-                <span
-                  className={`h-[7px] w-[7px] rounded-full transition-colors ${
-                    current
-                      ? "bg-sys-primary"
-                      : i < active || dimmed
-                        ? "bg-sys-primary-light"
-                        : "bg-sys-line"
-                  } ${dimmed ? "opacity-40" : ""}`}
-                />
-                <span
-                  className={`text-[11px] ${
-                    current
-                      ? "font-semibold text-sys-primary-dark"
-                      : "text-sys-label-alt"
-                  } ${dimmed ? "opacity-50" : ""}`}
-                >
-                  {label}
-                </span>
-              </div>
-            );
-          })}
         </div>
 
         <button
@@ -173,16 +132,14 @@ export function DemoFlow() {
           onPick={(cardId) => dispatch({ type: "pickSplitCard", cardId })}
           onSkip={() => dispatch({ type: "skipSplit" })}
           onLeave={() => dispatch({ type: "toToday" })}
-          onConfirm={(cardId, tasks, firstStep, answers) => {
-            setLastSplitCardId(cardId);
-            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers });
-          }}
+          onConfirm={(cardId, tasks, firstStep, answers) =>
+            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers })
+          }
         />
       ) : (
         <TodayPhase
           cards={state.cards}
           slideupShown={state.slideupShown}
-          initialOpenCardId={lastSplitCardId}
           onToggleFirstStep={(cardId) => dispatch({ type: "toggleFirstStep", cardId })}
           onToggleSubtask={(cardId, subtaskId) =>
             dispatch({ type: "toggleSubtask", cardId, subtaskId })
@@ -190,10 +147,7 @@ export function DemoFlow() {
           onToggleCardDone={(cardId) => dispatch({ type: "toggleCardDone", cardId })}
           onSplitCard={(cardId) => dispatch({ type: "startSplit", cardId })}
           onSlideupShown={notifySlideupShown}
-          onRestart={() => {
-            setLastSplitCardId(null);
-            dispatch({ type: "reset" });
-          }}
+          onRestart={() => dispatch({ type: "reset" })}
         />
       )}
 
@@ -220,7 +174,7 @@ export function DemoFlow() {
                 onClick={exit}
                 className="w-full rounded-[12px] border border-sys-line py-[13px] text-[14.5px] font-semibold text-sys-label-neutral"
               >
-                나가기
+                소감 남기고 나가기
               </button>
             </div>
           </div>

@@ -15,11 +15,12 @@ import type {
  * demo can drive it with an injected goal (docs/features/03-demo-split.md §4).
  *
  * Differences from the old component: no intro phase (the goal is the card
- * title), `context` (브레인덤프 원문) rides along on every advance, and the
- * PRD's "최대 2~3번" question cap is actually enforced here:
- *  - soft guard: the 3rd answer is sent with an "assume the rest" suffix;
- *  - hard guard: a `need_more` after 3 answers is never shown — one silent
- *    skip-advance is retried, then an error banner. A 4th question cannot
+ * title), `context` (브레인덤프 원문) rides along on every advance. 질문은
+ * 항상 2개를 받은 뒤 분해한다(서버가 보장, "그냥 이대로 쪼개줘" 스킵만 예외)
+ * — 상한도 2개로 클라이언트가 지킨다:
+ *  - soft guard: the 2nd answer is sent with an "assume the rest" suffix;
+ *  - hard guard: a `need_more` after 2 answers is never shown — one silent
+ *    skip-advance is retried, then an error banner. A 3rd question cannot
  *    reach the screen (03 §3.2).
  *
  * The caller must keep `goal`/`initialAnswers`/`initialResult`/`context`
@@ -29,28 +30,29 @@ import type {
 export const SKIP_ANSWER = "그냥 이대로 쪼개줘";
 const SOFT_GUARD_SUFFIX = " (남은 건 알아서 가정하고 이대로 쪼개주세요)";
 const IMMEDIATE_ACK = "좋아요. 몇 가지만 짧게 여쭤볼게요.";
-const REOPEN_NOTE = "저장해둔 계획이에요. 더 잘게 쪼갤 항목이 있으면 눌러 주세요.";
+const REOPEN_NOTE = "저장해둔 계획이에요. 마음에 들지 않으면 다시 쪼갤 수 있어요.";
 const NETWORK_ERROR = "연결에 문제가 생겼어요. 잠시 후 다시 시도해 주세요.";
 const HARD_GUARD_ERROR =
   "질문이 길어지지 않게 여기서 바로 쪼개볼게요. 다시 시도를 눌러 주세요.";
 
-const QUESTION_CAP = 3;
-const MAX_TASKS = 5;
-export const MAX_SELECTED = 5;
+const QUESTION_CAP = 2;
+/** 서브태스크 상한 — 다시 쪼개기를 거듭할수록 더 잘게 제안한다 (5 → 8 → 10). */
+const TASK_CAPS = [5, 8, 10] as const;
 
 export type FlowTask = { id: string; title: string; done: boolean };
 export type FlowLogItem = { id: number; role: "user" | "ai"; text: string };
 
 export type UseSplitFlowArgs = {
-  /** 데모는 claude 고정. */
+  /** 미지정이면 서버가 결정한다 — LLM_PROVIDER 환경 변수 또는 키가 있는 쪽. */
   provider?: Provider;
   /** 카드 title이 주입된다 — 목표 입력(intro) 단계는 없다. */
   goal: string;
   /** 다시 쪼개기: 이전 clarify 문답에 이어간다 (원칙 4). */
   initialAnswers?: Answer[];
   /**
-   * 쪼갠 카드 재진입: 저장된 계획으로 result 화면을 재구성하고 항목별
-   * resplit만 허용한다 — advance는 다시 돌지 않는다 (03 §3.3).
+   * 쪼갠 카드 재진입: 저장된 계획으로 result 화면을 재구성한다. 서브태스크는
+   * 더 쪼갤 수 없고, 마음에 들지 않으면 regenerate()로 전체를 다시 만든다 —
+   * 새 결과는 확정해야 카드에 반영된다 (03 §3.3).
    */
   initialResult?: { tasks: { title: string; done: boolean }[]; firstStep: Task } | null;
   /** 브레인덤프 원문 — 데모는 항상 전달 (03 §4 필수 확장). */
@@ -68,7 +70,7 @@ async function postSplit(body: SplitRequest): Promise<SplitResponse> {
 }
 
 export function useSplitFlow({
-  provider = "claude",
+  provider,
   goal,
   initialAnswers,
   initialResult,
@@ -100,7 +102,6 @@ export function useSplitFlow({
     (initialResult?.tasks ?? []).forEach((_, i) => (all[`t${i}`] = true));
     return all;
   });
-  const [resplittingId, setResplittingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState<(() => void) | null>(null);
 
@@ -109,6 +110,9 @@ export function useSplitFlow({
   const logCounter = useRef(1);
   const autoSkipUsed = useRef(false);
   const started = useRef(false);
+  // 다시 쪼개기 횟수 — 상한을 5 → 8 → 10으로 올린다.
+  const regenCount = useRef(0);
+  const maxTasks = () => TASK_CAPS[Math.min(regenCount.current, TASK_CAPS.length - 1)];
 
   const appendAi = (text: string) => {
     if (!text?.trim()) return;
@@ -119,7 +123,7 @@ export function useSplitFlow({
 
   const makeTasks = (list: Task[], done = false): FlowTask[] =>
     list
-      .slice(0, MAX_TASKS)
+      .slice(0, maxTasks())
       .map((t) => ({ id: `t${taskCounter.current++}`, title: t.title, done }));
 
   function showResult(taskList: Task[], step: Task) {
@@ -143,6 +147,7 @@ export function useSplitFlow({
         goal,
         answers,
         context,
+        maxTasks: maxTasks(),
       });
       if ("error" in data) {
         setError(data.error);
@@ -157,12 +162,12 @@ export function useSplitFlow({
       if (data.status !== "need_more") return;
 
       if (answers.length >= QUESTION_CAP) {
-        // 하드 가드: 4번째 질문은 화면에 올리지 않는다 (03 §3.2-3).
+        // 하드 가드: 상한을 넘는 질문은 화면에 올리지 않는다 (03 §3.2-3).
         if (!autoSkipUsed.current) {
           autoSkipUsed.current = true;
           const skipAnswers = [
             ...answers,
-            { key: data.question.key, question: data.question.text, answer: SKIP_ANSWER },
+            { question: data.question.text, answer: SKIP_ANSWER },
           ];
           answersRef.current = skipAnswers;
           // await로 이어야 바깥 finally가 자동 스킵 요청 중에 loading을 끄지 않는다.
@@ -202,78 +207,37 @@ export function useSplitFlow({
     const question = pending;
     appendUser(answer);
     setPending(null);
-    // 소프트 가드: 3번째 답변에는 "남은 건 가정" 문구를 실어 보낸다 (03 §3.2-2).
-    const isThird = answersRef.current.length >= QUESTION_CAP - 1;
+    // 소프트 가드: 마지막(2번째) 답변에는 "남은 건 가정" 문구를 실어 보낸다 (03 §3.2-2).
+    const isLast = answersRef.current.length >= QUESTION_CAP - 1;
     const sent =
-      isThird && answer !== SKIP_ANSWER ? `${answer}${SOFT_GUARD_SUFFIX}` : answer;
+      isLast && answer !== SKIP_ANSWER ? `${answer}${SOFT_GUARD_SUFFIX}` : answer;
     const next = [
       ...answersRef.current,
-      { key: question.key, question: question.text, answer: sent },
+      { question: question.text, answer: sent },
     ];
     answersRef.current = next;
     void runAdvance(next);
   }
 
-  async function runResplit(task: FlowTask) {
-    if (resplittingId || loading || task.done) return;
-    setResplittingId(task.id);
-    setError(null);
-    setRetry(null);
-    const remaining = tasks.filter((t) => t.id !== task.id);
-    try {
-      const data = await postSplit({
-        action: "resplit",
-        provider,
-        goal,
-        answers: answersRef.current,
-        taskToSplit: task.title,
-        // 완료 현황은 "(완료)" 표기 컨벤션으로 전달 — 계약 변경 없음 (03 §3.3).
-        otherTasks: remaining.map((t) => (t.done ? `${t.title} (완료)` : t.title)),
-      });
-      if ("error" in data) {
-        setError(data.error);
-        setRetry(() => () => runResplit(task));
-        return;
-      }
-      if (data.status !== "resplit") return;
-      appendAi(data.message);
-      const subs = makeTasks(data.tasks);
-      setTasks([...subs, ...remaining]);
-      setFirstStep({ title: data.firstStep.title });
-      // 기본 선택은 새 하위 항목 우선으로 5개까지 (03 §3.2 — 5개 상한 규칙).
-      setSelected((prev) => {
-        const next: Record<string, boolean> = {};
-        let count = 0;
-        for (const s of subs) {
-          if (count >= MAX_SELECTED) break;
-          next[s.id] = true;
-          count++;
-        }
-        for (const t of remaining) {
-          if (count >= MAX_SELECTED) break;
-          if (prev[t.id]) {
-            next[t.id] = true;
-            count++;
-          }
-        }
-        return next;
-      });
-    } catch {
-      setError(NETWORK_ERROR);
-      setRetry(() => () => runResplit(task));
-    } finally {
-      setResplittingId(null);
-    }
+  /**
+   * "다시 쪼개기" — 전체 계획을 같은 문답·맥락으로 재생성한다 (PRD 5.2).
+   * 요청할 때마다 상한이 5 → 8 → 10으로 올라 더 잘게 제안된다.
+   * 화면의 제안만 바뀌며, 카드에는 confirm()해야 반영된다.
+   */
+  function regenerate() {
+    if (loading) return;
+    regenCount.current = Math.min(regenCount.current + 1, TASK_CAPS.length - 1);
+    autoSkipUsed.current = false; // 재생성마다 하드 가드 자동 스킵 기회를 새로 준다
+    void runAdvance(answersRef.current);
   }
 
   const toggleSelected = (taskId: string) =>
     setSelected((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
 
   const selectedCount = tasks.filter((t) => selected[t.id]).length;
-  const overCap = selectedCount > MAX_SELECTED;
 
   function confirm() {
-    if (!firstStep || selectedCount === 0 || overCap) return;
+    if (!firstStep || selectedCount === 0 || loading) return;
     onConfirm({
       tasks: tasks.filter((t) => selected[t.id]).map((t) => ({ title: t.title })),
       firstStep,
@@ -298,12 +262,10 @@ export function useSplitFlow({
     firstStep,
     selected,
     selectedCount,
-    overCap,
-    resplittingId,
     error,
     canRetry: retry !== null,
     answerPending,
-    runResplit,
+    regenerate,
     toggleSelected,
     confirm,
     retryNow,

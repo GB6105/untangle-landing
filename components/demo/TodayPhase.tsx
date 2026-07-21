@@ -1,29 +1,26 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { CtaButton } from "@/components/CtaButton";
-import { ChatBubble } from "@/components/split/ChatBubble";
 import { hasAnyCheck, initialDemoState, isCardDone } from "@/components/demo/state";
 import type { DemoCard } from "@/components/demo/types";
 
 /**
  * Today execution screen — phase "today" (docs/features/04-demo-today.md).
  *
- * Confirmed cards only, one card open at a time (아코디언 — "실행은 한 번에
- * 하나"). Every checkbox here means "완료". The first check anywhere is the
- * demo's success signal: 1.2s later the one-shot feedback slide-up appears
- * (04 §3.4). Restraint rules apply throughout — no timers, no confetti, no
- * next-day talk (00 §6, 04 §3.3).
+ * AI와의 대화가 끝나고 도착하는 순수한 투두 리스트다 — 코치 말풍선 등 채팅
+ * 요소는 없다. Confirmed cards only, one card open at a time (아코디언 —
+ * "실행은 한 번에 하나"). Every checkbox here means "완료". The first check
+ * anywhere is the demo's success signal: 1.2s later the one-shot feedback
+ * slide-up appears (04 §3.4). Restraint rules apply throughout — no timers,
+ * no confetti, no next-day talk (00 §6, 04 §3.3).
  */
 
 const REGISTER_HREF = "/register?from=demo";
 const SLIDEUP_DELAY_MS = 1200;
 
-const ARRIVAL_SPLIT = "이제 '지금 할 첫 단계' 하나만 체크해 보세요.";
-const ARRIVAL_UNSPLIT = "오늘 할 일이 준비됐어요. 끝낸 일에 체크해 보세요.";
-const FIRST_CHECK_LINE = "방금 첫 칸을 채웠어요. 시작이 제일 어려운 건데요.";
 const CARD_DONE_LINE = "이 일을 끝까지 마쳤어요. 잘하고 있어요.";
 const ALL_DONE_BANNER = "오늘 정한 일을 전부 끝냈어요";
 const CTA_LABEL = "소감 한 마디 남기기";
@@ -31,7 +28,6 @@ const CTA_LABEL = "소감 한 마디 남기기";
 export function TodayPhase({
   cards,
   slideupShown,
-  initialOpenCardId,
   onToggleFirstStep,
   onToggleSubtask,
   onToggleCardDone,
@@ -41,34 +37,18 @@ export function TodayPhase({
 }: {
   cards: DemoCard[];
   slideupShown: boolean;
-  /** 방금 쪼갠 카드 id — 도착 시 자동으로 펼친다 (04 §3.1). */
-  initialOpenCardId: string | null;
   onToggleFirstStep: (cardId: string) => void;
   onToggleSubtask: (cardId: string, subtaskId: string) => void;
   /** 미분해 카드만 — 쪼갠 카드는 서브태스크로만 완료된다 (04 §3.2). */
   onToggleCardDone: (cardId: string) => void;
-  /** 쪼개기/더 쪼개기 재진입 (03 §3.3). */
+  /** 쪼개기/다시 쪼개기 재진입 (03 §3.3). */
   onSplitCard: (cardId: string) => void;
   onSlideupShown: () => void;
   /** 인라인 확인 1회 뒤에만 호출한다. */
   onRestart: () => void;
 }) {
   const anyCheck = hasAnyCheck({ ...initialDemoState, cards });
-  const splitCards = cards.filter((c) => c.subtasks.length > 0);
   const allDone = cards.length > 0 && cards.every(isCardDone);
-
-  // 아코디언 초기 펼침: 방금 쪼갠 카드 → 쪼갠 카드 중 첫 번째 → 첫 카드.
-  const [openId, setOpenId] = useState<string | null>(
-    () => initialOpenCardId ?? splitCards[0]?.id ?? cards[0]?.id ?? null,
-  );
-
-  // "첫 체크" 축하는 이 세션에서 최초 1회만 — 재진입으로 이미 체크가 있으면
-  // 최초가 아니므로 다시 축하하지 않는다 (04 §3.3-1).
-  const hadCheckOnArrival = useRef(anyCheck);
-  const [celebrated, setCelebrated] = useState(false);
-  const noteCheck = () => {
-    if (!hadCheckOnArrival.current) setCelebrated(true);
-  };
 
   // 슬라이드업: 첫 체크 && 미노출 → 1.2초 뒤 표시 (04 §3.4). 1.2초 안에 체크를
   // 되돌리면 cleanup이 타이머를 취소하고, 노출 즉시 onSlideupShown을 알린다.
@@ -92,12 +72,6 @@ export function TodayPhase({
     weekday: "long",
   });
 
-  const coachLine = celebrated
-    ? FIRST_CHECK_LINE
-    : splitCards.length > 0
-      ? ARRIVAL_SPLIT
-      : ARRIVAL_UNSPLIT;
-
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex-1 overflow-y-auto px-5 py-5">
@@ -120,30 +94,13 @@ export function TodayPhase({
             </h2>
           </div>
 
-          {/* 도착 안내 / 첫 체크 축하 — Co-Planner 한 줄 */}
-          <ChatBubble role="ai">{coachLine}</ChatBubble>
-
           {cards.map((card) => (
             <TodayCard
               key={card.id}
               card={card}
-              open={openId === card.id}
-              onOpenToggle={() =>
-                setOpenId((prev) => (prev === card.id ? null : card.id))
-              }
-              onFirstStep={() => {
-                if (card.firstStep && !card.firstStep.done) noteCheck();
-                onToggleFirstStep(card.id);
-              }}
-              onSubtask={(subtaskId) => {
-                const sub = card.subtasks.find((s) => s.id === subtaskId);
-                if (sub && !sub.done) noteCheck();
-                onToggleSubtask(card.id, subtaskId);
-              }}
-              onCardDone={() => {
-                if (!card.done) noteCheck();
-                onToggleCardDone(card.id);
-              }}
+              onFirstStep={() => onToggleFirstStep(card.id)}
+              onSubtask={(subtaskId) => onToggleSubtask(card.id, subtaskId)}
+              onCardDone={() => onToggleCardDone(card.id)}
               onSplit={() => onSplitCard(card.id)}
             />
           ))}
@@ -191,19 +148,15 @@ export function TodayPhase({
   );
 }
 
-/** One TODO Card — 접힘/펼침 (04 §3.2). */
+/** One TODO Card — 기본 펼침. 쪼갠 카드만 헤드를 터치해 접었다 펼 수 있다. */
 function TodayCard({
   card,
-  open,
-  onOpenToggle,
   onFirstStep,
   onSubtask,
   onCardDone,
   onSplit,
 }: {
   card: DemoCard;
-  open: boolean;
-  onOpenToggle: () => void;
   onFirstStep: () => void;
   onSubtask: (subtaskId: string) => void;
   onCardDone: () => void;
@@ -212,6 +165,17 @@ function TodayCard({
   const split = card.subtasks.length > 0;
   const done = isCardDone(card);
   const doneCount = card.subtasks.filter((s) => s.done).length;
+  const [collapsed, setCollapsed] = useState(false);
+
+  const title = (
+    <span
+      className={`min-w-0 flex-1 text-left text-[15px] font-medium leading-[1.4] ${
+        done ? "text-sys-primary-dark" : "text-sys-label-strong"
+      }`}
+    >
+      {card.title}
+    </span>
+  );
 
   return (
     <div
@@ -221,35 +185,31 @@ function TodayCard({
           : "border-sys-line bg-sys-bg"
       }`}
     >
-      {/* 접힘 행: 제목 + (쪼갠 카드: 진행 배지 / 미분해: 완료 체크박스) */}
-      <div className="flex items-center gap-2.5 px-[14px] py-3">
-        {!split && <CheckBox checked={card.done} onToggle={onCardDone} />}
+      {/* 헤드 행: 제목 + (쪼갠 카드: 진행 배지 / 미분해: 완료 체크박스) */}
+      {split ? (
         <button
           type="button"
-          onClick={onOpenToggle}
-          aria-expanded={open}
-          className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
+          onClick={() => setCollapsed((prev) => !prev)}
+          aria-expanded={!collapsed}
+          className="flex w-full items-center gap-2.5 px-[14px] py-3"
         >
+          {title}
           <span
-            className={`min-w-0 flex-1 text-[15px] font-medium leading-[1.4] ${
-              done ? "text-sys-primary-dark" : "text-sys-label-strong"
+            className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold transition-colors ${
+              done
+                ? "bg-sys-primary text-sys-on-primary"
+                : "bg-sys-primary-lighter text-sys-primary-dark"
             }`}
           >
-            {card.title}
+            {doneCount}/{card.subtasks.length}
           </span>
-          {split && (
-            <span
-              className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold transition-colors ${
-                done
-                  ? "bg-sys-primary text-sys-on-primary"
-                  : "bg-sys-primary-lighter text-sys-primary-dark"
-              }`}
-            >
-              {doneCount}/{card.subtasks.length}
-            </span>
-          )}
         </button>
-      </div>
+      ) : (
+        <div className="flex items-center gap-2.5 px-[14px] py-3">
+          <CheckBox checked={card.done} onToggle={onCardDone} />
+          {title}
+        </div>
+      )}
 
       {/* 카드 완료 — 따뜻한 1문장 (04 §3.3-2) */}
       {done && (
@@ -258,8 +218,9 @@ function TodayCard({
         </p>
       )}
 
-      {open &&
-        (split ? (
+      {split ? (
+        // 터치로 접힌 동안엔 본문만 숨긴다 — 헤드·완료 문구는 유지
+        !collapsed && (
           <div className="flex flex-col gap-[9px] border-t border-sys-line px-[14px] pb-3.5 pt-3">
             {/* 지금 할 첫 단계 — 도착 시 시각적 포커스 (04 §3.1) */}
             {card.firstStep && (
@@ -303,31 +264,30 @@ function TodayCard({
               ))}
             </ol>
 
-            {/* 더 쪼개기 — 저장된 계획으로 재진입 (03 §3.3) */}
+            {/* 다시 쪼개기 — 저장된 계획을 열어 전체를 재생성 (03 §3.3) */}
             <button
               type="button"
               onClick={onSplit}
               className="flex items-center gap-1.5 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark"
             >
               <Icon name="scissors" size={13} strokeWidth={2} />
-              더 쪼개기
+              다시 쪼개기
             </button>
           </div>
-        ) : (
-          <div className="flex items-center justify-between gap-3 border-t border-sys-line px-[14px] py-3">
-            <p className="text-[13.5px] leading-[1.5] text-sys-label-neutral">
-              막막하면 쪼개볼까요?
-            </p>
+        )
+      ) : (
+          <div className="flex flex-col border-t border-sys-line px-[14px] py-3">
+            {/* 미분해 카드 — 쪼개기 시작 */}
             <button
               type="button"
               onClick={onSplit}
-              className="flex shrink-0 items-center gap-1.5 rounded-[10px] bg-sys-primary-dark px-3 py-2 text-[13px] font-bold text-sys-on-primary"
+              className="flex items-center gap-1.5 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark"
             >
-              <Icon name="scissors" size={14} strokeWidth={2.2} />
+              <Icon name="scissors" size={13} strokeWidth={2} />
               쪼개기
             </button>
           </div>
-        ))}
+        )}
     </div>
   );
 }
