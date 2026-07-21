@@ -9,13 +9,17 @@ import type {
 } from "@/components/split/types";
 
 /**
- * 쪼개기(Split) feature backend — FEATURE.md §3.
+ * 쪼개기(Split) feature backend — docs/features/03-demo-split.md.
  *
  * Drives the Co-Planner conversation with an LLM: on each `advance` turn it
  * decides which of the 5 context items are still unclear and either asks the
- * next adaptive question (F3-2/F3-3) or decomposes the goal into ≤5 tasks plus
- * an immediate first step (F3-4/F3-5). `resplit` breaks one chosen task down
- * further (F3-6).
+ * next adaptive question or decomposes the goal into ≤5 tasks plus an
+ * immediate first step. `resplit` breaks one chosen task down further.
+ *
+ * Questions are hard-capped at 3 per conversation (PRD 5.2 "최대 2~3번") — the
+ * prompt targets 2 and the client adds soft/hard guards on top (03 §3.2).
+ * `advance` optionally takes `context` (예: 브레인덤프 원문) so items already
+ * evident there are never asked again.
  *
  * The user can pick the provider (Claude or GPT); both are asked to return the
  * same JSON shape. The conversation is stateless: the client sends the full
@@ -85,12 +89,16 @@ const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '
 
 # 진행 방식
 1. 사용자의 목표와 지금까지의 답변을 보고, 5가지 항목 중 아직 불명확한 것이 있는지 판단하세요.
-2. 첫 입력만으로 이미 충분히 명확한 항목은 질문하지 마세요. 5가지가 처음부터 모두 충분하면 곧바로 분해하세요(status: "ready").
+2. 첫 입력만으로 이미 충분히 명확한 항목은 질문하지 마세요. [오늘의 맥락]이 주어지면 그 안에서 이미 드러난 항목도 질문하지 마세요. 처음부터 모두 충분하면 곧바로 분해하세요(status: "ready").
 3. 아직 불명확한 항목이 있으면 status를 "need_more"로 하고, 가장 도움이 되는 다음 질문 '하나만' 던지세요.
    - 앞선 답변에 따라 질문과 선택지를 자연스럽게 조정하세요. 질문 순서는 고정이 아니에요.
    - 사용자가 바로 고를 수 있는 짧은 선택지(options)를 반드시 2~4개 함께 제시하세요. (options는 절대 빈 배열이면 안 됩니다.)
    - 이미 답변된 항목(key)은 다시 묻지 마세요. question.key는 이번에 묻는 항목의 key여야 해요.
-4. 5가지 맥락이 충분히 파악되면 status를 "ready"로 하고, 그 일을 작은 실행 단위로 분해하세요.
+4. 질문 수 상한: 질문은 이 대화 전체에서 2회를 목표로 하고, 3회를 절대 넘기지 마세요.
+   - 답변이 2개 이상 쌓였으면 남은 불명확한 항목은 합리적으로 가정하고 되도록 분해로 넘어가세요.
+   - 답변이 3개 쌓였다면 더 묻지 말고 반드시 분해하세요(status: "ready").
+   - 사용자가 "그냥 이대로 쪼개줘"처럼 바로 분해를 원하면, 즉시 남은 항목을 합리적으로 가정하고 분해하세요(status: "ready").
+5. 맥락이 충분히 파악되면 status를 "ready"로 하고, 그 일을 작은 실행 단위로 분해하세요.
    - tasks: 5개 이하의, 한눈에 부담 없는 작은 할 일. 각 title은 구체적인 행동으로.
    - firstStep: 지금 당장 고민 없이 할 수 있는 아주 작은 첫 행동 하나. tasks와는 별개로, 걸림돌을 우회하는 행동이어야 해요. (예: "책상에 앉기", "노트북 펼치기", "OOO 검색해보기")
 
@@ -133,8 +141,11 @@ function contextBlock(goal: string, answers: Answer[]): string {
   return `[목표]\n${goal}\n\n[지금까지 파악된 맥락]\n${lines}`;
 }
 
-function advanceUser(goal: string, answers: Answer[]): string {
-  return `${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 아직 불명확한 맥락이 있으면 다음 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 5가지가 충분히 명확하면 할 일로 분해하세요(status: "ready").`;
+function advanceUser(goal: string, answers: Answer[], context?: string): string {
+  const daily = context?.trim()
+    ? `[오늘의 맥락]\n${context.trim()}\n\n`
+    : "";
+  return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 아직 불명확한 맥락이 있으면 다음 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 충분히 명확하면 할 일로 분해하세요(status: "ready"). 질문 상한(전체 2~3회)을 지키세요.`;
 }
 
 function resplitUser(
@@ -264,7 +275,7 @@ export async function POST(request: Request): Promise<Response> {
     const parsed = await callLLM(
       provider,
       ADVANCE_SYSTEM,
-      advanceUser(body.goal, body.answers ?? []),
+      advanceUser(body.goal, body.answers ?? [], body.context),
       ADVANCE_SCHEMA,
     );
 
