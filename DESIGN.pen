@@ -1,5 +1,5 @@
 {
-  "version": "2.13",
+  "version": "2.14",
   "children": [
     {
       "type": "frame",
@@ -4458,783 +4458,6 @@
     },
     {
       "type": "frame",
-      "id": "ZPOYi",
-      "x": 2617,
-      "y": 3301,
-      "name": "Split Example",
-      "width": "fill_container(440)",
-      "fill": "$sys-bg",
-      "cornerRadius": 20,
-      "stroke": "$sys-line",
-      "strokeWidth": 1,
-      "effect": {
-        "type": "shadow",
-        "shadowType": "outer",
-        "color": "#1A1A2410",
-        "offset": {
-          "x": 0,
-          "y": 6
-        },
-        "blur": 20,
-        "spread": -4
-      },
-      "layout": "vertical",
-      "gap": 13,
-      "padding": 16,
-      "children": [
-        {
-          "type": "frame",
-          "id": "NfDom",
-          "name": "Header",
-          "width": "fill_container",
-          "gap": 8,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "DRShm",
-              "name": "Avatar",
-              "width": 22,
-              "height": 22,
-              "fill": "$sys-primary",
-              "cornerRadius": 7,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "n6wxo3",
-                  "name": "Scissors",
-                  "width": 13,
-                  "height": 13,
-                  "icon": "scissors",
-                  "library": "lucide",
-                  "fill": "$sys-on-primary"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "id": "q6gQN",
-              "name": "Title",
-              "fill": "$sys-label-strong",
-              "content": "Co-Planner",
-              "fontFamily": "$sys-font",
-              "fontSize": 13.5,
-              "fontWeight": "700"
-            },
-            {
-              "type": "frame",
-              "id": "M2kTBS",
-              "name": "Tag",
-              "fill": "$sys-primary-lighter",
-              "cornerRadius": 999,
-              "padding": [
-                3,
-                9
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "n5Jm8K",
-                  "name": "Tag Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "쪼개기",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 11,
-                  "fontWeight": "600"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "VBSdK",
-          "name": "User Row",
-          "width": "fill_container",
-          "justifyContent": "end",
-          "children": [
-            {
-              "type": "frame",
-              "id": "I89FUU",
-              "name": "User Bubble",
-              "fill": "$sys-primary",
-              "cornerRadius": 14,
-              "padding": [
-                9,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "YoU3T",
-                  "name": "User Text",
-                  "fill": "$sys-on-primary",
-                  "content": "포트폴리오 웹사이트 만들기",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "J3shze",
-          "name": "AI Row",
-          "width": "fill_container",
-          "children": [
-            {
-              "type": "frame",
-              "id": "sBDPP",
-              "name": "AI Bubble",
-              "width": 300,
-              "fill": "$sys-bg-gray",
-              "cornerRadius": 14,
-              "padding": [
-                10,
-                13
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "xlA8h",
-                  "name": "AI Text",
-                  "fill": "$sys-label-strong",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "좋아요. 먼저, 이걸 왜 만들고 싶으세요?",
-                  "lineHeight": 1.5,
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "n0S5nt",
-          "name": "Chips",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 7,
-          "children": [
-            {
-              "type": "frame",
-              "id": "hI1Eh",
-              "name": "Chip 이직 준비",
-              "fill": "$sys-primary-lighter",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "hVkDL",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "이직 준비",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "Plp7c",
-              "name": "Chip 사이드 프로젝트",
-              "fill": "$sys-bg",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "TnybN",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "사이드 프로젝트",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "ckzvZ",
-              "name": "Chip 그냥 정리용",
-              "fill": "$sys-bg",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "X3cv2",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "그냥 정리용",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "id": "YgjQK",
-              "name": "Chips Hint",
-              "fill": "$sys-label-alt",
-              "content": "직접 입력해도 돼요",
-              "fontFamily": "$sys-font",
-              "fontSize": 10.5,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "wktw1",
-          "name": "AI Row",
-          "width": "fill_container",
-          "children": [
-            {
-              "type": "frame",
-              "id": "bMvra",
-              "name": "AI Bubble",
-              "width": 300,
-              "fill": "$sys-bg-gray",
-              "cornerRadius": 14,
-              "padding": [
-                10,
-                13
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "xwRJW",
-                  "name": "AI Text",
-                  "fill": "$sys-label-strong",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "지금 어디까지 와 있어요?",
-                  "lineHeight": 1.5,
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "ijQo0",
-          "name": "Chips",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 7,
-          "children": [
-            {
-              "type": "frame",
-              "id": "bHDGI",
-              "name": "Chip 아무것도 안 함",
-              "fill": "$sys-bg",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "b4Awvo",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "아무것도 안 함",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "WVp9r",
-              "name": "Chip 내용 정리 중",
-              "fill": "$sys-primary-lighter",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "kl2c9",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "내용 정리 중",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "NxwYR",
-              "name": "Chip 디자인 시안 있음",
-              "fill": "$sys-bg",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                8,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "jsz3F",
-                  "name": "Chip Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "디자인 시안 있음",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "id": "YigkG",
-              "name": "Chips Hint",
-              "fill": "$sys-label-alt",
-              "content": "직접 입력해도 돼요",
-              "fontFamily": "$sys-font",
-              "fontSize": 10.5,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "vccUh",
-          "name": "System Line",
-          "width": "fill_container",
-          "padding": [
-            2,
-            0
-          ],
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "MvRRp",
-              "name": "System Text",
-              "fill": "$sys-label-alt",
-              "content": "몇 가지 더 확인한 뒤…",
-              "fontFamily": "$sys-font",
-              "fontSize": 11,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "HNvhc",
-          "name": "First Step Card",
-          "width": "fill_container",
-          "fill": "$sys-primary-lighter",
-          "cornerRadius": 14,
-          "layout": "vertical",
-          "gap": 8,
-          "padding": 13,
-          "children": [
-            {
-              "type": "frame",
-              "id": "EONqg",
-              "name": "FS Label Row",
-              "gap": 5,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "r895L",
-                  "name": "Zap",
-                  "width": 13,
-                  "height": 13,
-                  "icon": "zap",
-                  "library": "lucide",
-                  "fill": "$sys-primary-dark"
-                },
-                {
-                  "type": "text",
-                  "id": "CuWR4",
-                  "name": "FS Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "지금 할 첫 단계",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 11.5,
-                  "fontWeight": "700"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "id": "oPDE7",
-              "name": "FS Title",
-              "fill": "$sys-label-strong",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "노트북 열고 새 프로젝트 폴더 만들기",
-              "fontFamily": "$sys-font",
-              "fontSize": 14,
-              "fontWeight": "600"
-            },
-            {
-              "type": "frame",
-              "id": "WE2eL",
-              "name": "FS Add Row",
-              "width": "fill_container",
-              "justifyContent": "end",
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "n7hsqP",
-                  "name": "Add Button",
-                  "padding": [
-                    4,
-                    8
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "x33UP",
-                      "name": "Add Label",
-                      "fill": "$sys-primary",
-                      "content": "추가",
-                      "fontFamily": "$sys-font",
-                      "fontSize": 12,
-                      "fontWeight": "700"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "hNEdL",
-          "name": "AI Row",
-          "width": "fill_container",
-          "children": [
-            {
-              "type": "frame",
-              "id": "weiIg",
-              "name": "AI Bubble",
-              "width": 300,
-              "fill": "$sys-bg-gray",
-              "cornerRadius": 14,
-              "padding": [
-                10,
-                13
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "UREuo",
-                  "name": "AI Text",
-                  "fill": "$sys-label-strong",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "맥락을 바탕으로 작은 단위로 쪼개었어요. 추가할 것만 골라주세요.",
-                  "lineHeight": 1.5,
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "o3ttf",
-          "name": "Results List",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 9,
-          "children": [
-            {
-              "id": "txFwq",
-              "type": "ref",
-              "ref": "jpXuk",
-              "name": "Todo 사이트 구조 스케치하기",
-              "width": "fill_container",
-              "descendants": {
-                "CMKbv": {
-                  "fill": "$sys-pri-mid"
-                },
-                "HoYf1": {
-                  "content": "사이트 구조 스케치하기"
-                },
-                "kdBux": {
-                  "fill": "$sys-pri-mid-bg"
-                },
-                "y6F82X": {
-                  "content": "중간",
-                  "fill": "$sys-pri-mid"
-                },
-                "HZWnV": {
-                  "content": "20분"
-                },
-                "R6QMvS": {
-                  "enabled": false
-                },
-                "QxRvi": {
-                  "enabled": false
-                }
-              }
-            },
-            {
-              "id": "x58Jw",
-              "type": "ref",
-              "ref": "jpXuk",
-              "name": "Todo 메인 페이지 문구 정리",
-              "width": "fill_container",
-              "descendants": {
-                "CMKbv": {
-                  "fill": "$sys-pri-mid"
-                },
-                "HoYf1": {
-                  "content": "메인 페이지 문구 정리"
-                },
-                "kdBux": {
-                  "fill": "$sys-pri-mid-bg"
-                },
-                "y6F82X": {
-                  "content": "중간",
-                  "fill": "$sys-pri-mid"
-                },
-                "HZWnV": {
-                  "content": "30분"
-                },
-                "R6QMvS": {
-                  "enabled": false
-                },
-                "QxRvi": {
-                  "enabled": false
-                }
-              }
-            },
-            {
-              "id": "v375BZ",
-              "type": "ref",
-              "ref": "jpXuk",
-              "name": "Todo 디자인 시안 잡기",
-              "width": "fill_container",
-              "descendants": {
-                "CMKbv": {
-                  "fill": "$sys-pri-low"
-                },
-                "HoYf1": {
-                  "content": "디자인 시안 잡기"
-                },
-                "kdBux": {
-                  "fill": "$sys-pri-low-bg"
-                },
-                "y6F82X": {
-                  "content": "낮음",
-                  "fill": "$sys-pri-low"
-                },
-                "HZWnV": {
-                  "content": "40분"
-                },
-                "R6QMvS": {
-                  "enabled": false
-                },
-                "QxRvi": {
-                  "enabled": false
-                }
-              }
-            },
-            {
-              "id": "aIj9F",
-              "type": "ref",
-              "ref": "jpXuk",
-              "name": "Todo 배포 도구 알아보기",
-              "width": "fill_container",
-              "descendants": {
-                "CMKbv": {
-                  "fill": "$sys-pri-low"
-                },
-                "HoYf1": {
-                  "content": "배포 도구 알아보기"
-                },
-                "kdBux": {
-                  "fill": "$sys-pri-low-bg"
-                },
-                "y6F82X": {
-                  "content": "낮음",
-                  "fill": "$sys-pri-low"
-                },
-                "HZWnV": {
-                  "content": "15분"
-                },
-                "R6QMvS": {
-                  "enabled": false
-                },
-                "QxRvi": {
-                  "enabled": false
-                }
-              }
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "O9SrQ1",
-          "name": "Resplit Row",
-          "width": "fill_container",
-          "fill": "$sys-bg-gray",
-          "cornerRadius": 12,
-          "gap": 8,
-          "padding": [
-            10,
-            13
-          ],
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "U7RTa",
-              "name": "Resplit Hint",
-              "fill": "$sys-label-neutral",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "'디자인 시안 잡기'가 아직 커요?",
-              "fontFamily": "$sys-font",
-              "fontSize": 12,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "F7yZC",
-              "name": "Resplit Button",
-              "fill": "$sys-bg",
-              "cornerRadius": 999,
-              "stroke": "$sys-primary-light",
-              "strokeWidth": 1,
-              "padding": [
-                7,
-                13
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "qaNVq",
-                  "name": "Resplit Label",
-                  "fill": "$sys-primary-dark",
-                  "content": "더 쪼개기",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 12,
-                  "fontWeight": "700"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TMO30",
-          "name": "Confirm Bar",
-          "width": "fill_container",
-          "gap": 10,
-          "padding": [
-            4,
-            0,
-            0,
-            0
-          ],
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "Zc4rO",
-              "name": "Confirm Hint",
-              "fill": "$sys-label-alt",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "추가할 항목만 골라 확정해요",
-              "fontFamily": "$sys-font",
-              "fontSize": 11.5,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "frame",
-              "id": "Gxyxo",
-              "name": "Confirm Button",
-              "fill": "$sys-primary",
-              "cornerRadius": 10,
-              "padding": [
-                9,
-                16
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "XG5fy",
-                  "name": "Confirm Label",
-                  "fill": "$sys-on-primary",
-                  "content": "선택 항목 추가",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 13,
-                  "fontWeight": "700"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
       "id": "m4QcIs",
       "x": 760,
       "y": 919,
@@ -5407,7 +4630,7 @@
                   "id": "hD6cv",
                   "name": "Pill Label",
                   "fill": "$sys-primary-dark",
-                  "content": "출시 예정 · 사전 등록 받는 중",
+                  "content": "베타 체험 진행 중",
                   "fontFamily": "$sys-font",
                   "fontSize": 12.5,
                   "fontWeight": "600"
@@ -5440,368 +4663,45 @@
               "fontFamily": "$sys-font",
               "fontSize": 15,
               "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "FwfBB",
-          "name": "Experience",
-          "width": "fill_container",
-          "fill": "$sys-bg-violet",
-          "layout": "vertical",
-          "gap": 22,
-          "padding": [
-            52,
-            20,
-            56,
-            20
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "EMo3f",
-              "name": "Chat Window",
-              "clip": true,
-              "width": "fill_container",
-              "height": 524,
-              "fill": "$sys-bg",
-              "cornerRadius": 24,
-              "stroke": "$sys-line",
-              "strokeWidth": 1,
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#1A1A2417",
-                "offset": {
-                  "x": 0,
-                  "y": 10
-                },
-                "blur": 30,
-                "spread": -6
-              },
-              "layout": "vertical",
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "rQI14",
-                  "name": "Header",
-                  "width": "fill_container",
-                  "stroke": "$sys-line",
-                  "strokeWidth": {
-                    "bottom": 1
-                  },
-                  "strokeAlignment": "inner",
-                  "gap": 10,
-                  "padding": [
-                    14,
-                    16
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "NvQXm",
-                      "name": "Avatar",
-                      "width": 34,
-                      "height": 34,
-                      "fill": "$sys-primary",
-                      "cornerRadius": 11,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "YzFQZ",
-                          "name": "Avatar Icon",
-                          "width": 18,
-                          "height": 18,
-                          "icon": "sparkles",
-                          "library": "lucide",
-                          "fill": "$sys-on-primary"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "r9R3Si",
-                      "name": "Head Text",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 3,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "H8s18",
-                          "name": "Name Row",
-                          "width": "fill_container",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "bYeve",
-                              "name": "Title",
-                              "fill": "$sys-label-strong",
-                              "content": "Co-Planner",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 15,
-                              "fontWeight": "700"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "cLn5w",
-                              "name": "Tag",
-                              "fill": "$sys-primary-lighter",
-                              "cornerRadius": 999,
-                              "padding": [
-                                3,
-                                9
-                              ],
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "AqAEk",
-                                  "name": "Tag Label",
-                                  "fill": "$sys-primary-dark",
-                                  "content": "쪼개기",
-                                  "fontFamily": "$sys-font",
-                                  "fontSize": 11,
-                                  "fontWeight": "600"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "f6ElN",
-                          "name": "Status",
-                          "width": "fill_container",
-                          "gap": 5,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "EFfpn",
-                              "name": "Avatar",
-                              "width": 6,
-                              "height": 6,
-                              "fill": "#22C55E",
-                              "cornerRadius": 999,
-                              "justifyContent": "center",
-                              "alignItems": "center"
-                            },
-                            {
-                              "type": "text",
-                              "id": "IY0GK",
-                              "name": "Title",
-                              "fill": "$sys-label-neutral",
-                              "content": "온라인",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 11.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "Uc1g5",
-                  "name": "Conversation",
-                  "width": "fill_container",
-                  "height": "fill_container",
-                  "fill": "$sys-bg",
-                  "layout": "vertical",
-                  "gap": 12,
-                  "padding": 16,
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "T3P5Y2",
-                      "name": "AI Message",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "RcFsh",
-                          "name": "Msg Avatar",
-                          "width": 24,
-                          "height": 24,
-                          "fill": "$sys-primary",
-                          "cornerRadius": 8,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "v9Lut",
-                              "name": "Msg Avatar Icon",
-                              "width": 13,
-                              "height": 13,
-                              "icon": "sparkles",
-                              "library": "lucide",
-                              "fill": "$sys-on-primary"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "vHFjR",
-                          "name": "AI Bubble",
-                          "fill": "$sys-bg-gray",
-                          "cornerRadius": [
-                            4,
-                            14,
-                            14,
-                            14
-                          ],
-                          "padding": [
-                            11,
-                            14
-                          ],
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "vQfCQ",
-                              "name": "Greeting",
-                              "fill": "$sys-label-strong",
-                              "textGrowth": "fixed-width",
-                              "width": 240,
-                              "content": "안녕하세요, Co-Planner예요.\n어떤 일을 쪼개볼까요?",
-                              "lineHeight": 1.5,
-                              "fontFamily": "$sys-font",
-                              "fontSize": 13.5,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "Hhvfl",
-                  "name": "Input Bar",
-                  "width": "fill_container",
-                  "stroke": "$sys-line",
-                  "strokeWidth": {
-                    "top": 1
-                  },
-                  "strokeAlignment": "inner",
-                  "gap": 10,
-                  "padding": [
-                    12,
-                    16,
-                    16,
-                    16
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "ftqdK",
-                      "name": "Input Field",
-                      "width": "fill_container",
-                      "height": 46,
-                      "fill": "$sys-bg-gray",
-                      "cornerRadius": 14,
-                      "padding": [
-                        0,
-                        16
-                      ],
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "uW35c",
-                          "name": "Placeholder",
-                          "fill": "$sys-label-alt",
-                          "content": "쪼개고 싶은 일을 적어보세요",
-                          "fontFamily": "$sys-font",
-                          "fontSize": 14,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "y7uomO",
-                      "name": "Send",
-                      "width": 44,
-                      "height": 44,
-                      "fill": "$sys-primary",
-                      "cornerRadius": 14,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon",
-                          "id": "fsNEz",
-                          "name": "Send Icon",
-                          "width": 20,
-                          "height": 20,
-                          "icon": "arrow-up",
-                          "library": "lucide",
-                          "fill": "$sys-on-primary"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
             },
             {
               "type": "frame",
-              "id": "jiH77",
-              "name": "Hero CTA",
+              "id": "ssDHf",
+              "name": "Hero CTA Block",
               "width": "fill_container",
-              "fill": "$sys-primary-dark",
-              "cornerRadius": 14,
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#6A45E740",
-                "offset": {
-                  "x": 0,
-                  "y": 9
-                },
-                "blur": 24,
-                "spread": -2
-              },
+              "layout": "vertical",
               "gap": 8,
               "padding": [
-                19,
-                30
+                6,
+                0,
+                0,
+                0
               ],
-              "justifyContent": "center",
-              "alignItems": "center",
               "children": [
                 {
-                  "type": "text",
-                  "id": "h9gu8",
-                  "name": "Label",
-                  "fill": "$sys-on-primary",
-                  "content": "사전 등록하기",
-                  "fontFamily": "$sys-font",
-                  "fontSize": 17,
-                  "fontWeight": "700"
+                  "id": "AN7sU",
+                  "type": "ref",
+                  "ref": "mXwkh",
+                  "name": "Hero Demo CTA",
+                  "width": "fill_container",
+                  "descendants": {
+                    "A1aSP5": {
+                      "content": "지금 바로 체험해보기"
+                    }
+                  }
                 },
                 {
-                  "type": "icon",
-                  "id": "p6UNhk",
-                  "name": "Arrow",
-                  "width": 18,
-                  "height": 18,
-                  "icon": "arrow-right",
-                  "library": "lucide",
-                  "fill": "$sys-on-primary"
+                  "type": "text",
+                  "id": "VCpmK",
+                  "name": "CTA Subcopy",
+                  "fill": "$sys-label-alt",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "가입 없음 · 머릿속을 쏟아내는 것부터 시작해요",
+                  "textAlign": "center",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 12.5,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -6511,6 +5411,2074 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "P93CQ",
+      "x": 0,
+      "y": -786,
+      "name": "component/DemoHeader",
+      "context": "데모 화면 공통 헤더 — 로고+데모 배지+닫기 (진행 표시 없음)",
+      "reusable": true,
+      "width": 480,
+      "fill": "$sys-bg",
+      "stroke": "$sys-line",
+      "strokeWidth": {
+        "bottom": 1
+      },
+      "strokeAlignment": "inner",
+      "padding": [
+        12,
+        16
+      ],
+      "justifyContent": "space_between",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "lpx7U",
+          "name": "Brand",
+          "gap": 8,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "dcuXZ",
+              "name": "Mini Logo",
+              "clip": true,
+              "width": 26,
+              "height": 26,
+              "fill": {
+                "type": "gradient",
+                "gradientType": "radial",
+                "enabled": true,
+                "rotation": 0,
+                "size": {
+                  "width": 2.5,
+                  "height": 2.5
+                },
+                "colors": [
+                  {
+                    "color": "#f4f2ffff",
+                    "position": 0
+                  },
+                  {
+                    "color": "#d5c9ffff",
+                    "position": 0.42
+                  },
+                  {
+                    "color": "#b9a6feff",
+                    "position": 1
+                  }
+                ],
+                "center": {
+                  "x": 0.55,
+                  "y": 0.08
+                }
+              },
+              "cornerRadius": 13,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#6a45e740",
+                "blur": 4
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.5,
+                  "id": "VEqnk",
+                  "x": 5.7,
+                  "y": 8,
+                  "name": "Bar 1",
+                  "fill": "#6a45e7ff",
+                  "width": 3,
+                  "height": 5
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.5,
+                  "id": "tgQq3",
+                  "x": 11.5,
+                  "y": 8,
+                  "name": "Bar 2",
+                  "fill": "#6a45e7ff",
+                  "width": 3,
+                  "height": 5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NXeLP",
+              "name": "Demo Badge",
+              "fill": "$sys-primary-lighter",
+              "cornerRadius": 999,
+              "padding": [
+                2,
+                8
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jEFtp",
+                  "name": "Badge Label",
+                  "fill": "$sys-primary-dark",
+                  "content": "데모",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "icon",
+          "id": "CczXh",
+          "name": "Close",
+          "width": 20,
+          "height": 20,
+          "icon": "x",
+          "library": "lucide",
+          "fill": "$sys-label-neutral"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "nH6lm",
+      "x": 2715,
+      "y": 919,
+      "name": "Screen · Demo 1 Braindump · System",
+      "clip": true,
+      "width": 480,
+      "height": 820,
+      "fill": "$sys-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "HAlbY",
+          "type": "ref",
+          "ref": "P93CQ",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "xVrKw",
+          "name": "Chat Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "ajBVT",
+              "name": "Welcome Bubble",
+              "fill": "$sys-bg-gray",
+              "cornerRadius": [
+                5,
+                16,
+                16,
+                16
+              ],
+              "padding": [
+                11,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zWCPS",
+                  "name": "Welcome Text",
+                  "fill": "$sys-label-normal",
+                  "textGrowth": "fixed-width",
+                  "width": 310,
+                  "content": "요즘 머릿속에 있는 일들을 편하게 쏟아내 보세요. 문장이 아니어도 괜찮아요.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WXsao",
+              "name": "Example Chips",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 7,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "YQCAh",
+                  "name": "Chip",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "padding": [
+                    13,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v3Z7w",
+                      "name": "Chip Label",
+                      "fill": "$sys-label-strong",
+                      "content": "과제 2개랑 빨래가 밀렸어",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "TB0Is",
+                  "name": "Chip",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "padding": [
+                    13,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DoKMp",
+                      "name": "Chip Label",
+                      "fill": "$sys-label-strong",
+                      "content": "자소서 써야 하는데 손이 안 가",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MMGFz",
+                  "name": "Chip",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "padding": [
+                    13,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "te9oZ",
+                      "name": "Chip Label",
+                      "fill": "$sys-label-strong",
+                      "content": "시험공부 뭐부터 할지 모르겠어",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vm23I",
+          "name": "Input Bar",
+          "width": "fill_container",
+          "stroke": "$sys-line",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "padding": [
+            12,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "GrAIP",
+              "name": "Input Field",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 16,
+              "stroke": "$sys-line",
+              "strokeWidth": 1,
+              "gap": 8,
+              "padding": [
+                6,
+                6,
+                6,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "POTEQ",
+                  "name": "Placeholder",
+                  "fill": "$sys-label-alt",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "예: 과제 마감이 목요일인데 손도 못 댔고, 방도 치워야 하고…",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "r9dw5",
+                  "name": "Send",
+                  "width": 36,
+                  "height": 36,
+                  "fill": "$sys-primary-dark",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Q4eUl",
+                      "name": "Send Icon",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "arrow-up",
+                      "library": "lucide",
+                      "fill": "$sys-on-primary"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "NUxvN",
+      "x": 3355,
+      "y": 919,
+      "name": "Screen · Demo 2 Candidates · System",
+      "clip": true,
+      "width": 480,
+      "height": 820,
+      "fill": "$sys-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "V8dvnJ",
+          "type": "ref",
+          "ref": "P93CQ",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "hLWcB",
+          "name": "Candidates Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "wHF18",
+              "name": "Guide Bubble",
+              "fill": "$sys-bg-gray",
+              "cornerRadius": [
+                5,
+                16,
+                16,
+                16
+              ],
+              "padding": [
+                11,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "KWxRu",
+                  "name": "Guide Text",
+                  "fill": "$sys-label-normal",
+                  "content": "다 고르지 않아도 돼요. 오늘은 1개면 충분해요.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZfdDC",
+              "name": "Candidate List",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 7,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sS0pC",
+                  "name": "Candidate Selected",
+                  "width": "fill_container",
+                  "fill": "$sys-primary-lighter",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-primary",
+                  "strokeWidth": 1,
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "CAhOT",
+                      "name": "Mark",
+                      "width": 19,
+                      "height": 19,
+                      "fill": "$sys-primary",
+                      "cornerRadius": 6,
+                      "stroke": "$sys-primary",
+                      "strokeWidth": 1.5,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "HSlp4",
+                          "name": "Check",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$sys-on-primary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "R5GCn",
+                      "name": "Label",
+                      "fill": "$sys-label-strong",
+                      "content": "경영학 과제 초안 잡기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "oWxrD",
+                  "name": "Candidate Selected",
+                  "width": "fill_container",
+                  "fill": "$sys-primary-lighter",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-primary",
+                  "strokeWidth": 1,
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "JAVlv",
+                      "name": "Mark",
+                      "width": 19,
+                      "height": 19,
+                      "fill": "$sys-primary",
+                      "cornerRadius": 6,
+                      "stroke": "$sys-primary",
+                      "strokeWidth": 1.5,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "TxMrA",
+                          "name": "Check",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$sys-on-primary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Y0seC",
+                      "name": "Label",
+                      "fill": "$sys-label-strong",
+                      "content": "방 책상 위만 정리하기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wVNcA",
+                  "name": "Candidate",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KzpCR",
+                      "name": "Mark",
+                      "width": 19,
+                      "height": 19,
+                      "fill": "$sys-bg",
+                      "cornerRadius": 6,
+                      "stroke": "$sys-label-alt",
+                      "strokeWidth": 1.5,
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "XVDis",
+                      "name": "Label",
+                      "fill": "$sys-label-normal",
+                      "content": "오늘 20분 산책하기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c5TkSt",
+                  "name": "Candidate",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n7vfhM",
+                      "name": "Mark",
+                      "width": 19,
+                      "height": 19,
+                      "fill": "$sys-bg",
+                      "cornerRadius": 6,
+                      "stroke": "$sys-label-alt",
+                      "strokeWidth": 1.5,
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "PcSIH",
+                      "name": "Label",
+                      "fill": "$sys-label-normal",
+                      "content": "빨래 돌리기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jBb4d",
+                  "name": "Candidate",
+                  "width": "fill_container",
+                  "fill": "$sys-bg",
+                  "cornerRadius": 12,
+                  "stroke": "$sys-line",
+                  "strokeWidth": 1,
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "W8hhe",
+                      "name": "Mark",
+                      "width": 19,
+                      "height": 19,
+                      "fill": "$sys-bg",
+                      "cornerRadius": 6,
+                      "stroke": "$sys-label-alt",
+                      "strokeWidth": 1.5,
+                      "justifyContent": "center",
+                      "alignItems": "center"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dOtRB",
+                      "name": "Label",
+                      "fill": "$sys-label-normal",
+                      "content": "자소서 한 문단 쓰기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rtf0p",
+          "name": "Confirm Bar",
+          "width": "fill_container",
+          "stroke": "$sys-line",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            12,
+            20,
+            20,
+            20
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "P2K25",
+              "name": "Confirm Button",
+              "width": "fill_container",
+              "fill": "$sys-primary-dark",
+              "cornerRadius": 12,
+              "padding": [
+                13,
+                0
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lE9y3",
+                  "name": "Confirm Label",
+                  "fill": "$sys-on-primary",
+                  "content": "이대로 확정 (2개)",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PBswF",
+              "name": "Back Row",
+              "width": "fill_container",
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Lk1aK",
+                  "name": "Back Label",
+                  "fill": "$sys-label-neutral",
+                  "content": "다시 쏟아내기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "xTu1V",
+      "x": 3995,
+      "y": 919,
+      "name": "Screen · Demo 3 Split · System",
+      "clip": true,
+      "width": 480,
+      "height": 820,
+      "fill": "$sys-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "xa5DF",
+          "type": "ref",
+          "ref": "P93CQ",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "MlxRT",
+          "name": "Card Strip",
+          "width": "fill_container",
+          "stroke": "$sys-line",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "strokeAlignment": "inner",
+          "gap": 6,
+          "padding": [
+            9,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "M8nkD7",
+              "name": "Strip Icon",
+              "width": 13,
+              "height": 13,
+              "icon": "scissors",
+              "library": "lucide",
+              "fill": "$sys-primary-dark"
+            },
+            {
+              "type": "text",
+              "id": "pqpGu",
+              "name": "Strip Title",
+              "fill": "$sys-label-neutral",
+              "content": "경영학 과제 초안 잡기",
+              "fontFamily": "$sys-font",
+              "fontSize": 12.5,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "z0FkW",
+          "name": "Result Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "XTQJl",
+              "name": "AI Bubble",
+              "fill": "$sys-bg-gray",
+              "cornerRadius": [
+                5,
+                16,
+                16,
+                16
+              ],
+              "padding": [
+                11,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "LRPJN",
+                  "name": "AI Text",
+                  "fill": "$sys-label-normal",
+                  "textGrowth": "fixed-width",
+                  "width": 300,
+                  "content": "이렇게 쪼개봤어요. 지금 할 첫 단계부터 가볍게 시작해요.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "f0r7B8",
+              "name": "First Step Card",
+              "width": "fill_container",
+              "fill": "$sys-primary-lighter",
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                13,
+                14
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "TEwuk",
+                  "name": "First Step Head",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "b8YQIn",
+                      "name": "Sparkles",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "sparkles",
+                      "library": "lucide",
+                      "fill": "$sys-primary-dark"
+                    },
+                    {
+                      "type": "text",
+                      "id": "me6F3",
+                      "name": "First Step Label",
+                      "fill": "$sys-primary-dark",
+                      "content": "지금 할 첫 단계",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11.5,
+                      "fontWeight": "700",
+                      "letterSpacing": 0.4
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "HfMh5",
+                  "name": "First Step Title",
+                  "fill": "$sys-label-strong",
+                  "content": "과제 파일 열어서 제목만 쓰기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "yPEBA",
+              "name": "Task Row",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-primary-light",
+              "strokeWidth": 1,
+              "gap": 10,
+              "padding": [
+                11,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "R9IB4",
+                  "name": "Include Pill",
+                  "fill": "$sys-primary-dark",
+                  "cornerRadius": 999,
+                  "gap": 4,
+                  "padding": [
+                    5,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "qYEMS",
+                      "name": "Pill Check",
+                      "width": 11,
+                      "height": 11,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$sys-on-primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "GEkAT",
+                      "name": "Pill Label",
+                      "fill": "$sys-on-primary",
+                      "content": "담김",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11.5,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "N2nuHc",
+                  "name": "Task Title",
+                  "fill": "$sys-label-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "과제 요구사항 다시 읽기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "cbjLu",
+                  "name": "Resplit",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "DtxUw",
+                      "name": "Resplit Icon",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "scissors",
+                      "library": "lucide",
+                      "fill": "$sys-label-neutral"
+                    },
+                    {
+                      "type": "text",
+                      "id": "pmyE5",
+                      "name": "Resplit Label",
+                      "fill": "$sys-label-neutral",
+                      "content": "더 잘게",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "RxKr2",
+              "name": "Task Row",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-primary-light",
+              "strokeWidth": 1,
+              "gap": 10,
+              "padding": [
+                11,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "MIHjC",
+                  "name": "Include Pill",
+                  "fill": "$sys-primary-dark",
+                  "cornerRadius": 999,
+                  "gap": 4,
+                  "padding": [
+                    5,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "g5lQs",
+                      "name": "Pill Check",
+                      "width": 11,
+                      "height": 11,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$sys-on-primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "U8jFv",
+                      "name": "Pill Label",
+                      "fill": "$sys-on-primary",
+                      "content": "담김",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11.5,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "V3QMgF",
+                  "name": "Task Title",
+                  "fill": "$sys-label-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "참고 자료 2개 찾기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "hFLiw",
+                  "name": "Resplit",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "UhsbN",
+                      "name": "Resplit Icon",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "scissors",
+                      "library": "lucide",
+                      "fill": "$sys-label-neutral"
+                    },
+                    {
+                      "type": "text",
+                      "id": "s8wlR",
+                      "name": "Resplit Label",
+                      "fill": "$sys-label-neutral",
+                      "content": "더 잘게",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SlYYh",
+              "name": "Task Row",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-primary-light",
+              "strokeWidth": 1,
+              "gap": 10,
+              "padding": [
+                11,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "h2kp4",
+                  "name": "Include Pill",
+                  "fill": "$sys-primary-dark",
+                  "cornerRadius": 999,
+                  "gap": 4,
+                  "padding": [
+                    5,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "ztlCF",
+                      "name": "Pill Check",
+                      "width": 11,
+                      "height": 11,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$sys-on-primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kc16n",
+                      "name": "Pill Label",
+                      "fill": "$sys-on-primary",
+                      "content": "담김",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11.5,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "EWkMl",
+                  "name": "Task Title",
+                  "fill": "$sys-label-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "목차 뼈대 잡기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "TagjH",
+                  "name": "Resplit",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "amK8L",
+                      "name": "Resplit Icon",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "scissors",
+                      "library": "lucide",
+                      "fill": "$sys-label-neutral"
+                    },
+                    {
+                      "type": "text",
+                      "id": "H6TZD",
+                      "name": "Resplit Label",
+                      "fill": "$sys-label-neutral",
+                      "content": "더 잘게",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "D1qC78",
+              "name": "Task Row",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-primary-light",
+              "strokeWidth": 1,
+              "gap": 10,
+              "padding": [
+                11,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "B082p4",
+                  "name": "Include Pill",
+                  "fill": "$sys-primary-dark",
+                  "cornerRadius": 999,
+                  "gap": 4,
+                  "padding": [
+                    5,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "DbBKq",
+                      "name": "Pill Check",
+                      "width": 11,
+                      "height": 11,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$sys-on-primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dzu3n",
+                      "name": "Pill Label",
+                      "fill": "$sys-on-primary",
+                      "content": "담김",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11.5,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "t5wqZ",
+                  "name": "Task Title",
+                  "fill": "$sys-label-strong",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "서론 3문장 쓰기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "RLmT3",
+                  "name": "Resplit",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "lCO8r",
+                      "name": "Resplit Icon",
+                      "width": 13,
+                      "height": 13,
+                      "icon": "scissors",
+                      "library": "lucide",
+                      "fill": "$sys-label-neutral"
+                    },
+                    {
+                      "type": "text",
+                      "id": "o2t1v",
+                      "name": "Resplit Label",
+                      "fill": "$sys-label-neutral",
+                      "content": "더 잘게",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "zt1P2",
+          "name": "Confirm Bar",
+          "width": "fill_container",
+          "stroke": "$sys-line",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": [
+            10,
+            16,
+            16,
+            16
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "oWoFL",
+              "name": "Count",
+              "fill": "$sys-label-neutral",
+              "content": "4개 선택됨",
+              "fontFamily": "$sys-font",
+              "fontSize": 12.5,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "mzw72",
+              "name": "Start Button",
+              "width": "fill_container",
+              "fill": "$sys-primary-dark",
+              "cornerRadius": 12,
+              "padding": [
+                13,
+                0
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "gdxs3",
+                  "name": "Start Label",
+                  "fill": "$sys-on-primary",
+                  "content": "이 계획으로 시작",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14.5,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PxU7A",
+              "name": "Leave Row",
+              "width": "fill_container",
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K62y5w",
+                  "name": "Leave Label",
+                  "fill": "$sys-label-neutral",
+                  "content": "지금은 넘어가기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 12.5,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Wdjm9",
+      "x": 4635,
+      "y": 919,
+      "name": "Screen · Demo 4 Today · System",
+      "clip": true,
+      "width": 480,
+      "height": 820,
+      "fill": "$sys-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "mhopJ",
+          "type": "ref",
+          "ref": "P93CQ",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "ItKDB",
+          "name": "Today Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "iSe8s",
+              "name": "Date Block",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "oquo1",
+                  "name": "Date",
+                  "fill": "$sys-primary-dark",
+                  "content": "7월 21일 월요일",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "G5cSI",
+                  "name": "Count Title",
+                  "fill": "$sys-label-strong",
+                  "content": "오늘 할 일 2개",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 19,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "U1LpwN",
+              "name": "Coach Bubble",
+              "fill": "$sys-bg-gray",
+              "cornerRadius": [
+                5,
+                16,
+                16,
+                16
+              ],
+              "padding": [
+                11,
+                15
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "fudei",
+                  "name": "Coach Text",
+                  "fill": "$sys-label-normal",
+                  "content": "이제 '지금 할 첫 단계' 하나만 체크해 보세요.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BXxhX",
+              "name": "Card Split",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mN2ZR",
+                  "name": "Card Head",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "padding": [
+                    12,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "eKC8D",
+                      "name": "Card Title",
+                      "fill": "$sys-label-strong",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "경영학 과제 초안 잡기",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 15,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GS6JS",
+                      "name": "Progress Badge",
+                      "fill": "$sys-primary-lighter",
+                      "cornerRadius": 999,
+                      "padding": [
+                        2,
+                        8
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "CQixi",
+                          "name": "Badge Text",
+                          "fill": "$sys-primary-dark",
+                          "content": "1/4",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 11,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "pGU90",
+                  "name": "Card Expanded",
+                  "width": "fill_container",
+                  "stroke": "$sys-line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "gap": 9,
+                  "padding": [
+                    12,
+                    14,
+                    14,
+                    14
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "i2Tx2",
+                      "name": "First Step Block",
+                      "width": "fill_container",
+                      "fill": "$sys-primary-lighter",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        13,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "liGks",
+                          "name": "First Step Head",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "G3sP0R",
+                              "name": "Sparkles",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "sparkles",
+                              "library": "lucide",
+                              "fill": "$sys-primary-dark"
+                            },
+                            {
+                              "type": "text",
+                              "id": "t0tmbb",
+                              "name": "First Step Label",
+                              "fill": "$sys-primary-dark",
+                              "content": "지금 할 첫 단계",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 11.5,
+                              "fontWeight": "700",
+                              "letterSpacing": 0.4
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "y9IGka",
+                          "name": "First Step Row",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "PqQrH",
+                              "name": "Checkbox Checked",
+                              "width": 22,
+                              "height": 22,
+                              "fill": "$sys-primary",
+                              "cornerRadius": 7,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "RYpVl",
+                                  "name": "Check",
+                                  "width": 14,
+                                  "height": 14,
+                                  "icon": "check",
+                                  "library": "lucide",
+                                  "fill": "$sys-on-primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "AUxoN",
+                              "name": "First Step Title",
+                              "fill": "$sys-label-neutral",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "과제 파일 열어서 제목만 쓰기",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "hcGnT",
+                      "name": "Subtasks",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "JWhKL",
+                          "name": "Subtask Row",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "padding": [
+                            3,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "R9xywf",
+                              "name": "Checkbox",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-primary",
+                              "cornerRadius": 6,
+                              "stroke": "$sys-primary",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "nV3EV",
+                                  "name": "Check",
+                                  "width": 11,
+                                  "height": 11,
+                                  "icon": "check",
+                                  "library": "lucide",
+                                  "fill": "$sys-on-primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "bkHVT",
+                              "name": "Index",
+                              "fill": "$sys-primary-dark",
+                              "content": "1",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "rVoqD",
+                              "name": "Subtask Title",
+                              "fill": "$sys-label-alt",
+                              "content": "과제 요구사항 다시 읽기",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rFWt4",
+                          "name": "Subtask Row",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "padding": [
+                            3,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "V1pVBK",
+                              "name": "Checkbox",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 6,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "PsaJS",
+                              "name": "Index",
+                              "fill": "$sys-primary-dark",
+                              "content": "2",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "rR2wK",
+                              "name": "Subtask Title",
+                              "fill": "$sys-label-normal",
+                              "content": "참고 자료 2개 찾기",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pQ82G",
+                          "name": "Subtask Row",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "padding": [
+                            3,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "h6IUd",
+                              "name": "Checkbox",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 6,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "zpefK",
+                              "name": "Index",
+                              "fill": "$sys-primary-dark",
+                              "content": "3",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "c5Wic",
+                              "name": "Subtask Title",
+                              "fill": "$sys-label-normal",
+                              "content": "목차 뼈대 잡기",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "b4pD9y",
+                          "name": "Subtask Row",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "padding": [
+                            3,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Ch0kg",
+                              "name": "Checkbox",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$sys-bg",
+                              "cornerRadius": 6,
+                              "stroke": "$sys-label-alt",
+                              "strokeWidth": 1.5,
+                              "justifyContent": "center",
+                              "alignItems": "center"
+                            },
+                            {
+                              "type": "text",
+                              "id": "b9i1IO",
+                              "name": "Index",
+                              "fill": "$sys-primary-dark",
+                              "content": "4",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Ng0j0",
+                              "name": "Subtask Title",
+                              "fill": "$sys-label-normal",
+                              "content": "서론 3문장 쓰기",
+                              "fontFamily": "$sys-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TyP4G",
+                      "name": "More Split",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "JXitG",
+                          "name": "More Icon",
+                          "width": 13,
+                          "height": 13,
+                          "icon": "scissors",
+                          "library": "lucide",
+                          "fill": "$sys-label-neutral"
+                        },
+                        {
+                          "type": "text",
+                          "id": "N5ZlSB",
+                          "name": "More Label",
+                          "fill": "$sys-label-neutral",
+                          "content": "더 쪼개기",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 12.5,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZMjms",
+              "name": "Card Plain",
+              "width": "fill_container",
+              "fill": "$sys-bg",
+              "cornerRadius": 14,
+              "stroke": "$sys-line",
+              "strokeWidth": 1,
+              "gap": 10,
+              "padding": [
+                12,
+                14
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "D335gb",
+                  "name": "Checkbox",
+                  "width": 22,
+                  "height": 22,
+                  "fill": "$sys-bg",
+                  "cornerRadius": 7,
+                  "stroke": "$sys-label-alt",
+                  "strokeWidth": 1.5
+                },
+                {
+                  "type": "text",
+                  "id": "n8X28",
+                  "name": "Card Title",
+                  "fill": "$sys-label-strong",
+                  "content": "방 책상 위만 정리하기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "XG0iY",
+          "name": "Feedback Slideup",
+          "width": "fill_container",
+          "fill": "$sys-bg",
+          "stroke": "$sys-line",
+          "strokeWidth": {
+            "top": 1
+          },
+          "strokeAlignment": "inner",
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#1A1A242E",
+            "offset": {
+              "x": 0,
+              "y": -10
+            },
+            "blur": 40,
+            "spread": -10
+          },
+          "layout": "vertical",
+          "gap": 14,
+          "padding": [
+            20,
+            24,
+            24,
+            24
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "WxKda",
+              "name": "Summary Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "vKiYa",
+                  "name": "Num",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "$sys-primary-lighter",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aXnHx",
+                      "name": "Num Text",
+                      "fill": "$sys-primary-dark",
+                      "content": "1",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "N9n0wE",
+                  "name": "Summary Text",
+                  "fill": "$sys-label-normal",
+                  "content": "쏟아낸 생각",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "DYa6m",
+              "name": "Summary Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dKU4e",
+                  "name": "Num",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "$sys-primary-lighter",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vT7wb",
+                      "name": "Num Text",
+                      "fill": "$sys-primary-dark",
+                      "content": "2",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "h69rfi",
+                  "name": "Summary Text",
+                  "fill": "$sys-label-normal",
+                  "content": "오늘 할 일 2개",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xgsAH",
+              "name": "Summary Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Jif0C",
+                  "name": "Num",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "$sys-primary-lighter",
+                  "cornerRadius": 999,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LrfEc",
+                      "name": "Num Text",
+                      "fill": "$sys-primary-dark",
+                      "content": "3",
+                      "fontFamily": "$sys-font",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "umvh0",
+                  "name": "Summary Text",
+                  "fill": "$sys-label-normal",
+                  "content": "첫 걸음 완료",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "SX5in",
+              "type": "ref",
+              "ref": "mXwkh",
+              "name": "Feedback CTA",
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "FpRg6",
+              "name": "Continue Row",
+              "width": "fill_container",
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XrhXw",
+                  "name": "Continue Label",
+                  "fill": "$sys-label-neutral",
+                  "content": "조금 더 해보기",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 13.5,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
@@ -7196,5 +8164,6 @@
       "type": "color",
       "value": "#8A8A9A"
     }
-  }
+  },
+  "fileToken": "6f0a728f-2aff-49db-9fc2-c51785908754"
 }
