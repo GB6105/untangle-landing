@@ -13,7 +13,7 @@ import type { Candidate } from "@/components/demo/types";
  * the selection up to DemoFlow.
  */
 
-const GUIDE = "이 중에 오늘 반드시 끝내고 싶은 일이 있나요?";
+const GUIDE = "이 중에 오늘 반드시 끝내고 싶은 일들이 있나요?";
 const CAP_NOTICE = "한 3개만 골라볼까요? 고른 일은 오늘 꼭 끝내봐요.";
 const MAX_SELECTED = 3;
 /** 카드 승격 연출 길이 — 짧은 CSS 전환 수준으로 절제 (02 §3.2). */
