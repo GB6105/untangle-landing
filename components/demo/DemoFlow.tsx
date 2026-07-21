@@ -39,8 +39,6 @@ export function DemoFlow() {
   // clobber a saved session before the user chooses (01 §3.4).
   const [ready, setReady] = useState(false);
   const exitPromptSeen = useRef(false);
-  // 방금 확정한 쪼개기의 카드 — Today 도착 시 자동으로 펼친다 (04 §3.1).
-  const [lastSplitCardId, setLastSplitCardId] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadDemoState();
@@ -134,16 +132,14 @@ export function DemoFlow() {
           onPick={(cardId) => dispatch({ type: "pickSplitCard", cardId })}
           onSkip={() => dispatch({ type: "skipSplit" })}
           onLeave={() => dispatch({ type: "toToday" })}
-          onConfirm={(cardId, tasks, firstStep, answers) => {
-            setLastSplitCardId(cardId);
-            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers });
-          }}
+          onConfirm={(cardId, tasks, firstStep, answers) =>
+            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers })
+          }
         />
       ) : (
         <TodayPhase
           cards={state.cards}
           slideupShown={state.slideupShown}
-          initialOpenCardId={lastSplitCardId}
           onToggleFirstStep={(cardId) => dispatch({ type: "toggleFirstStep", cardId })}
           onToggleSubtask={(cardId, subtaskId) =>
             dispatch({ type: "toggleSubtask", cardId, subtaskId })
@@ -151,10 +147,7 @@ export function DemoFlow() {
           onToggleCardDone={(cardId) => dispatch({ type: "toggleCardDone", cardId })}
           onSplitCard={(cardId) => dispatch({ type: "startSplit", cardId })}
           onSlideupShown={notifySlideupShown}
-          onRestart={() => {
-            setLastSplitCardId(null);
-            dispatch({ type: "reset" });
-          }}
+          onRestart={() => dispatch({ type: "reset" })}
         />
       )}
 

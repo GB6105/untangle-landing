@@ -32,7 +32,9 @@ export const runtime = "nodejs";
 
 const CLAUDE_MODEL = "claude-sonnet-5";
 const OPENAI_MODEL = "gpt-4o"; // change here to use another GPT model
-const MAX_TASKS = 5;
+// 기본 상한 5. 다시 쪼개기를 거듭하면 클라이언트가 8, 10으로 올려 보낸다.
+const DEFAULT_MAX_TASKS = 5;
+const MAX_TASKS_LIMIT = 10;
 
 const taskSchema = {
   type: "object",
@@ -67,7 +69,7 @@ const ADVANCE_SCHEMA: Record<string, unknown> = {
   },
 };
 
-const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '목표만 있는 큰 일'을 가져오면, 그 일을 실제로 시작할 수 있도록 작은 실행 단위로 쪼개주는 역할을 합니다.
+const advanceSystem = (maxTasks: number) => `당신은 "Untangle"의 Co-Planner예요. 사용자가 '목표만 있는 큰 일'을 가져오면, 그 일을 실제로 시작할 수 있도록 작은 실행 단위로 쪼개주는 역할을 합니다.
 
 # 진행 방식
 1. 목표, [오늘의 맥락], 지금까지의 문답을 보고 곧바로 분해할 수 있는지 판단하세요. 대부분의 경우 바로 분해할 수 있어요(status: "ready"). 모호한 부분은 합리적으로 가정하고, 그 가정을 결과에 자연스럽게 반영하세요.
@@ -79,7 +81,7 @@ const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '
    - 답변이 2개 쌓였다면 더 묻지 말고 반드시 분해하세요(status: "ready").
    - 사용자가 "그냥 이대로 쪼개줘"처럼 바로 분해를 원하면, 즉시 남은 것을 가정하고 분해하세요(status: "ready").
 4. 분해할 때(status: "ready"):
-   - tasks: 5개 이하의, 한눈에 부담 없는 작은 할 일. 각 title은 구체적인 행동으로.
+   - tasks: ${maxTasks}개 이하의, 한눈에 부담 없는 작은 할 일. 각 title은 구체적인 행동으로.
    - firstStep: 지금 당장 고민 없이 할 수 있는 아주 작은 첫 행동 하나. tasks와는 별개로, 걸림돌을 우회하는 행동이어야 해요. (예: "책상에 앉기", "노트북 펼치기", "OOO 검색해보기")
 
 # 말투
@@ -95,7 +97,7 @@ const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '
   "firstStep": { "title": string } | null
 }
 - status가 "need_more"면 question을 채우고(options 2~4개 필수) tasks와 firstStep은 null.
-- status가 "ready"면 tasks(5개 이하)와 firstStep을 채우고 question은 null.`;
+- status가 "ready"면 tasks(${maxTasks}개 이하)와 firstStep을 채우고 question은 null.`;
 
 function contextBlock(goal: string, answers: Answer[]): string {
   const lines = answers.length
@@ -106,11 +108,21 @@ function contextBlock(goal: string, answers: Answer[]): string {
   return `[목표]\n${goal}\n\n[지금까지 파악된 맥락]\n${lines}`;
 }
 
-function advanceUser(goal: string, answers: Answer[], context?: string): string {
+function advanceUser(
+  goal: string,
+  answers: Answer[],
+  context: string | undefined,
+  maxTasks: number,
+): string {
   const daily = context?.trim()
     ? `[오늘의 맥락]\n${context.trim()}\n\n`
     : "";
-  return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 분해에 꼭 필요한 정보가 정말 빠져 있을 때만 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 그렇지 않으면 합리적으로 가정하고 할 일로 분해하세요(status: "ready"). 질문 상한(전체 1~2회)을 지키세요.`;
+  // 상한이 기본(5)보다 크다 = 다시 쪼개기 — 더 잘게 나눠달라는 신호다.
+  const regen =
+    maxTasks > DEFAULT_MAX_TASKS
+      ? `\n\n사용자가 다시 쪼개기를 요청했어요. 이전 제안보다 단계를 더 잘게, 하나하나 부담이 덜하게 나눠주세요(최대 ${maxTasks}개).`
+      : "";
+  return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 분해에 꼭 필요한 정보가 정말 빠져 있을 때만 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 그렇지 않으면 합리적으로 가정하고 할 일로 분해하세요(status: "ready"). 질문 상한(전체 1~2회)을 지키세요.${regen}`;
 }
 
 function firstText(message: Anthropic.Message): string {
@@ -118,10 +130,10 @@ function firstText(message: Anthropic.Message): string {
   return block && block.type === "text" ? block.text : "";
 }
 
-const asTasks = (value: unknown): Task[] =>
+const asTasks = (value: unknown, maxTasks: number): Task[] =>
   (Array.isArray(value) ? value : [])
     .filter((t): t is Task => !!t && typeof t.title === "string")
-    .slice(0, MAX_TASKS);
+    .slice(0, maxTasks);
 
 const asStep = (value: unknown): Task =>
   value && typeof (value as Task).title === "string"
@@ -189,11 +201,16 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "쪼갤 일을 먼저 입력해 주세요." }, { status: 400 });
   }
 
+  const rawMax = Number(body?.maxTasks);
+  const maxTasks = Number.isFinite(rawMax)
+    ? Math.min(MAX_TASKS_LIMIT, Math.max(DEFAULT_MAX_TASKS, Math.floor(rawMax)))
+    : DEFAULT_MAX_TASKS;
+
   try {
     const parsed = await callLLM(
       provider,
-      ADVANCE_SYSTEM,
-      advanceUser(body.goal, body.answers ?? [], body.context),
+      advanceSystem(maxTasks),
+      advanceUser(body.goal, body.answers ?? [], body.context, maxTasks),
       ADVANCE_SCHEMA,
     );
 
@@ -201,7 +218,7 @@ export async function POST(request: Request): Promise<Response> {
       const result: SplitResult = {
         status: "ready",
         message: typeof parsed.message === "string" ? parsed.message : "이렇게 쪼개봤어요.",
-        tasks: asTasks(parsed.tasks),
+        tasks: asTasks(parsed.tasks, maxTasks),
         firstStep: asStep(parsed.firstStep),
       };
       return Response.json(result);

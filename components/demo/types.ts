@@ -19,7 +19,7 @@ export type DemoCard = {
   done: boolean;
   /** Present only after the card has been split. */
   firstStep: { title: string; done: boolean } | null;
-  /** Empty until a split plan is confirmed (≤5 — 03-demo-split.md §3.2). */
+  /** Empty until a split plan is confirmed. 기본 ≤5, 다시 쪼개기 시 최대 10. */
   subtasks: DemoSubtask[];
   /** Clarify history, kept so "더 쪼개기" resumes the past conversation. */
   splitAnswers: Answer[];

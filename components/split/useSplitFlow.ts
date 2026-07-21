@@ -35,7 +35,8 @@ const HARD_GUARD_ERROR =
   "질문이 길어지지 않게 여기서 바로 쪼개볼게요. 다시 시도를 눌러 주세요.";
 
 const QUESTION_CAP = 2;
-const MAX_TASKS = 5;
+/** 서브태스크 상한 — 다시 쪼개기를 거듭할수록 더 잘게 제안한다 (5 → 8 → 10). */
+const TASK_CAPS = [5, 8, 10] as const;
 
 export type FlowTask = { id: string; title: string; done: boolean };
 export type FlowLogItem = { id: number; role: "user" | "ai"; text: string };
@@ -108,6 +109,9 @@ export function useSplitFlow({
   const logCounter = useRef(1);
   const autoSkipUsed = useRef(false);
   const started = useRef(false);
+  // 다시 쪼개기 횟수 — 상한을 5 → 8 → 10으로 올린다.
+  const regenCount = useRef(0);
+  const maxTasks = () => TASK_CAPS[Math.min(regenCount.current, TASK_CAPS.length - 1)];
 
   const appendAi = (text: string) => {
     if (!text?.trim()) return;
@@ -118,7 +122,7 @@ export function useSplitFlow({
 
   const makeTasks = (list: Task[], done = false): FlowTask[] =>
     list
-      .slice(0, MAX_TASKS)
+      .slice(0, maxTasks())
       .map((t) => ({ id: `t${taskCounter.current++}`, title: t.title, done }));
 
   function showResult(taskList: Task[], step: Task) {
@@ -142,6 +146,7 @@ export function useSplitFlow({
         goal,
         answers,
         context,
+        maxTasks: maxTasks(),
       });
       if ("error" in data) {
         setError(data.error);
@@ -215,10 +220,12 @@ export function useSplitFlow({
 
   /**
    * "다시 쪼개기" — 전체 계획을 같은 문답·맥락으로 재생성한다 (PRD 5.2).
+   * 요청할 때마다 상한이 5 → 8 → 10으로 올라 더 잘게 제안된다.
    * 화면의 제안만 바뀌며, 카드에는 confirm()해야 반영된다.
    */
   function regenerate() {
     if (loading) return;
+    regenCount.current = Math.min(regenCount.current + 1, TASK_CAPS.length - 1);
     autoSkipUsed.current = false; // 재생성마다 하드 가드 자동 스킵 기회를 새로 준다
     void runAdvance(answersRef.current);
   }

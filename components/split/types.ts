@@ -37,6 +37,11 @@ export type SplitRequest = {
    * 드러난 항목은 다시 묻지 않는다 — 하위 호환 확장 (docs/features/03-demo-split.md §4).
    */
   context?: string;
+  /**
+   * 서브태스크 개수 상한. 기본 5, 다시 쪼개기 1회째 8, 2회째부터 10 —
+   * 서버는 5~10으로 클램프한다.
+   */
+  maxTasks?: number;
 };
 
 /** POST /api/split success/error response bodies. */
