@@ -40,6 +40,11 @@ export type SplitRequest =
       provider?: Provider;
       goal: string;
       answers: Answer[];
+      /**
+       * 이미 파악된 오늘의 맥락(예: 데모의 브레인덤프 원문). 주어지면 그 안에서
+       * 드러난 항목은 다시 묻지 않는다 — 하위 호환 확장 (docs/features/03-demo-split.md §4).
+       */
+      context?: string;
     }
   | {
       action: "resplit";
