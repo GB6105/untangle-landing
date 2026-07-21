@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 
 /**
- * Primary "소감 한 마디 남기기" call-to-action. Leads to the experience-feedback form.
+ * Primary full-width call-to-action. Defaults to the experience-feedback form;
+ * pass `href` to point it elsewhere (e.g. `/demo` — 00-overview.md §7).
  *
  * Renders an anchor rather than a <button> because it navigates: that keeps the
  * component server-rendered and preserves native link affordances such as
@@ -10,14 +11,16 @@ import { Icon } from "@/components/Icon";
  */
 export function CtaButton({
   label = "소감 한 마디 남기기",
+  href = "/register",
   className = "",
 }: {
   label?: string;
+  href?: string;
   className?: string;
 }) {
   return (
     <Link
-      href="/register"
+      href={href}
       className={`flex w-full items-center justify-center gap-2 rounded-[14px] bg-sys-primary-dark px-[30px] py-[19px] text-[17px] font-bold text-sys-on-primary shadow-[0_9px_24px_-2px_rgba(106,69,231,0.28)] transition-shadow hover:shadow-[0_12px_28px_-2px_rgba(106,69,231,0.4)] ${className}`}
     >
       {label}
