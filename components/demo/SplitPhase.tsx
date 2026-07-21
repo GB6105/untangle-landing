@@ -19,7 +19,8 @@ import { SKIP_ANSWER, useSplitFlow } from "@/components/split/useSplitFlow";
  * Otherwise → DemoSplitPanel keyed by card id so switching cards remounts the
  * flow. Clarify/result are driven by useSplitFlow; the result's include pills
  * deliberately look nothing like Today's done checkboxes (§3.2 — "내 선택이
- * 날아갔다" 오독 방지).
+ * 날아갔다" 오독 방지). 서브태스크는 더 쪼갤 수 없다 — 마음에 들지 않으면
+ * "다시 쪼개기"로 전체를 재생성하고, 확정해야 카드에 반영된다.
  */
 
 const PICK_QUESTION =
@@ -27,7 +28,7 @@ const PICK_QUESTION =
 const SKIP_CHIP = "괜찮아요, 바로 시작할게요";
 const LEAVE_LABEL = "지금은 넘어가기";
 const CONFIRM_LABEL = "이 계획으로 시작";
-const OVER_CAP_NOTICE = "오늘 카드에는 5개까지만 담을 수 있어요";
+const REGEN_LABEL = "다시 쪼개기";
 const ANSWER_PLACEHOLDER = "직접 답을 적어도 돼요";
 const WAIT_MESSAGES = [
   "이 일을 찬찬히 살펴보는 중…",
@@ -152,11 +153,11 @@ function DemoSplitPanel({
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const waiting = flow.loading || flow.resplittingId !== null;
+  const waiting = flow.loading;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [flow.log, flow.pending, flow.loading, flow.resplittingId, flow.phase, flow.error]);
+  }, [flow.log, flow.pending, flow.loading, flow.phase, flow.error]);
 
   const sendAnswer = () => {
     const text = input.trim();
@@ -212,9 +213,9 @@ function DemoSplitPanel({
                 </span>
               </div>
 
+              {/* 서브태스크는 더 쪼갤 수 없다 — 항목별 쪼개기 버튼 없음 */}
               {flow.tasks.map((task) => {
                 const included = !!flow.selected[task.id];
-                const resplitting = flow.resplittingId === task.id;
                 return (
                   <div
                     key={task.id}
@@ -247,20 +248,6 @@ function DemoSplitPanel({
                     >
                       {task.title}
                     </span>
-
-                    <button
-                      type="button"
-                      onClick={() => flow.runResplit(task)}
-                      disabled={task.done || waiting}
-                      className={`flex shrink-0 items-center gap-1 text-[12px] font-semibold transition-colors disabled:opacity-40 ${
-                        resplitting
-                          ? "text-sys-primary-dark"
-                          : "text-sys-label-neutral hover:text-sys-primary-dark"
-                      }`}
-                    >
-                      <Icon name="scissors" size={13} strokeWidth={2} />
-                      {resplitting ? "쪼개는 중…" : "더 잘게"}
-                    </button>
                   </div>
                 );
               })}
@@ -291,25 +278,30 @@ function DemoSplitPanel({
 
       {flow.phase === "result" ? (
         <div className="flex flex-col gap-2 border-t border-sys-line px-4 py-3">
-          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-1">
-            <span className="text-[12.5px] font-semibold text-sys-label-neutral">
-              {flow.selectedCount}개 선택됨
-            </span>
-            {flow.overCap && (
-              <span className="text-[12px] font-semibold text-sys-pri-high">
-                {OVER_CAP_NOTICE}
-              </span>
-            )}
-          </div>
+          <span className="px-1 text-[12.5px] font-semibold text-sys-label-neutral">
+            {flow.selectedCount}개 선택됨
+          </span>
           <button
             type="button"
             onClick={flow.confirm}
-            disabled={flow.selectedCount === 0 || flow.overCap || waiting}
+            disabled={flow.selectedCount === 0 || waiting}
             className="w-full rounded-[12px] bg-sys-primary-dark py-[13px] text-[14.5px] font-bold text-sys-on-primary transition-opacity disabled:opacity-40"
           >
             {CONFIRM_LABEL}
           </button>
-          <LeaveButton onLeave={onLeave} disabled={waiting} />
+          <div className="flex items-center justify-center gap-6">
+            {/* 마음에 들지 않으면 전체를 다시 만든다 — 확정 전에는 카드 미반영 */}
+            <button
+              type="button"
+              onClick={flow.regenerate}
+              disabled={waiting}
+              className="flex items-center gap-1.5 px-2 py-1 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark disabled:opacity-50"
+            >
+              <Icon name="scissors" size={13} strokeWidth={2} />
+              {REGEN_LABEL}
+            </button>
+            <LeaveButton onLeave={onLeave} disabled={waiting} />
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-1.5 border-t border-sys-line px-4 py-3">

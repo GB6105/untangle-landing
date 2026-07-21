@@ -29,14 +29,13 @@ import type {
 export const SKIP_ANSWER = "그냥 이대로 쪼개줘";
 const SOFT_GUARD_SUFFIX = " (남은 건 알아서 가정하고 이대로 쪼개주세요)";
 const IMMEDIATE_ACK = "좋아요. 몇 가지만 짧게 여쭤볼게요.";
-const REOPEN_NOTE = "저장해둔 계획이에요. 더 잘게 쪼갤 항목이 있으면 눌러 주세요.";
+const REOPEN_NOTE = "저장해둔 계획이에요. 마음에 들지 않으면 다시 쪼갤 수 있어요.";
 const NETWORK_ERROR = "연결에 문제가 생겼어요. 잠시 후 다시 시도해 주세요.";
 const HARD_GUARD_ERROR =
   "질문이 길어지지 않게 여기서 바로 쪼개볼게요. 다시 시도를 눌러 주세요.";
 
 const QUESTION_CAP = 2;
 const MAX_TASKS = 5;
-export const MAX_SELECTED = 5;
 
 export type FlowTask = { id: string; title: string; done: boolean };
 export type FlowLogItem = { id: number; role: "user" | "ai"; text: string };
@@ -49,8 +48,9 @@ export type UseSplitFlowArgs = {
   /** 다시 쪼개기: 이전 clarify 문답에 이어간다 (원칙 4). */
   initialAnswers?: Answer[];
   /**
-   * 쪼갠 카드 재진입: 저장된 계획으로 result 화면을 재구성하고 항목별
-   * resplit만 허용한다 — advance는 다시 돌지 않는다 (03 §3.3).
+   * 쪼갠 카드 재진입: 저장된 계획으로 result 화면을 재구성한다. 서브태스크는
+   * 더 쪼갤 수 없고, 마음에 들지 않으면 regenerate()로 전체를 다시 만든다 —
+   * 새 결과는 확정해야 카드에 반영된다 (03 §3.3).
    */
   initialResult?: { tasks: { title: string; done: boolean }[]; firstStep: Task } | null;
   /** 브레인덤프 원문 — 데모는 항상 전달 (03 §4 필수 확장). */
@@ -100,7 +100,6 @@ export function useSplitFlow({
     (initialResult?.tasks ?? []).forEach((_, i) => (all[`t${i}`] = true));
     return all;
   });
-  const [resplittingId, setResplittingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState<(() => void) | null>(null);
 
@@ -214,66 +213,23 @@ export function useSplitFlow({
     void runAdvance(next);
   }
 
-  async function runResplit(task: FlowTask) {
-    if (resplittingId || loading || task.done) return;
-    setResplittingId(task.id);
-    setError(null);
-    setRetry(null);
-    const remaining = tasks.filter((t) => t.id !== task.id);
-    try {
-      const data = await postSplit({
-        action: "resplit",
-        provider,
-        goal,
-        answers: answersRef.current,
-        taskToSplit: task.title,
-        // 완료 현황은 "(완료)" 표기 컨벤션으로 전달 — 계약 변경 없음 (03 §3.3).
-        otherTasks: remaining.map((t) => (t.done ? `${t.title} (완료)` : t.title)),
-      });
-      if ("error" in data) {
-        setError(data.error);
-        setRetry(() => () => runResplit(task));
-        return;
-      }
-      if (data.status !== "resplit") return;
-      appendAi(data.message);
-      const subs = makeTasks(data.tasks);
-      setTasks([...subs, ...remaining]);
-      setFirstStep({ title: data.firstStep.title });
-      // 기본 선택은 새 하위 항목 우선으로 5개까지 (03 §3.2 — 5개 상한 규칙).
-      setSelected((prev) => {
-        const next: Record<string, boolean> = {};
-        let count = 0;
-        for (const s of subs) {
-          if (count >= MAX_SELECTED) break;
-          next[s.id] = true;
-          count++;
-        }
-        for (const t of remaining) {
-          if (count >= MAX_SELECTED) break;
-          if (prev[t.id]) {
-            next[t.id] = true;
-            count++;
-          }
-        }
-        return next;
-      });
-    } catch {
-      setError(NETWORK_ERROR);
-      setRetry(() => () => runResplit(task));
-    } finally {
-      setResplittingId(null);
-    }
+  /**
+   * "다시 쪼개기" — 전체 계획을 같은 문답·맥락으로 재생성한다 (PRD 5.2).
+   * 화면의 제안만 바뀌며, 카드에는 confirm()해야 반영된다.
+   */
+  function regenerate() {
+    if (loading) return;
+    autoSkipUsed.current = false; // 재생성마다 하드 가드 자동 스킵 기회를 새로 준다
+    void runAdvance(answersRef.current);
   }
 
   const toggleSelected = (taskId: string) =>
     setSelected((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
 
   const selectedCount = tasks.filter((t) => selected[t.id]).length;
-  const overCap = selectedCount > MAX_SELECTED;
 
   function confirm() {
-    if (!firstStep || selectedCount === 0 || overCap) return;
+    if (!firstStep || selectedCount === 0 || loading) return;
     onConfirm({
       tasks: tasks.filter((t) => selected[t.id]).map((t) => ({ title: t.title })),
       firstStep,
@@ -298,12 +254,10 @@ export function useSplitFlow({
     firstStep,
     selected,
     selectedCount,
-    overCap,
-    resplittingId,
     error,
     canRetry: retry !== null,
     answerPending,
-    runResplit,
+    regenerate,
     toggleSelected,
     confirm,
     retryNow,

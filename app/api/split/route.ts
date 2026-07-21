@@ -14,8 +14,8 @@ import { asRequestedProvider, resolveProvider } from "@/lib/llm";
  *
  * Drives the Co-Planner conversation with an LLM: on each `advance` turn it
  * either asks one freely-chosen clarify question or decomposes the goal into
- * ≤5 tasks plus an immediate first step. `resplit` breaks one chosen task
- * down further.
+ * ≤5 tasks plus an immediate first step. 서브태스크 단위 재분해는 없다 —
+ * 결과가 마음에 들지 않으면 같은 advance를 다시 보내 전체를 재생성한다.
  *
  * Questions are hard-capped at 2 per conversation — the prompt targets 1,
  * defaults to assuming-and-splitting, and the client adds soft/hard guards on
@@ -67,17 +67,6 @@ const ADVANCE_SCHEMA: Record<string, unknown> = {
   },
 };
 
-const RESPLIT_SCHEMA: Record<string, unknown> = {
-  type: "object",
-  additionalProperties: false,
-  required: ["message", "tasks", "firstStep"],
-  properties: {
-    message: { type: "string" },
-    tasks: { type: "array", items: taskSchema },
-    firstStep: taskSchema,
-  },
-};
-
 const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '목표만 있는 큰 일'을 가져오면, 그 일을 실제로 시작할 수 있도록 작은 실행 단위로 쪼개주는 역할을 합니다.
 
 # 진행 방식
@@ -108,21 +97,6 @@ const ADVANCE_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 '
 - status가 "need_more"면 question을 채우고(options 2~4개 필수) tasks와 firstStep은 null.
 - status가 "ready"면 tasks(5개 이하)와 firstStep을 채우고 question은 null.`;
 
-const RESPLIT_SYSTEM = `당신은 "Untangle"의 Co-Planner예요. 사용자가 이미 분해된 할 일 중 하나가 여전히 크게 느껴져서, 그 일을 더 잘게 쪼개달라고 요청했어요.
-
-# 진행 방식
-- 주어진 목표와 맥락을 참고해서 '더 쪼갤 일'을 더 작은 실행 단위(5개 이하)로 나누세요.
-- 각 title은 구체적인 행동으로. 이미 존재하는 다른 할 일들과 중복되지 않게 하세요.
-- firstStep: 그중 지금 당장 할 수 있는 아주 작은 첫 행동 하나.
-
-# 말투
-- 따뜻한 해요체. message는 한두 문장.
-
-# 출력 형식
-반드시 아래 JSON 하나로만 응답하세요. JSON 외 다른 텍스트는 덧붙이지 마세요.
-{ "message": string, "tasks": [ { "title": string } ], "firstStep": { "title": string } }
-- tasks는 5개 이하.`;
-
 function contextBlock(goal: string, answers: Answer[]): string {
   const lines = answers.length
     ? answers
@@ -137,16 +111,6 @@ function advanceUser(goal: string, answers: Answer[], context?: string): string 
     ? `[오늘의 맥락]\n${context.trim()}\n\n`
     : "";
   return `${daily}${contextBlock(goal, answers)}\n\n위 정보를 바탕으로, 분해에 꼭 필요한 정보가 정말 빠져 있을 때만 질문 하나를 옵션과 함께 제시하고(status: "need_more"), 그렇지 않으면 합리적으로 가정하고 할 일로 분해하세요(status: "ready"). 질문 상한(전체 1~2회)을 지키세요.`;
-}
-
-function resplitUser(
-  goal: string,
-  answers: Answer[],
-  taskToSplit: string,
-  otherTasks: string[],
-): string {
-  const others = otherTasks.length ? otherTasks.map((t) => `- ${t}`).join("\n") : "없음";
-  return `${contextBlock(goal, answers)}\n\n[더 잘게 쪼갤 일]\n${taskToSplit}\n\n[이미 있는 다른 할 일들]\n${others}\n\n"${taskToSplit}"을(를) 더 작은 실행 단위(5개 이하)로 쪼개고, 지금 당장 할 수 있는 첫 행동(firstStep)을 제시하세요.`;
 }
 
 function firstText(message: Anthropic.Message): string {
@@ -226,28 +190,6 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    if (body.action === "resplit") {
-      if (!body.taskToSplit?.trim()) {
-        return Response.json(
-          { error: "더 쪼갤 할 일을 지정해 주세요." },
-          { status: 400 },
-        );
-      }
-      const parsed = await callLLM(
-        provider,
-        RESPLIT_SYSTEM,
-        resplitUser(body.goal, body.answers ?? [], body.taskToSplit, body.otherTasks ?? []),
-        RESPLIT_SCHEMA,
-      );
-      const result: SplitResult = {
-        status: "resplit",
-        message: typeof parsed.message === "string" ? parsed.message : "더 잘게 쪼개봤어요.",
-        tasks: asTasks(parsed.tasks),
-        firstStep: asStep(parsed.firstStep),
-      };
-      return Response.json(result);
-    }
-
     const parsed = await callLLM(
       provider,
       ADVANCE_SYSTEM,
