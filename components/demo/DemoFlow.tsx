@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { Logo } from "@/components/Logo";
+import { BraindumpPhase } from "@/components/demo/BraindumpPhase";
+import { CandidatesPhase } from "@/components/demo/CandidatesPhase";
+import { SplitPhase } from "@/components/demo/SplitPhase";
+import { TodayPhase } from "@/components/demo/TodayPhase";
 import {
   clearDemoState,
   demoReducer,
@@ -42,6 +46,8 @@ export function DemoFlow() {
   // clobber a saved session before the user chooses (01 §3.4).
   const [ready, setReady] = useState(false);
   const exitPromptSeen = useRef(false);
+  // 방금 확정한 쪼개기의 카드 — Today 도착 시 자동으로 펼친다 (04 §3.1).
+  const [lastSplitCardId, setLastSplitCardId] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadDemoState();
@@ -58,6 +64,13 @@ export function DemoFlow() {
   }, [ready, state]);
 
   const exit = () => router.push(EXIT_TARGET);
+
+  // TodayPhase의 슬라이드업 타이머 effect가 의존하는 콜백 — 렌더마다 새로
+  // 만들어지면 타이머가 계속 리셋되므로 identity를 고정한다.
+  const notifySlideupShown = useCallback(
+    () => dispatch({ type: "slideupShown" }),
+    [],
+  );
 
   const handleClose = () => {
     // 결과물이 없으면 붙잡지 않고 즉시 종료; 결과물이 생긴 뒤에는 저장을
@@ -139,8 +152,49 @@ export function DemoFlow() {
             setReady(true);
           }}
         />
+      ) : state.phase === "braindump" ? (
+        <BraindumpPhase
+          initialText={state.braindump}
+          onCandidates={(braindump, candidates) =>
+            dispatch({ type: "candidatesReceived", braindump, candidates })
+          }
+        />
+      ) : state.phase === "candidates" ? (
+        <CandidatesPhase
+          candidates={state.candidates}
+          onConfirm={(selected) => dispatch({ type: "confirmTodos", selected })}
+          onBack={() => dispatch({ type: "backToBraindump" })}
+        />
+      ) : state.phase === "split" ? (
+        <SplitPhase
+          braindump={state.braindump}
+          cards={state.cards}
+          splittingCardId={state.splittingCardId}
+          onPick={(cardId) => dispatch({ type: "pickSplitCard", cardId })}
+          onSkip={() => dispatch({ type: "skipSplit" })}
+          onLeave={() => dispatch({ type: "toToday" })}
+          onConfirm={(cardId, tasks, firstStep, answers) => {
+            setLastSplitCardId(cardId);
+            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers });
+          }}
+        />
       ) : (
-        <PhasePlaceholder phase={state.phase} />
+        <TodayPhase
+          cards={state.cards}
+          slideupShown={state.slideupShown}
+          initialOpenCardId={lastSplitCardId}
+          onToggleFirstStep={(cardId) => dispatch({ type: "toggleFirstStep", cardId })}
+          onToggleSubtask={(cardId, subtaskId) =>
+            dispatch({ type: "toggleSubtask", cardId, subtaskId })
+          }
+          onToggleCardDone={(cardId) => dispatch({ type: "toggleCardDone", cardId })}
+          onSplitCard={(cardId) => dispatch({ type: "startSplit", cardId })}
+          onSlideupShown={notifySlideupShown}
+          onRestart={() => {
+            setLastSplitCardId(null);
+            dispatch({ type: "reset" });
+          }}
+        />
       )}
 
       {/* 중도 종료 바텀시트 (01 §3.5) — 나가기를 막지 않는다 */}
@@ -214,15 +268,6 @@ function ResumeChoice({
           처음부터
         </button>
       </div>
-    </div>
-  );
-}
-
-/** Swapped for the real phase screens in units 02~04. */
-function PhasePlaceholder({ phase }: { phase: DemoState["phase"] }) {
-  return (
-    <div className="flex flex-1 items-center justify-center text-[14px] text-sys-label-alt">
-      {phase} 화면 준비 중
     </div>
   );
 }
