@@ -31,6 +31,11 @@ export const SKIP_ANSWER = "그냥 이대로 쪼개줘";
 const SOFT_GUARD_SUFFIX = " (남은 건 알아서 가정하고 이대로 쪼개주세요)";
 const IMMEDIATE_ACK = "좋아요. 몇 가지만 짧게 여쭤볼게요.";
 const REOPEN_NOTE = "저장해둔 계획이에요. 마음에 들지 않으면 다시 쪼갤 수 있어요.";
+/** 무엇이 달라지는지 먼저 말해준다 — 결과만 바뀌면 "뭘 다시 쪼갠 거지?"가 된다. */
+const regenNote = (cap: number) =>
+  `다시 쪼개볼게요. 이번에는 최대 ${cap}단계까지 나눠서 제안해 볼게요.`;
+/** 상한이 이미 최대일 때 — 더 잘게 나눠주겠다고 약속하지 않는다. */
+const REGEN_SAME_NOTE = "다시 쪼개볼게요. 같은 조건으로 새로 제안해 볼게요.";
 const NETWORK_ERROR = "연결에 문제가 생겼어요. 잠시 후 다시 시도해 주세요.";
 const HARD_GUARD_ERROR =
   "질문이 길어지지 않게 여기서 바로 쪼개볼게요. 다시 시도를 눌러 주세요.";
@@ -104,6 +109,8 @@ export function useSplitFlow({
   });
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState<(() => void) | null>(null);
+  /** 다시 쪼개기 직전의 계획 — 새 제안과 무엇이 달라졌는지 대조할 수 있게. */
+  const [previousTasks, setPreviousTasks] = useState<string[] | null>(null);
 
   const answersRef = useRef<Answer[]>(initialAnswers ?? []);
   const taskCounter = useRef(tasks.length);
@@ -112,6 +119,8 @@ export function useSplitFlow({
   const started = useRef(false);
   // 다시 쪼개기 횟수 — 상한을 5 → 8 → 10으로 올린다.
   const regenCount = useRef(0);
+  // 재생성이 성공해 새 결과가 도착했을 때만 커밋할 직전 계획.
+  const pendingPrevious = useRef<string[] | null>(null);
   const maxTasks = () => TASK_CAPS[Math.min(regenCount.current, TASK_CAPS.length - 1)];
 
   const appendAi = (text: string) => {
@@ -134,6 +143,12 @@ export function useSplitFlow({
     flow.forEach((t) => (all[t.id] = true));
     setSelected(all);
     setPhase("result");
+    // 다시 쪼개기로 도착한 결과일 때만 직전 계획을 비교용으로 남긴다. 요청이
+    // 실패했다면 화면의 계획이 그대로이므로 여기까지 오지 않는다.
+    if (pendingPrevious.current) {
+      setPreviousTasks(pendingPrevious.current);
+      pendingPrevious.current = null;
+    }
   }
 
   async function runAdvance(answers: Answer[]) {
@@ -226,8 +241,12 @@ export function useSplitFlow({
    */
   function regenerate() {
     if (loading) return;
+    if (tasks.length > 0) pendingPrevious.current = tasks.map((t) => t.title);
+    const capBefore = maxTasks();
     regenCount.current = Math.min(regenCount.current + 1, TASK_CAPS.length - 1);
     autoSkipUsed.current = false; // 재생성마다 하드 가드 자동 스킵 기회를 새로 준다
+    const cap = maxTasks();
+    appendAi(cap === capBefore ? REGEN_SAME_NOTE : regenNote(cap));
     void runAdvance(answersRef.current);
   }
 
@@ -259,6 +278,7 @@ export function useSplitFlow({
     pending,
     loading,
     tasks,
+    previousTasks,
     firstStep,
     selected,
     selectedCount,

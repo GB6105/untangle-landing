@@ -3221,7 +3221,7 @@
           "id": "A1aSP5",
           "name": "Label",
           "fill": "$sys-on-primary",
-          "content": "소감 한 마디 남기기",
+          "content": "지금 바로 체험하기",
           "fontFamily": "$sys-font",
           "fontSize": 17,
           "fontWeight": "700"
@@ -3567,6 +3567,7 @@
       "x": 1420,
       "y": 919,
       "name": "Screen · Registration · System",
+      "context": "체험 소감 + 사전 신청 — 체험을 마쳤거나 중간에 그만둔 사람만 도착한다. 연락처는 이메일과 휴대폰 번호를 모두 받으며 끝까지 선택 항목이라, 비워도 소감은 접수된다.",
       "clip": true,
       "width": 480,
       "fill": "$sys-bg",
@@ -4252,10 +4253,92 @@
                           "width": "fill_container",
                           "content": "좋았던 점이든 바라는 점이든, 자유롭게 남겨주세요",
                           "fontFamily": "$sys-font",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bS5Nl",
+                  "name": "Waitlist",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "M4VW0",
+                      "name": "Waitlist Label",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZLHfZ",
+                          "name": "Label",
+                          "fill": "$sys-label-strong",
+                          "content": "정식 출시되면 알려드릴까요?",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "mpkmp",
+                          "name": "Optional",
+                          "fill": "$sys-label-alt",
+                          "content": "(선택)",
+                          "fontFamily": "$sys-font",
                           "fontSize": 14,
                           "fontWeight": "normal"
                         }
                       ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Q1IqJ",
+                      "name": "Email Field",
+                      "width": "fill_container",
+                      "height": 48,
+                      "fill": "$sys-bg",
+                      "cornerRadius": 12,
+                      "stroke": "$sys-line",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "padding": [
+                        0,
+                        16
+                      ],
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "FZLHf",
+                          "name": "Placeholder",
+                          "fill": "$sys-label-alt",
+                          "content": "이메일 또는 휴대폰 번호",
+                          "fontFamily": "$sys-font",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "CGonZ",
+                      "name": "Waitlist Note",
+                      "fill": "$sys-label-alt",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "출시 알림에만 쓰고, 다른 곳에는 쓰지 않아요. 비워두셔도 괜찮아요.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$sys-font",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -4288,7 +4371,7 @@
                   "id": "WREhY",
                   "name": "Submit Label",
                   "fill": "$sys-on-primary",
-                  "content": "소감 보낼게요",
+                  "content": "사전 신청하기",
                   "fontFamily": "$sys-font",
                   "fontSize": 16,
                   "fontWeight": "700"
@@ -4462,7 +4545,7 @@
       "x": 760,
       "y": 919,
       "name": "Landing Page(new version) · System",
-      "context": "랜딩(/) 최신 구현과 동기화된 프레임 — CTA는 체험 소감 목적",
+      "context": "랜딩(/) 최신 구현과 동기화 — 랜딩에는 기능 체험 동선만 둔다. 소감과 사전 신청은 체험을 마치거나 중간에 그만둔 뒤에만 묻는다.",
       "clip": true,
       "width": 480,
       "fill": "$sys-bg",
@@ -4583,7 +4666,7 @@
               "id": "W1pGyr",
               "name": "Header CTA",
               "fill": "$sys-primary-dark",
-              "content": "소감 남기기",
+              "content": "체험하기",
               "fontFamily": "$sys-font",
               "fontSize": 13,
               "fontWeight": "600"
@@ -4687,7 +4770,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "A1aSP5": {
-                      "content": "지금 바로 체험해보기"
+                      "content": "지금 바로 체험하기"
                     }
                   }
                 },
@@ -5287,7 +5370,7 @@
               "fill": "$sys-label-strong",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "오늘 써본 느낌, 같이 나눠요",
+              "content": "지금 가장 막막한 일,\n하나만 같이 쪼개봐요",
               "lineHeight": 1.36,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -5302,7 +5385,7 @@
               "fill": "$sys-label-neutral",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "짧은 소감 하나가 다음 걸음을 더 다정하게 만들어요.",
+              "content": "가입 없이 바로 시작해요. 하나만 해보고 닫아도 괜찮아요.",
               "lineHeight": 1.6,
               "textAlign": "center",
               "fontFamily": "$sys-font",
@@ -5353,7 +5436,7 @@
                       "id": "ngBhB",
                       "name": "Label",
                       "fill": "$sys-on-primary",
-                      "content": "소감 한 마디 남기기",
+                      "content": "지금 바로 체험하기",
                       "fontFamily": "$sys-font",
                       "fontSize": 17,
                       "fontWeight": "700"
@@ -5553,6 +5636,7 @@
       "x": 2715,
       "y": 919,
       "name": "Screen · Demo 1 Braindump · System",
+      "context": "데모 1 브레인덤프 — 첫 안내가 결과를 먼저 약속하고, 입력창 위 고정 힌트는 키보드가 올라와도 남는다. 입력 글자 16px(iOS 자동 확대 차단).",
       "clip": true,
       "width": 480,
       "height": 820,
@@ -5599,7 +5683,7 @@
                   "fill": "$sys-label-normal",
                   "textGrowth": "fixed-width",
                   "width": 310,
-                  "content": "요즘 머릿속에 있는 일들을 편하게 쏟아내 보세요. 문장이 아니어도 괜찮아요.",
+                  "content": "요즘 머릿속에 맴도는 일들을 편하게 쏟아내 보세요. 다 적으면 그 안에서 오늘 할 일 후보를 하나씩 꺼내 드릴게요. 문장이 아니어도 괜찮아요.",
                   "lineHeight": 1.55,
                   "fontFamily": "$sys-font",
                   "fontSize": 14.5,
@@ -5620,9 +5704,9 @@
                   "id": "YQCAh",
                   "name": "Chip",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "padding": [
                     13,
@@ -5646,9 +5730,9 @@
                   "id": "TB0Is",
                   "name": "Chip",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "padding": [
                     13,
@@ -5672,9 +5756,9 @@
                   "id": "MMGFz",
                   "name": "Chip",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "padding": [
                     13,
@@ -5707,11 +5791,26 @@
             "top": 1
           },
           "strokeAlignment": "inner",
+          "layout": "vertical",
+          "gap": 6,
           "padding": [
             12,
             16
           ],
           "children": [
+            {
+              "type": "text",
+              "id": "AmJAf",
+              "name": "Input Hint",
+              "fill": "$sys-label-neutral",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "쏟아낸 내용에서 오늘 할 일 후보를 찾아드려요",
+              "lineHeight": 1.5,
+              "fontFamily": "$sys-font",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
             {
               "type": "frame",
               "id": "GrAIP",
@@ -5737,7 +5836,7 @@
                   "fill": "$sys-label-alt",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "예: 과제 마감이 목요일인데 손도 못 댔고, 방도 치워야 하고…",
+                  "content": "예: 과제도 밀렸고, 방도 치워야 하고…",
                   "fontFamily": "$sys-font",
                   "fontSize": 14.5,
                   "fontWeight": "normal"
@@ -5777,6 +5876,7 @@
       "x": 3355,
       "y": 919,
       "name": "Screen · Demo 2 Candidates · System",
+      "context": "데모 2 후보 고르기 — 안내 아래 상시 라인으로 '쏟아낸 이야기에서 나왔다'와 '최대 3개' 상한을 고르기 전에 알린다.",
       "clip": true,
       "width": 480,
       "height": 820,
@@ -5828,6 +5928,19 @@
                   "fontWeight": "normal"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "id": "FiSTC",
+              "name": "Pick Hint",
+              "fill": "$sys-label-neutral",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "쏟아낸 이야기에서 찾은 일들이에요 · 최대 3개까지 고를 수 있어요",
+              "lineHeight": 1.5,
+              "fontFamily": "$sys-font",
+              "fontSize": 12,
+              "fontWeight": "normal"
             },
             {
               "type": "frame",
@@ -5948,9 +6061,9 @@
                   "id": "wVNcA",
                   "name": "Candidate",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "gap": 10,
                   "padding": [
@@ -5989,9 +6102,9 @@
                   "id": "c5TkSt",
                   "name": "Candidate",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "gap": 10,
                   "padding": [
@@ -6030,9 +6143,9 @@
                   "id": "jBb4d",
                   "name": "Candidate",
                   "width": "fill_container",
-                  "fill": "$sys-bg",
+                  "fill": "$sys-bg-gray",
                   "cornerRadius": 12,
-                  "stroke": "$sys-line",
+                  "stroke": "$sys-line-strong",
                   "strokeWidth": 1,
                   "gap": 10,
                   "padding": [
@@ -6144,6 +6257,7 @@
       "x": 3995,
       "y": 919,
       "name": "Screen · Demo 3 Split · System",
+      "context": "데모 3 쪼개기 결과 — 다시 쪼개기 시 직전 계획을 접이식으로 함께 남겨 무엇이 달라졌는지 대조할 수 있다.",
       "clip": true,
       "width": 480,
       "height": 820,
@@ -6552,6 +6666,33 @@
                   "fontWeight": "normal"
                 }
               ]
+            },
+            {
+              "type": "frame",
+              "id": "SU4ed",
+              "name": "Previous Plan",
+              "width": "fill_container",
+              "fill": "$sys-bg-gray",
+              "cornerRadius": 12,
+              "stroke": "$sys-line-strong",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "padding": [
+                10,
+                14
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "mIO91",
+                  "name": "Toggle Label",
+                  "fill": "$sys-label-neutral",
+                  "content": "이전 계획 보기 (4개)",
+                  "fontFamily": "$sys-font",
+                  "fontSize": 12.5,
+                  "fontWeight": "600"
+                }
+              ]
             }
           ]
         },
@@ -6669,6 +6810,7 @@
       "x": 4635,
       "y": 919,
       "name": "Screen · Demo 4 Today · System",
+      "context": "데모 4 Today — 서브태스크 번호 없음. 소감 CTA는 '솔직한 느낌 들려주기'이며 도착 화면에서 사전 신청도 함께 묻는다.",
       "clip": true,
       "width": 480,
       "height": 820,
@@ -6729,7 +6871,7 @@
               "width": "fill_container",
               "fill": "$sys-bg",
               "cornerRadius": 14,
-              "stroke": "$sys-line",
+              "stroke": "$sys-line-strong",
               "strokeWidth": 1,
               "layout": "vertical",
               "children": [
@@ -6939,16 +7081,6 @@
                             },
                             {
                               "type": "text",
-                              "id": "bkHVT",
-                              "name": "Index",
-                              "fill": "$sys-primary-dark",
-                              "content": "1",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            },
-                            {
-                              "type": "text",
                               "id": "rVoqD",
                               "name": "Subtask Title",
                               "fill": "$sys-label-alt",
@@ -6983,16 +7115,6 @@
                               "strokeWidth": 1.5,
                               "justifyContent": "center",
                               "alignItems": "center"
-                            },
-                            {
-                              "type": "text",
-                              "id": "PsaJS",
-                              "name": "Index",
-                              "fill": "$sys-primary-dark",
-                              "content": "2",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
                             },
                             {
                               "type": "text",
@@ -7033,16 +7155,6 @@
                             },
                             {
                               "type": "text",
-                              "id": "zpefK",
-                              "name": "Index",
-                              "fill": "$sys-primary-dark",
-                              "content": "3",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            },
-                            {
-                              "type": "text",
                               "id": "c5Wic",
                               "name": "Subtask Title",
                               "fill": "$sys-label-normal",
@@ -7077,16 +7189,6 @@
                               "strokeWidth": 1.5,
                               "justifyContent": "center",
                               "alignItems": "center"
-                            },
-                            {
-                              "type": "text",
-                              "id": "b9i1IO",
-                              "name": "Index",
-                              "fill": "$sys-primary-dark",
-                              "content": "4",
-                              "fontFamily": "$sys-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
                             },
                             {
                               "type": "text",
@@ -7142,7 +7244,7 @@
               "width": "fill_container",
               "fill": "$sys-bg",
               "cornerRadius": 14,
-              "stroke": "$sys-line",
+              "stroke": "$sys-line-strong",
               "strokeWidth": 1,
               "gap": 10,
               "padding": [
@@ -7341,7 +7443,12 @@
               "type": "ref",
               "ref": "mXwkh",
               "name": "Feedback CTA",
-              "width": "fill_container"
+              "width": "fill_container",
+              "descendants": {
+                "A1aSP5": {
+                  "content": "솔직한 느낌 들려주기"
+                }
+              }
             },
             {
               "type": "frame",
@@ -8049,6 +8156,10 @@
     "sys-pri-none": {
       "type": "color",
       "value": "#8A8A9A"
+    },
+    "sys-line-strong": {
+      "type": "color",
+      "value": "#E3E3EC"
     }
   },
   "fileToken": "6f0a728f-2aff-49db-9fc2-c51785908754"

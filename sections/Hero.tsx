@@ -21,7 +21,7 @@ export function Hero() {
 
       {/* Above-the-fold 데모 진입 CTA (01-demo-shell.md §3.2 — 시간 약속 카피 금지) */}
       <div className="flex flex-col gap-2 pt-1.5">
-        <CtaButton label="지금 바로 체험해보기" href="/demo" />
+        <CtaButton label="지금 바로 체험하기" href="/demo" />
         <p className="text-center text-[12.5px] text-sys-label-alt">
           가입 없음 · 머릿속을 쏟아내는 것부터 시작해요
         </p>

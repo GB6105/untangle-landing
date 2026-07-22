@@ -5,7 +5,8 @@ import { RegisterForm } from "@/app/register/RegisterForm";
 
 export const metadata: Metadata = {
   title: "체험 소감 — Untangle",
-  description: "방금 체험한 Untangle, 어떠셨어요? 짧은 소감을 들려주세요.",
+  description:
+    "방금 체험한 Untangle, 어떠셨어요? 짧은 소감을 들려주시고, 원하시면 출시 알림도 함께 신청하세요.",
 };
 
 /**

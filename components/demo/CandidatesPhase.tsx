@@ -14,6 +14,12 @@ import type { Candidate } from "@/components/demo/types";
  */
 
 const GUIDE = "이 중에 오늘 반드시 끝내고 싶은 일들이 있나요?";
+/**
+ * 고르기 전에 두 가지를 미리 알려둔다: (1) 이 목록이 방금 쏟아낸 내 이야기에서
+ * 나왔다는 것 — 없으면 "내가 적은 일은 어디 갔지?"로 읽힌다, (2) 상한이 3개라는
+ * 것 — 4번째를 눌러서야 알게 되면 "왜 안 눌리지?"로 당황한다.
+ */
+const PICK_HINT = "쏟아낸 이야기에서 찾은 일들이에요 · 최대 3개까지 고를 수 있어요";
 const CAP_NOTICE = "한 3개만 골라볼까요? 고른 일은 오늘 꼭 끝내봐요.";
 const MAX_SELECTED = 3;
 /** 카드 승격 연출 길이 — 짧은 CSS 전환 수준으로 절제 (02 §3.2). */
@@ -65,6 +71,9 @@ export function CandidatesPhase({
       <div className="flex-1 overflow-y-auto px-5 py-5">
         <div className="flex flex-col gap-3">
           <ChatBubble role="ai">{GUIDE}</ChatBubble>
+          <p className="-mt-1 px-1 text-[12px] leading-[1.5] text-sys-label-neutral">
+            {PICK_HINT}
+          </p>
 
           <div className="flex flex-col gap-[7px] pt-0.5">
             {candidates.map((candidate, i) => {
@@ -83,7 +92,7 @@ export function CandidatesPhase({
                   className={`flex items-center gap-2.5 rounded-[12px] border px-[14px] py-[13px] text-left transition-all duration-300 ${
                     isSelected
                       ? "border-sys-primary bg-sys-primary-lighter"
-                      : "border-sys-line bg-sys-bg"
+                      : "border-sys-line-strong bg-sys-bg-gray"
                   } ${
                     confirming
                       ? isSelected
