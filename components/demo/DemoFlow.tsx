@@ -135,6 +135,7 @@ export function DemoFlow() {
           onConfirm={(cardId, tasks, firstStep, answers) =>
             dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers })
           }
+          onResplitUsed={(cardId) => dispatch({ type: "resplitUsed", cardId })}
         />
       ) : (
         <TodayPhase

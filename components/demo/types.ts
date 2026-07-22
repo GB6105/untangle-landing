@@ -23,6 +23,12 @@ export type DemoCard = {
   subtasks: DemoSubtask[];
   /** Clarify history, kept so "더 쪼개기" resumes the past conversation. */
   splitAnswers: Answer[];
+  /**
+   * "다시 쪼개기"로 계획을 재생성한 횟수 — 카드당 MAX_RESPLITS까지. 훅의 ref만으로는
+   * 패널을 다시 열 때마다 0으로 돌아가 무제한이 되므로 카드에 실어 저장한다.
+   * 세는 것은 재생성(LLM 호출)뿐 — 저장된 계획을 열기만 하는 건 세지 않는다.
+   */
+  resplitCount: number;
 };
 
 export type DemoPhase = "braindump" | "candidates" | "split" | "today";
