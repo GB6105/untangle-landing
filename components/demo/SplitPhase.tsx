@@ -23,8 +23,10 @@ import { SKIP_ANSWER, useSplitFlow } from "@/components/split/useSplitFlow";
  * "다시 쪼개기"로 전체를 재생성하고, 확정해야 카드에 반영된다.
  */
 
+// "가장 막막한 일" 같은 표현은 처음 읽는 사람에게 무슨 뜻인지 전해지지 않는다.
+// 무엇을 고르는지와 고르면 무엇이 일어나는지를 그대로 쓴다.
 const PICK_QUESTION =
-  "이 중 가장 막막한 일이 있나요? 하나만 골라주시면 같이 쪼개볼게요.";
+  "어떤 일부터 시작해볼까요? 하나 고르면 지금 바로 할 수 있는 작은 단계로 쪼개드릴게요.";
 const SKIP_CHIP = "괜찮아요, 바로 시작할게요";
 const LEAVE_LABEL = "지금은 넘어가기";
 const CONFIRM_LABEL = "이 계획으로 시작";
@@ -99,7 +101,7 @@ function SplitPicker({
                 key={c.id}
                 type="button"
                 onClick={() => onPick(c.id)}
-                className="flex items-center gap-2 rounded-[12px] border border-sys-line bg-sys-bg px-4 py-[13px] text-left text-[14.5px] leading-[1.4] text-sys-label-strong transition-colors hover:border-sys-primary hover:bg-sys-primary-lighter"
+                className="flex items-center gap-2 rounded-[12px] border border-sys-line-strong bg-sys-bg-gray px-4 py-[13px] text-left text-[14.5px] leading-[1.4] text-sys-label-strong transition-colors hover:border-sys-primary hover:bg-sys-primary-lighter"
               >
                 <span className="min-w-0 flex-1">{c.title}</span>
                 {/* 이미 쪼갠 카드는 저장된 계획을 다시 여는 동선 (03 §3.3) */}
@@ -113,7 +115,7 @@ function SplitPicker({
             <button
               type="button"
               onClick={onSkip}
-              className="rounded-[12px] border border-sys-line bg-sys-bg px-4 py-[13px] text-left text-[14.5px] leading-[1.4] text-sys-label-neutral transition-colors hover:border-sys-primary hover:bg-sys-primary-lighter"
+              className="rounded-[12px] border border-sys-line-strong bg-sys-bg-gray px-4 py-[13px] text-left text-[14.5px] leading-[1.4] text-sys-label-neutral transition-colors hover:border-sys-primary hover:bg-sys-primary-lighter"
             >
               {SKIP_CHIP}
             </button>
@@ -220,7 +222,7 @@ function DemoSplitPanel({
                   <div
                     key={task.id}
                     className={`flex items-center gap-2.5 rounded-[14px] border bg-sys-bg px-[14px] py-[11px] transition-colors ${
-                      included ? "border-sys-primary-light" : "border-sys-line"
+                      included ? "border-sys-primary-light" : "border-sys-line-strong"
                     }`}
                   >
                     {/* 담기 토글 — Today의 완료 체크박스와 다른 형태 (03 §3.2) */}
@@ -251,6 +253,17 @@ function DemoSplitPanel({
                   </div>
                 );
               })}
+
+              {/* 다시 쪼개기를 하면 이전 목록이 사라져 무엇이 달라졌는지 확인할
+                  수 없었다 — 직전 계획을 접어둔 채로 함께 남긴다. */}
+              {flow.previousTasks && flow.previousTasks.length > 0 && (
+                // key로 갈아끼워 다시 접는다 — 펼친 채로 내용만 바뀌면 어느 쪽이
+                // 방금 만든 계획인지 구분되지 않는다.
+                <PreviousPlan
+                  key={flow.previousTasks.join("|")}
+                  titles={flow.previousTasks}
+                />
+              )}
             </div>
           )}
 
@@ -314,6 +327,37 @@ function DemoSplitPanel({
           />
           <LeaveButton onLeave={onLeave} disabled={waiting} />
         </div>
+      )}
+    </div>
+  );
+}
+
+/** 다시 쪼개기 직전 계획 — 기본은 접어두고, 눌러야 펼친다 (새 제안이 주인공). */
+function PreviousPlan({ titles }: { titles: string[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-[12px] border border-sys-line-strong bg-sys-bg-gray px-[14px] py-2.5">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className="w-full text-left text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-label-strong"
+      >
+        {open ? "이전 계획 접기" : `이전 계획 보기 (${titles.length}개)`}
+      </button>
+      {open && (
+        <ul className="flex flex-col gap-1 pt-2">
+          {titles.map((title, i) => (
+            <li
+              key={`${i}-${title}`}
+              // 대조하라고 펼치는 목록이므로 본문 대비를 지킨다 — label-alt는
+              // 회색 배경 위에서 2:1 수준이라 읽히지 않는다.
+              className="text-[13px] leading-[1.45] text-sys-label-neutral"
+            >
+              {title}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
