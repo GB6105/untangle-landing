@@ -23,7 +23,9 @@ const SLIDEUP_DELAY_MS = 1200;
 
 const CARD_DONE_LINE = "이 일을 끝까지 마쳤어요. 잘하고 있어요.";
 const ALL_DONE_BANNER = "오늘 정한 일을 전부 끝냈어요";
-const CTA_LABEL = "소감 한 마디 남기기";
+// "소감"은 좋았던 점을 써야 할 것처럼 읽힌다 — 아쉬웠던 말도 환영한다는 신호를
+// 라벨에 담는다. 이 CTA가 닿는 화면에서 사전 신청도 함께 묻는다.
+const CTA_LABEL = "솔직한 느낌 들려주기";
 
 export function TodayPhase({
   cards,
@@ -182,7 +184,7 @@ function TodayCard({
       className={`rounded-[14px] border transition-colors ${
         done
           ? "border-sys-primary-light bg-sys-bg-violet" // 채움 전환 — 취소선 아님 (04 §3.3-2)
-          : "border-sys-line bg-sys-bg"
+          : "border-sys-line-strong bg-sys-bg"
       }`}
     >
       {/* 헤드 행: 제목 + (쪼갠 카드: 진행 배지 / 미분해: 완료 체크박스) */}
@@ -244,13 +246,12 @@ function TodayCard({
               </div>
             )}
 
+            {/* 순서는 있지만 번호를 붙이지는 않는다 — 투두 항목 옆의 숫자는
+                "몇 번째"인지보다 "왜 매겨졌지?"로 먼저 읽힌다. */}
             <ol className="flex flex-col gap-1.5">
-              {card.subtasks.map((s, i) => (
+              {card.subtasks.map((s) => (
                 <li key={s.id} className="flex items-center gap-2.5 py-0.5">
                   <CheckBox small checked={s.done} onToggle={() => onSubtask(s.id)} />
-                  <span className="shrink-0 text-[12px] font-bold text-sys-primary-dark">
-                    {i + 1}
-                  </span>
                   <span
                     className={`min-w-0 text-[14px] leading-[1.45] ${
                       s.done

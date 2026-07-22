@@ -174,7 +174,7 @@ export function DemoFlow() {
                 onClick={exit}
                 className="w-full rounded-[12px] border border-sys-line py-[13px] text-[14.5px] font-semibold text-sys-label-neutral"
               >
-                소감 남기고 나가기
+                느낌 남기고 나가기
               </button>
             </div>
           </div>
