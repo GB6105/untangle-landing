@@ -11,7 +11,7 @@ import { Icon } from "@/components/Icon";
  * middle-click and "open in new tab".
  */
 export function CtaButton({
-  label = "지금 바로 체험해보기",
+  label = "지금 바로 체험하기",
   href = "/demo",
   className = "",
 }: {

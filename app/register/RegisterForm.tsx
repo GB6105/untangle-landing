@@ -276,7 +276,7 @@ export function RegisterForm() {
           ? "보내는 중…"
           : email.trim()
             ? "소감 보내고 신청하기"
-            : "소감 보낼게요"}
+            : "소감 보내기"}
       </button>
 
       <p className="text-center text-[12px] leading-[1.5] text-sys-label-alt">
