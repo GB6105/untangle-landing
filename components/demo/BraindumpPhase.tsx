@@ -14,10 +14,14 @@ import type { BraindumpRequest, BraindumpResponse, Candidate } from "@/component
  * fresh examples instead of questioning them back (PRD 5.1).
  */
 
+// 무엇을 해주는지 먼저 약속한다 — "쏟아내라"까지만 읽으면 "그래서 뭘 해준다는
+// 거지?"에서 멈추고, 결과가 나왔을 때도 "갑자기 할 일만 나왔다"고 느낀다.
 const WELCOME =
-  "요즘 머릿속에 있는 일들을 편하게 쏟아내 보세요. 문장이 아니어도 괜찮아요.";
-const PLACEHOLDER =
-  "예: 과제 마감이 목요일인데 손도 못 댔고, 방도 치워야 하고, 운동도 다시 시작하고 싶어…";
+  "요즘 머릿속에 맴도는 일들을 편하게 쏟아내 보세요. 다 적으면 그 안에서 오늘 할 일 후보를 하나씩 꺼내 드릴게요. 문장이 아니어도 괜찮아요.";
+// 길면 무엇을 적으라는 건지 읽히지 않는다 — 형식만 보여주는 정도로 짧게.
+const PLACEHOLDER = "예: 과제도 밀렸고, 방도 치워야 하고…";
+/** 키보드가 올라오면 위쪽 말풍선이 가려진다 — 약속은 입력창 옆에 항상 남긴다. */
+const INPUT_HINT = "쏟아낸 내용에서 오늘 할 일 후보를 찾아드려요";
 // 빈 화면 공포가 최대 이탈 요인 — 원탭으로 입력창에 채워지고 수정 가능 (02 §3.1)
 const EXAMPLES = [
   "과제 2개랑 빨래가 밀렸어",
@@ -163,6 +167,10 @@ export function BraindumpPhase({
       </div>
 
       <div className="border-t border-sys-line px-4 py-3">
+        {/* 스크롤 로그가 아니라 입력창에 붙여둔다 — 키보드가 올라와도 보인다. */}
+        <p className="px-1 pb-1.5 text-[12px] leading-[1.5] text-sys-label-neutral">
+          {INPUT_HINT}
+        </p>
         <ChatInput
           value={input}
           onChange={setInput}
