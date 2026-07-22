@@ -10,17 +10,13 @@
  * that 사전 신청 연락처는 체험을 마친 사람에게만 묻는다 (랜딩에는 없다).
  * 비워도 소감은 그대로 접수된다. The webhook URL and shared token live
  * only in server env vars.
+ *
+ * 이 파일은 최상단 `"use server"` 모듈이므로 **async 함수만** export한다.
+ * `FeedbackState`·`initialFeedbackState`가 여기 있으면 Next가 상수까지 서버
+ * 레퍼런스로 등록해 제출이 깨진다 — 이유는 `./feedback-state` 주석 참고.
  */
 
-export type FeedbackState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-  errors?: { rating?: string; contact?: string };
-  /** 성공 시 사전 신청까지 남겼는지 — 완료 문구를 가르는 데만 쓴다. */
-  subscribed?: boolean;
-};
-
-export const initialFeedbackState: FeedbackState = { status: "idle" };
+import type { FeedbackState } from "@/app/register/feedback-state";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** 구분자를 걷어낸 국내 번호 — 휴대폰(11자리)과 지역번호(9~10자리)를 함께 받는다. */
