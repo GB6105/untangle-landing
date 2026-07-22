@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { CtaButton } from "@/components/CtaButton";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export function FinalCta() {
   return (
@@ -17,13 +19,21 @@ export function FinalCta() {
         <CtaButton />
       </div>
 
+      {/* 사전 신청으로 연락처를 받는 이상 두 링크는 실제로 닿아야 한다 —
+          이전에는 href도 onClick도 없는 버튼이라 눌러도 아무 일도 없었다. */}
       <div className="flex justify-center gap-[18px] pt-1.5">
-        <button type="button" className="text-[13px] text-sys-label-neutral">
+        <Link
+          href="/privacy"
+          className="text-[13px] text-sys-label-neutral transition-colors hover:text-sys-label-strong"
+        >
           개인정보 처리방침
-        </button>
-        <button type="button" className="text-[13px] text-sys-label-neutral">
+        </Link>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="text-[13px] text-sys-label-neutral transition-colors hover:text-sys-label-strong"
+        >
           문의하기
-        </button>
+        </a>
       </div>
     </section>
   );
