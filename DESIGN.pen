@@ -4334,7 +4334,7 @@
                       "fill": "$sys-label-alt",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "출시 알림에만 쓰고, 다른 곳에는 쓰지 않아요. 비워두셔도 괜찮아요.",
+                      "content": "적어주신 연락처는 출시 안내에만 쓰고, 안내를 보낸 뒤 바로 지워요. 비워두셔도 괜찮아요.  개인정보 처리방침",
                       "lineHeight": 1.5,
                       "fontFamily": "$sys-font",
                       "fontSize": 12,
