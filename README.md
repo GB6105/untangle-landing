@@ -29,8 +29,11 @@ Script 웹 앱으로 전달되고, 지정한 스프레드시트에 `제출일시
 
 1행에 다음 컬럼을 순서대로 입력합니다.
 
-| 제출일시 | 만족도(점수) | 만족도 | 아쉬운 이유 | 자유 의견 |
-| --- | --- | --- | --- | --- |
+| 제출일시 | 만족도(점수) | 만족도 | 아쉬운 이유 | 자유 의견 | 사전 신청 이메일 |
+| --- | --- | --- | --- | --- | --- |
+
+> 마지막 **사전 신청 이메일** 컬럼은 소감 폼에서 함께 받는 선택 항목입니다. 비워둔 채
+> 제출한 사람은 이 칸이 빈 행으로 쌓입니다.
 
 ### 2. Apps Script 웹 앱 배포
 
@@ -46,7 +49,7 @@ Script 웹 앱으로 전달되고, 지정한 스프레드시트에 `제출일시
        const body = JSON.parse(e.postData.contents);
        if (body.token !== TOKEN) return json({ ok: false, error: 'unauthorized' });
        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-       sheet.appendRow([new Date(), body.rating || '', body.ratingLabel || '', body.reason || '', body.comment || '']);
+       sheet.appendRow([new Date(), body.rating || '', body.ratingLabel || '', body.reason || '', body.comment || '', body.email || '']);
        return json({ ok: true });
      } catch (err) {
        return json({ ok: false, error: String(err) });
@@ -59,6 +62,11 @@ Script 웹 앱으로 전달되고, 지정한 스프레드시트에 `제출일시
 
 3. **배포 → 새 배포 → 유형: 웹 앱** / 실행: **나** / 액세스 권한: **모든 사용자** 로 배포하고,
    생성된 `/exec` URL 을 복사합니다.
+
+> **이미 배포해 둔 스크립트가 있다면 반드시 위 코드로 갱신해 다시 배포하세요.**
+> `appendRow` 에 `body.email` 이 빠져 있으면 사전 신청 이메일이 저장되지 않습니다.
+> 이때도 스크립트는 `{ ok: true }` 를 돌려주므로 서버 액션은 성공으로 판단하고,
+> 사용자에게는 "출시되면 알려드릴게요" 라고 안내한 채 주소만 사라집니다.
 
 ### 3. 환경변수 설정
 

@@ -15,6 +15,10 @@ import {
  * Client Component so the page can stay a Server Component (keeping `metadata`).
  * `useState` drives the conditional reason block — it only appears for low
  * scores (1–3) — while `useActionState` drives submit / pending / success.
+ *
+ * 사전 신청(이메일)도 이 폼에서 함께 묻는다. 체험을 마쳤거나 중간에 그만둔
+ * 사람만 이 화면에 도착하므로, 랜딩에는 사전 신청·소감 어느 쪽도 노출되지
+ * 않는다. 이메일은 끝까지 선택 항목이라 비워둔 채로도 소감이 접수된다.
  */
 
 const RATINGS = [
@@ -47,8 +51,16 @@ export function RegisterForm() {
   // the score is briefly raised to 4–5 and lowered again — otherwise it would
   // submit an empty reason despite "기타" still being selected.
   const [reasonEtc, setReasonEtc] = useState<string>("");
+  // 이 폼의 모든 입력은 controlled여야 한다. React는 form action을 실행하기 전에
+  // requestFormReset을 무조건 예약하므로(react-dom-client: startHostTransition),
+  // 액션이 error를 돌려줘도 비제어 필드는 빈 값으로 리셋된다. 오류를 한 번에
+  // 모아 돌려주는 이유가 "다시 적게 만들지 않기"인데, 정작 가장 길게 쓴 자유
+  // 의견이 그 왕복에서 사라지면 앞뒤가 맞지 않는다.
+  const [email, setEmail] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
   const showReason = rating !== null && rating <= 3;
   const ratingError = state.status === "error" ? state.errors?.rating : undefined;
+  const emailError = state.status === "error" ? state.errors?.email : undefined;
 
   if (state.status === "success") {
     return (
@@ -57,12 +69,22 @@ export function RegisterForm() {
           <Icon name="check" size={28} strokeWidth={2.5} />
         </span>
         <h2 className="text-[22px] font-bold tracking-[-0.3px] text-sys-label-strong">
-          소감을 보냈어요
+          {state.subscribed ? "소감과 사전 신청, 잘 받았어요" : "소감을 보냈어요"}
         </h2>
         <p className="text-[15px] leading-[1.6] text-sys-label-neutral">
-          고마워요! 남겨주신 한 마디로
-          <br />
-          다음 걸음을 더 다정하게 만들어볼게요.
+          {state.subscribed ? (
+            <>
+              고마워요! 준비가 되면
+              <br />
+              남겨주신 메일로 가장 먼저 알려드릴게요.
+            </>
+          ) : (
+            <>
+              고마워요! 남겨주신 한 마디로
+              <br />
+              다음 걸음을 더 다정하게 만들어볼게요.
+            </>
+          )}
         </p>
         <Link
           href="/"
@@ -180,7 +202,7 @@ export function RegisterForm() {
               value={reasonEtc}
               onChange={(e) => setReasonEtc(e.target.value)}
               placeholder="어떤 점이 아쉬웠는지 적어주세요"
-              className="h-[48px] rounded-xl border border-sys-line bg-sys-bg px-4 text-[14px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
+              className="h-[48px] rounded-xl border border-sys-line bg-sys-bg px-4 text-[16px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
             />
           )}
         </div>
@@ -195,9 +217,45 @@ export function RegisterForm() {
         <textarea
           name="comment"
           rows={3}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
           placeholder="좋았던 점이든 바라는 점이든, 자유롭게 남겨주세요"
-          className="min-h-[92px] resize-none rounded-xl border border-sys-line bg-sys-bg px-4 py-3 text-[14px] leading-[1.5] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
+          className="min-h-[92px] resize-none rounded-xl border border-sys-line bg-sys-bg px-4 py-3 text-[16px] leading-[1.5] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:border-sys-primary focus:ring-2 focus:ring-sys-primary-lighter"
         />
+      </div>
+
+      {/* 사전 신청 — 소감과 같은 화면에서 함께 묻되 언제나 선택. 비워도 소감은
+          그대로 접수되므로 제출률을 막지 않는다. 랜딩에는 이 동선이 없다. */}
+      <div className="flex flex-col gap-2.5">
+        <span className="text-[14px] font-semibold text-sys-label-strong">
+          정식 출시되면 알려드릴까요?{" "}
+          <span className="font-normal text-sys-label-alt">(선택)</span>
+        </span>
+        <input
+          type="email"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="이메일 주소"
+          autoComplete="email"
+          inputMode="email"
+          maxLength={254}
+          aria-invalid={emailError ? true : undefined}
+          aria-describedby={emailError ? "email-error" : undefined}
+          className={`h-[48px] rounded-xl border bg-sys-bg px-4 text-[16px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:ring-2 ${
+            emailError
+              ? "border-red-400 focus:border-red-400 focus:ring-red-100"
+              : "border-sys-line focus:border-sys-primary focus:ring-sys-primary-lighter"
+          }`}
+        />
+        {emailError && (
+          <span id="email-error" role="alert" className="text-[13px] text-red-500">
+            {emailError}
+          </span>
+        )}
+        <p className="text-[12px] leading-[1.5] text-sys-label-alt">
+          출시 알림에만 쓰고, 다른 곳에는 쓰지 않아요. 비워두셔도 괜찮아요.
+        </p>
       </div>
 
       {state.status === "error" && state.message && (
@@ -214,7 +272,11 @@ export function RegisterForm() {
         disabled={pending}
         className="h-[54px] rounded-xl bg-sys-primary-dark text-[16px] font-bold text-sys-on-primary shadow-[0_9px_24px_-2px_rgba(106,69,231,0.25)] transition-shadow hover:shadow-[0_12px_28px_-2px_rgba(106,69,231,0.4)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {pending ? "보내는 중…" : "소감 보낼게요"}
+        {pending
+          ? "보내는 중…"
+          : email.trim()
+            ? "소감 보내고 신청하기"
+            : "소감 보낼게요"}
       </button>
 
       <p className="text-center text-[12px] leading-[1.5] text-sys-label-alt">
