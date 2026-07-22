@@ -112,11 +112,8 @@ export default function Privacy() {
         </div>
 
         <div className="flex flex-col gap-2.5 pt-2">
-          <p className="text-[13px] font-semibold tracking-[2px] text-sys-primary-dark">
+          <h1 className="text-[27px] font-bold leading-[1.34] tracking-[-0.5px] text-sys-label-strong">
             개인정보 처리방침
-          </p>
-          <h1 className="whitespace-pre-line text-[27px] font-bold leading-[1.34] tracking-[-0.5px] text-sys-label-strong">
-            {"무엇을 받고,\n어떻게 지우는지"}
           </h1>
           <p className="text-[15px] leading-[1.6] text-sys-label-neutral">
             베타 체험에서 받는 정보는 소감을 남겨주실 때 적어주시는 것뿐이에요.
