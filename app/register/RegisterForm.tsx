@@ -253,8 +253,20 @@ export function RegisterForm() {
             {contactError}
           </span>
         )}
+        {/* 수집 항목·목적·보유기간을 적는 지점. 연락처는 선택 항목이라 별도
+            동의 체크박스 대신 고지와 링크로 갈음한다. 처리방침은 새 탭으로 열어
+            작성 중인 소감이 날아가지 않게 한다. */}
         <p className="text-[12px] leading-[1.5] text-sys-label-alt">
-          출시 알림에만 쓰고, 다른 곳에는 쓰지 않아요. 비워두셔도 괜찮아요.
+          적어주신 연락처는 출시 안내에만 쓰고, 안내를 보낸 뒤 바로 지워요.
+          비워두셔도 괜찮아요.{" "}
+          <Link
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-sys-label-neutral underline"
+          >
+            개인정보 처리방침
+          </Link>
         </p>
       </div>
 
