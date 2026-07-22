@@ -8,7 +8,11 @@ import type { DemoCard } from "@/components/demo/types";
 import { ChatBubble } from "@/components/split/ChatBubble";
 import { OptionChips } from "@/components/split/OptionChips";
 import type { Answer, Task } from "@/components/split/types";
-import { SKIP_ANSWER, useSplitFlow } from "@/components/split/useSplitFlow";
+import {
+  MAX_RESPLITS,
+  SKIP_ANSWER,
+  useSplitFlow,
+} from "@/components/split/useSplitFlow";
 
 /**
  * Split phase screens (docs/features/03-demo-split.md).
@@ -31,6 +35,8 @@ const SKIP_CHIP = "괜찮아요, 바로 시작할게요";
 const LEAVE_LABEL = "지금은 넘어가기";
 const CONFIRM_LABEL = "이 계획으로 시작";
 const REGEN_LABEL = "다시 쪼개기";
+// 버튼이 사라진 이유를 딱 한 번 말해준다 — 말없이 없어지면 고장으로 읽힌다.
+const REGEN_EXHAUSTED = `다시 쪼개기는 할 일 하나당 ${MAX_RESPLITS}번까지예요`;
 const ANSWER_PLACEHOLDER = "직접 답을 적어도 돼요";
 const WAIT_MESSAGES = [
   "이 일을 찬찬히 살펴보는 중…",
@@ -46,6 +52,7 @@ export function SplitPhase({
   onSkip,
   onLeave,
   onConfirm,
+  onResplitUsed,
 }: {
   /** 쪼개기 advance의 context로 항상 전달 (03 §4 필수 확장). */
   braindump: string;
@@ -57,6 +64,8 @@ export function SplitPhase({
   /** 패널의 "지금은 넘어가기" — 확정 없이 Today로. */
   onLeave: () => void;
   onConfirm: (cardId: string, tasks: Task[], firstStep: Task, answers: Answer[]) => void;
+  /** 재생성 1회 소비 — 확정과 무관하게 즉시 카드에 누적한다. */
+  onResplitUsed: (cardId: string) => void;
 }) {
   const card = splittingCardId
     ? (cards.find((c) => c.id === splittingCardId) ?? null)
@@ -72,6 +81,7 @@ export function SplitPhase({
       braindump={braindump}
       card={card}
       onLeave={onLeave}
+      onResplitUsed={() => onResplitUsed(card.id)}
       onConfirm={(result) =>
         onConfirm(card.id, result.tasks, result.firstStep, result.answers)
       }
@@ -132,15 +142,20 @@ function DemoSplitPanel({
   card,
   onLeave,
   onConfirm,
+  onResplitUsed,
 }: {
   braindump: string;
   card: DemoCard;
   onLeave: () => void;
   onConfirm: (result: { tasks: Task[]; firstStep: Task; answers: Answer[] }) => void;
+  onResplitUsed: () => void;
 }) {
   const flow = useSplitFlow({
     goal: card.title,
     initialAnswers: card.splitAnswers,
+    // 카드에 누적된 사용 횟수로 seed — 패널을 다시 열어도 남은 횟수가 이어진다.
+    initialResplitCount: card.resplitCount,
+    onResplit: onResplitUsed,
     // 쪼갠 카드 재진입: 저장된 계획으로 result를 재구성, advance는 안 돈다 (03 §3.3).
     initialResult:
       card.subtasks.length > 0
@@ -303,16 +318,24 @@ function DemoSplitPanel({
             {CONFIRM_LABEL}
           </button>
           <div className="flex items-center justify-center gap-6">
-            {/* 마음에 들지 않으면 전체를 다시 만든다 — 확정 전에는 카드 미반영 */}
-            <button
-              type="button"
-              onClick={flow.regenerate}
-              disabled={waiting}
-              className="flex items-center gap-1.5 px-2 py-1 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark disabled:opacity-50"
-            >
-              <Icon name="scissors" size={13} strokeWidth={2} />
-              {REGEN_LABEL}
-            </button>
+            {/* 마음에 들지 않으면 전체를 다시 만든다 — 확정 전에는 카드 미반영.
+                남은 횟수는 평소에 세어 보여주지 않는다: 카운트다운·"N개 남음" 류
+                압박 카피 금지 (00 §6). 다 쓴 뒤에만 조용히 알린다. */}
+            {flow.canResplit ? (
+              <button
+                type="button"
+                onClick={flow.regenerate}
+                disabled={waiting}
+                className="flex items-center gap-1.5 px-2 py-1 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark disabled:opacity-50"
+              >
+                <Icon name="scissors" size={13} strokeWidth={2} />
+                {REGEN_LABEL}
+              </button>
+            ) : (
+              <span className="px-2 py-1 text-[12.5px] text-sys-label-alt">
+                {REGEN_EXHAUSTED}
+              </span>
+            )}
             <LeaveButton onLeave={onLeave} disabled={waiting} />
           </div>
         </div>

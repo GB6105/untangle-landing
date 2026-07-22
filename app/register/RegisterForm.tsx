@@ -3,10 +3,8 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
-import {
-  submitFeedback,
-  initialFeedbackState,
-} from "@/app/register/actions";
+import { submitFeedback } from "@/app/register/actions";
+import { initialFeedbackState } from "@/app/register/feedback-state";
 
 /**
  * Interactive part of the experience-feedback screen (the `/register` route,

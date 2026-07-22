@@ -56,17 +56,24 @@ Script 웹 앱으로 전달되고, 지정한 스프레드시트에
 ### 2. Apps Script 웹 앱 배포
 
 1. 시트에서 **확장 프로그램 → Apps Script** 를 엽니다.
-2. 아래 코드를 붙여넣고 `TOKEN` 을 긴 랜덤 문자열로 바꿉니다. `SHEET_NAME` 은 저장할 탭 이름.
+2. 아래 코드를 붙여넣고 `TOKEN` 을 긴 랜덤 문자열로 바꿉니다.
+
+   > **`SHEET_NAME` 주의** — 한국어 환경에서 만든 시트의 기본 탭 이름은 `Sheet1` 이 아니라
+   > **`시트1`** 입니다. 이름이 어긋나면 `getSheetByName` 이 `null` 을 돌려주고
+   > `TypeError: Cannot read properties of null (reading 'appendRow')` 로 실패합니다.
+   > 아래 코드는 못 찾으면 첫 번째 탭으로 넘어가므로 이름이 무엇이든 동작합니다.
 
    ```javascript
    const TOKEN = 'PUT_A_LONG_RANDOM_STRING_HERE';
-   const SHEET_NAME = 'Sheet1';
+   const SHEET_NAME = '시트1';
 
    function doPost(e) {
      try {
        const body = JSON.parse(e.postData.contents);
        if (body.token !== TOKEN) return json({ ok: false, error: 'unauthorized' });
-       const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+       const ss = SpreadsheetApp.getActiveSpreadsheet();
+       // 이름이 어긋나도 죽지 않게 — 못 찾으면 첫 번째 탭에 쓴다.
+       const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
        sheet.appendRow([new Date(), body.rating || '', body.ratingLabel || '', body.reason || '', body.comment || '', body.contact || '']);
        return json({ ok: true });
      } catch (err) {
@@ -97,6 +104,28 @@ SHEETS_WEBHOOK_TOKEN=위 Apps Script 의 TOKEN 과 동일한 값
 
 Vercel 에 배포할 때는 프로젝트 **Settings → Environment Variables** 에 같은 두 값을 등록합니다.
 두 값은 서버 액션에서만 사용되며 브라우저로 노출되지 않습니다.
+
+### 4. 연동이 안 될 때 — 웹훅만 따로 찔러보기
+
+브라우저로 `/exec` URL 을 여는 것은 **점검 방법이 아닙니다.** 이 스크립트에는 `doGet` 이 없어서
+`다음 스크립트 함수(doGet)를 찾을 수 없습니다` 가 뜨는 게 정상입니다. 아래처럼 POST 로 확인하세요.
+
+```bash
+# 1) 배포가 살아 있는지 — 일부러 틀린 토큰. 시트에는 아무것도 쓰이지 않습니다.
+curl -sL -X POST "$SHEETS_WEBHOOK_URL" -H 'Content-Type: application/json' \
+  -d '{"token":"wrong","rating":5}'
+```
+
+| 응답 | 뜻 |
+| --- | --- |
+| `{"ok":false,"error":"unauthorized"}` | 배포·권한 정상. 토큰만 맞추면 됩니다. |
+| `{"ok":false,"error":"TypeError: ... (reading 'appendRow')"}` | 탭 이름이 `SHEET_NAME` 과 다릅니다 (위 2단계 주의 상자). |
+| HTML 로그인 페이지 | 액세스 권한이 **모든 사용자** 가 아닙니다. |
+| 404 | 배포가 없거나 URL 이 틀렸습니다. |
+
+> **코드를 고친 뒤에는 반드시 다시 배포하세요.** `/exec` 는 버전이 고정된 URL이라 저장만으로는
+> 반영되지 않습니다. **배포 → 배포 관리 → (연필) → 버전: 새 버전 → 배포** 로 갱신하면 URL 이
+> 유지됩니다. `새 배포` 를 누르면 URL 이 바뀌어 `.env.local` 도 함께 고쳐야 합니다.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

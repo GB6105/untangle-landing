@@ -6,6 +6,7 @@ import { Icon } from "@/components/Icon";
 import { CtaButton } from "@/components/CtaButton";
 import { hasAnyCheck, initialDemoState, isCardDone } from "@/components/demo/state";
 import type { DemoCard } from "@/components/demo/types";
+import { MAX_RESPLITS } from "@/components/split/useSplitFlow";
 
 /**
  * Today execution screen — phase "today" (docs/features/04-demo-today.md).
@@ -265,15 +266,19 @@ function TodayCard({
               ))}
             </ol>
 
-            {/* 다시 쪼개기 — 저장된 계획을 열어 전체를 재생성 (03 §3.3) */}
-            <button
-              type="button"
-              onClick={onSplit}
-              className="flex items-center gap-1.5 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark"
-            >
-              <Icon name="scissors" size={13} strokeWidth={2} />
-              다시 쪼개기
-            </button>
+            {/* 다시 쪼개기 — 저장된 계획을 열어 전체를 재생성 (03 §3.3).
+                횟수를 다 쓴 카드에서는 동선을 아예 내린다: 눌러도 재생성할 수
+                없는 버튼을 남겨두면 남은 건 실망뿐이다. */}
+            {card.resplitCount < MAX_RESPLITS && (
+              <button
+                type="button"
+                onClick={onSplit}
+                className="flex items-center gap-1.5 text-[12.5px] font-semibold text-sys-label-neutral transition-colors hover:text-sys-primary-dark"
+              >
+                <Icon name="scissors" size={13} strokeWidth={2} />
+                다시 쪼개기
+              </button>
+            )}
           </div>
         )
       ) : (

@@ -45,6 +45,8 @@ export type DemoAction =
       firstStep: Task;
       answers: Answer[];
     }
+  /** 재생성 1회 소비 — 카드에 누적해 패널을 다시 열어도 이어지게 한다 (03 §3.3). */
+  | { type: "resplitUsed"; cardId: string }
   | { type: "toggleFirstStep"; cardId: string }
   | { type: "toggleSubtask"; cardId: string; subtaskId: string }
   /** Undivided cards only — split cards complete via their subtasks (04 §3.2). */
@@ -64,6 +66,7 @@ function promote(candidate: Candidate, index: number): DemoCard {
     firstStep: null,
     subtasks: [],
     splitAnswers: [],
+    resplitCount: 0,
   };
 }
 
@@ -97,9 +100,21 @@ function updateCard(
  *   의도적으로 유실을 허용하며, 패널로 직행하면 사용자 행동 없이 advance
  *   호출이 나가므로 splittingCardId를 비운다.
  * - 카드 없이 split/today에 도달한 손상 상태는 뒤로 되돌린다 (04 §5).
+ * - resplitCount가 없던 시절의 저장 상태는 0으로 채운다. 버전을 올려 통째로
+ *   버리면 진행 중이던 방문자의 "이어서 하기"가 사라지므로 채워서 살린다.
  */
 function normalizeRestored(state: DemoState): DemoState {
-  const next: DemoState = { ...state, splittingCardId: null };
+  const next: DemoState = {
+    ...state,
+    splittingCardId: null,
+    cards: state.cards.map((card) => ({
+      ...card,
+      resplitCount:
+        typeof card.resplitCount === "number" && card.resplitCount >= 0
+          ? card.resplitCount
+          : 0,
+    })),
+  };
   if ((next.phase === "split" || next.phase === "today") && next.cards.length === 0) {
     next.phase = next.candidates.length > 0 ? "candidates" : "braindump";
   }
@@ -149,6 +164,12 @@ export function demoReducer(state: DemoState, action: DemoAction): DemoState {
       }));
       return { ...next, phase: "today", splittingCardId: null };
     }
+    case "resplitUsed":
+      // 상한 자체는 useSplitFlow가 지킨다 — 여기서는 사용량만 누적한다.
+      return updateCard(state, action.cardId, (card) => ({
+        ...card,
+        resplitCount: card.resplitCount + 1,
+      }));
     case "toggleFirstStep":
       return updateCard(state, action.cardId, (card) =>
         card.firstStep
@@ -225,7 +246,9 @@ function isValidCard(value: unknown): value is DemoCard {
     c.subtasks.every(isValidSubtask) &&
     // 쪼갠 카드에 firstStep이 없는 상태는 성립하지 않는다 (00 §5).
     (c.subtasks.length === 0 || c.firstStep !== null) &&
-    Array.isArray(c.splitAnswers)
+    Array.isArray(c.splitAnswers) &&
+    // 이 필드가 생기기 전의 저장 상태도 받아준다 — normalizeRestored가 0으로 채운다.
+    (c.resplitCount === undefined || typeof c.resplitCount === "number")
   );
 }
 

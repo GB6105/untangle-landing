@@ -43,6 +43,11 @@ const HARD_GUARD_ERROR =
 const QUESTION_CAP = 2;
 /** 서브태스크 상한 — 다시 쪼개기를 거듭할수록 더 잘게 제안한다 (5 → 8 → 10). */
 const TASK_CAPS = [5, 8, 10] as const;
+/**
+ * 한 할 일에 쓸 수 있는 "다시 쪼개기" 횟수. 재생성 1회 = LLM 호출 1회이므로
+ * 카드마다 여기서 끊는다. 카운트는 카드에 저장되어 패널을 드나들어도 이어진다.
+ */
+export const MAX_RESPLITS = 3;
 
 export type FlowTask = { id: string; title: string; done: boolean };
 export type FlowLogItem = { id: number; role: "user" | "ai"; text: string };
@@ -62,6 +67,13 @@ export type UseSplitFlowArgs = {
   initialResult?: { tasks: { title: string; done: boolean }[]; firstStep: Task } | null;
   /** 브레인덤프 원문 — 데모는 항상 전달 (03 §4 필수 확장). */
   context?: string;
+  /**
+   * 카드에 저장된 "다시 쪼개기" 사용 횟수. 이걸로 seed해야 패널을 다시 열어도
+   * 남은 횟수와 상한 사다리(5 → 8 → 10)가 이어진다.
+   */
+  initialResplitCount?: number;
+  /** 재생성 1회를 소비했다 — 카드에 저장하라는 신호. */
+  onResplit?: () => void;
   onConfirm: (result: { tasks: Task[]; firstStep: Task; answers: Answer[] }) => void;
 };
 
@@ -80,6 +92,8 @@ export function useSplitFlow({
   initialAnswers,
   initialResult,
   context,
+  initialResplitCount,
+  onResplit,
   onConfirm,
 }: UseSplitFlowArgs) {
   const reopening = !!initialResult;
@@ -117,8 +131,11 @@ export function useSplitFlow({
   const logCounter = useRef(1);
   const autoSkipUsed = useRef(false);
   const started = useRef(false);
-  // 다시 쪼개기 횟수 — 상한을 5 → 8 → 10으로 올린다.
-  const regenCount = useRef(0);
+  // 다시 쪼개기 횟수 — 상한을 5 → 8 → 10으로 올리고, MAX_RESPLITS에서 끊는다.
+  // ref가 진실의 원천인 이유: runAdvance가 비동기로 maxTasks()를 읽으므로 state만
+  // 두면 같은 틱에서 스테일한 상한이 실려 나간다. 렌더용으로 state를 함께 민다.
+  const regenCount = useRef(initialResplitCount ?? 0);
+  const [resplitsUsed, setResplitsUsed] = useState(initialResplitCount ?? 0);
   // 재생성이 성공해 새 결과가 도착했을 때만 커밋할 직전 계획.
   const pendingPrevious = useRef<string[] | null>(null);
   const maxTasks = () => TASK_CAPS[Math.min(regenCount.current, TASK_CAPS.length - 1)];
@@ -238,12 +255,19 @@ export function useSplitFlow({
    * "다시 쪼개기" — 전체 계획을 같은 문답·맥락으로 재생성한다 (PRD 5.2).
    * 요청할 때마다 상한이 5 → 8 → 10으로 올라 더 잘게 제안된다.
    * 화면의 제안만 바뀌며, 카드에는 confirm()해야 반영된다.
+   *
+   * 횟수는 클릭 시점에 센다 — 실패한 재생성도 LLM을 한 번 태우기 때문이다.
+   * 대신 에러 배너의 "다시 시도"(retryNow)는 regenerate를 거치지 않으므로 공짜다.
    */
   function regenerate() {
-    if (loading) return;
+    if (loading || regenCount.current >= MAX_RESPLITS) return;
     if (tasks.length > 0) pendingPrevious.current = tasks.map((t) => t.title);
     const capBefore = maxTasks();
-    regenCount.current = Math.min(regenCount.current + 1, TASK_CAPS.length - 1);
+    // 클램프하지 않는다 — 이 값은 "사용 횟수"이고, 상한 사다리는 maxTasks()가
+    // TASK_CAPS 길이로 따로 클램프한다. 여기서 묶으면 3회를 셀 수 없다.
+    regenCount.current += 1;
+    setResplitsUsed(regenCount.current);
+    onResplit?.();
     autoSkipUsed.current = false; // 재생성마다 하드 가드 자동 스킵 기회를 새로 준다
     const cap = maxTasks();
     appendAi(cap === capBefore ? REGEN_SAME_NOTE : regenNote(cap));
@@ -284,6 +308,8 @@ export function useSplitFlow({
     selectedCount,
     error,
     canRetry: retry !== null,
+    /** 아직 "다시 쪼개기"가 남았는가 — 소진하면 버튼 자체를 내린다. */
+    canResplit: resplitsUsed < MAX_RESPLITS,
     answerPending,
     regenerate,
     toggleSelected,
