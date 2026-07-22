@@ -56,11 +56,11 @@ export function RegisterForm() {
   // 액션이 error를 돌려줘도 비제어 필드는 빈 값으로 리셋된다. 오류를 한 번에
   // 모아 돌려주는 이유가 "다시 적게 만들지 않기"인데, 정작 가장 길게 쓴 자유
   // 의견이 그 왕복에서 사라지면 앞뒤가 맞지 않는다.
-  const [email, setEmail] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const showReason = rating !== null && rating <= 3;
   const ratingError = state.status === "error" ? state.errors?.rating : undefined;
-  const emailError = state.status === "error" ? state.errors?.email : undefined;
+  const contactError = state.status === "error" ? state.errors?.contact : undefined;
 
   if (state.status === "success") {
     return (
@@ -76,7 +76,7 @@ export function RegisterForm() {
             <>
               고마워요! 준비가 되면
               <br />
-              남겨주신 메일로 가장 먼저 알려드릴게요.
+              남겨주신 연락처로 가장 먼저 알려드릴게요.
             </>
           ) : (
             <>
@@ -231,26 +231,26 @@ export function RegisterForm() {
           정식 출시되면 알려드릴까요?{" "}
           <span className="font-normal text-sys-label-alt">(선택)</span>
         </span>
+        {/* type="email"이면 브라우저가 전화번호를 반려한다 — 어느 쪽으로 연락받을지는
+            사용자가 고르는 것이므로 형식은 서버에서 둘 다 받아준다. */}
         <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일 주소"
-          autoComplete="email"
-          inputMode="email"
+          type="text"
+          name="contact"
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+          placeholder="이메일 또는 휴대폰 번호"
           maxLength={254}
-          aria-invalid={emailError ? true : undefined}
-          aria-describedby={emailError ? "email-error" : undefined}
+          aria-invalid={contactError ? true : undefined}
+          aria-describedby={contactError ? "contact-error" : undefined}
           className={`h-[48px] rounded-xl border bg-sys-bg px-4 text-[16px] text-sys-label-strong outline-none placeholder:text-sys-label-alt focus:ring-2 ${
-            emailError
+            contactError
               ? "border-red-400 focus:border-red-400 focus:ring-red-100"
               : "border-sys-line focus:border-sys-primary focus:ring-sys-primary-lighter"
           }`}
         />
-        {emailError && (
-          <span id="email-error" role="alert" className="text-[13px] text-red-500">
-            {emailError}
+        {contactError && (
+          <span id="contact-error" role="alert" className="text-[13px] text-red-500">
+            {contactError}
           </span>
         )}
         <p className="text-[12px] leading-[1.5] text-sys-label-alt">
@@ -272,11 +272,7 @@ export function RegisterForm() {
         disabled={pending}
         className="h-[54px] rounded-xl bg-sys-primary-dark text-[16px] font-bold text-sys-on-primary shadow-[0_9px_24px_-2px_rgba(106,69,231,0.25)] transition-shadow hover:shadow-[0_12px_28px_-2px_rgba(106,69,231,0.4)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {pending
-          ? "보내는 중…"
-          : email.trim()
-            ? "소감 보내고 신청하기"
-            : "소감 보내기"}
+        {pending ? "보내는 중…" : "사전 신청하기"}
       </button>
 
       <p className="text-center text-[12px] leading-[1.5] text-sys-label-alt">
