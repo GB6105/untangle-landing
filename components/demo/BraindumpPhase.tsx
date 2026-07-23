@@ -6,6 +6,7 @@ import { OptionChips } from "@/components/split/OptionChips";
 import { ChatInput } from "@/components/demo/ChatInput";
 import { WaitingIndicator } from "@/components/demo/WaitingIndicator";
 import type { BraindumpRequest, BraindumpResponse, Candidate } from "@/components/demo/types";
+import { track } from "@/lib/analytics";
 
 /**
  * Braindump screen (docs/features/02-demo-braindump.md §3.1): the visitor dumps
@@ -115,6 +116,8 @@ export function BraindumpPhase({
   function handleSend() {
     const text = input.trim();
     if (!text || loading) return;
+    // 원문은 남기지 않는다 — 글자수만(빈 화면 공포 이탈 대비 전송 신호).
+    track("braindump_submitted", { length: text.length });
     appendUser(text);
     setInput("");
     setExamples([]);

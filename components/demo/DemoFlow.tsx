@@ -17,6 +17,7 @@ import {
   saveDemoState,
 } from "@/components/demo/state";
 import type { DemoState } from "@/components/demo/types";
+import { track } from "@/lib/analytics";
 
 /**
  * Full-flow demo orchestrator (docs/features/01-demo-shell.md).
@@ -53,6 +54,13 @@ export function DemoFlow() {
   useEffect(() => {
     if (ready) saveDemoState(state);
   }, [ready, state]);
+
+  // 데모 퍼널 골격 — 이어하기/처음부터 결정이 끝난(ready) 뒤의 단계 전환만 남긴다.
+  // 복원 시엔 복원된 단계에서, 새로 시작하면 braindump에서 첫 이벤트가 뜬다.
+  useEffect(() => {
+    if (!ready) return;
+    track("demo_phase_view", { phase: state.phase });
+  }, [ready, state.phase]);
 
   // 중간에 그만둘 때도 소감으로 잇는다 — 아무 진행 없이 닫은 방문만 랜딩으로.
   const exit = () =>
@@ -121,7 +129,10 @@ export function DemoFlow() {
       ) : state.phase === "candidates" ? (
         <CandidatesPhase
           candidates={state.candidates}
-          onConfirm={(selected) => dispatch({ type: "confirmTodos", selected })}
+          onConfirm={(selected) => {
+            track("candidates_confirmed", { count: selected.length });
+            dispatch({ type: "confirmTodos", selected });
+          }}
           onBack={() => dispatch({ type: "backToBraindump" })}
         />
       ) : state.phase === "split" ? (
@@ -132,9 +143,13 @@ export function DemoFlow() {
           onPick={(cardId) => dispatch({ type: "pickSplitCard", cardId })}
           onSkip={() => dispatch({ type: "skipSplit" })}
           onLeave={() => dispatch({ type: "toToday" })}
-          onConfirm={(cardId, tasks, firstStep, answers) =>
-            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers })
-          }
+          onConfirm={(cardId, tasks, firstStep, answers) => {
+            track("split_confirmed", {
+              task_count: tasks.length,
+              has_first_step: !!firstStep,
+            });
+            dispatch({ type: "splitConfirmed", cardId, tasks, firstStep, answers });
+          }}
           onResplitUsed={(cardId) => dispatch({ type: "resplitUsed", cardId })}
         />
       ) : (

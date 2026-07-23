@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { TrackedLink } from "@/components/analytics/TrackedLink";
 
 export function Header() {
   return (
@@ -11,12 +11,14 @@ export function Header() {
         </span>
       </div>
       {/* 랜딩에는 체험 동선만 둔다 — 소감·사전 신청은 체험 이후에만 묻는다. */}
-      <Link
+      <TrackedLink
         href="/demo"
+        event="cta_clicked"
+        eventProps={{ location: "header" }}
         className="text-[13px] font-semibold text-sys-primary-dark"
       >
         체험하기
-      </Link>
+      </TrackedLink>
     </header>
   );
 }
