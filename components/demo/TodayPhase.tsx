@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { CtaButton } from "@/components/CtaButton";
 import { hasAnyCheck, initialDemoState, isCardDone } from "@/components/demo/state";
 import type { DemoCard } from "@/components/demo/types";
 import { MAX_RESPLITS } from "@/components/split/useSplitFlow";
+import { track } from "@/lib/analytics";
 
 /**
  * Today execution screen — phase "today" (docs/features/04-demo-today.md).
@@ -53,6 +54,15 @@ export function TodayPhase({
   const anyCheck = hasAnyCheck({ ...initialDemoState, cards });
   const allDone = cards.length > 0 && cards.every(isCardDone);
 
+  // 데모의 성공 신호 — 어디든 첫 체크가 생기는 순간 한 번만 남긴다.
+  const firstCheckLogged = useRef(false);
+  useEffect(() => {
+    if (anyCheck && !firstCheckLogged.current) {
+      firstCheckLogged.current = true;
+      track("first_check_success");
+    }
+  }, [anyCheck]);
+
   // 슬라이드업: 첫 체크 && 미노출 → 1.2초 뒤 표시 (04 §3.4). 1.2초 안에 체크를
   // 되돌리면 cleanup이 타이머를 취소하고, 노출 즉시 onSlideupShown을 알린다.
   const [slideupOpen, setSlideupOpen] = useState(false);
@@ -85,7 +95,12 @@ export function TodayPhase({
               <p className="text-center text-[15.5px] font-bold leading-[1.5] text-sys-primary-dark">
                 {ALL_DONE_BANNER}
               </p>
-              <CtaButton label={CTA_LABEL} href={REGISTER_HREF} className="mt-4" />
+              <CtaButton
+                label={CTA_LABEL}
+                href={REGISTER_HREF}
+                className="mt-4"
+                tracking={{ event: "demo_cta_clicked", props: { surface: "all_done" } }}
+              />
             </div>
           )}
 
@@ -362,7 +377,12 @@ function SlideupCard({ count, onCollapse }: { count: number; onCollapse: () => v
           </div>
         ))}
       </div>
-      <CtaButton label={CTA_LABEL} href={REGISTER_HREF} className="mt-4" />
+      <CtaButton
+        label={CTA_LABEL}
+        href={REGISTER_HREF}
+        className="mt-4"
+        tracking={{ event: "demo_cta_clicked", props: { surface: "slideup" } }}
+      />
       <button
         type="button"
         onClick={onCollapse}
@@ -380,6 +400,7 @@ function MiniBar() {
     <div className="border-t border-sys-line bg-sys-bg px-5 py-2.5">
       <Link
         href={REGISTER_HREF}
+        onClick={() => track("demo_cta_clicked", { surface: "minibar" })}
         className="flex items-center justify-center gap-1.5 rounded-[12px] py-2 text-[14px] font-semibold text-sys-primary-dark transition-colors hover:bg-sys-primary-lighter"
       >
         {CTA_LABEL}
