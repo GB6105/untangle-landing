@@ -45,8 +45,15 @@ export function initAnalytics(): void {
     capture_pageview: false,
     // 이탈 시점을 남겨 퍼널 드롭오프 계산에 쓴다.
     capture_pageleave: true,
-    // 세션 리플레이 미사용 — 화면 녹화로 콘텐츠가 새지 않게 명시적으로 끈다.
-    disable_session_recording: true,
+    // 세션 리플레이 켜짐 — 단, 개인 콘텐츠 보호를 위해 모든 입력값과 화면 텍스트를
+    // 마스킹한다. 재생 화면에는 레이아웃·클릭·스크롤·이동만 남고, 브레인덤프·할 일·
+    // 연락처 같은 실제 내용은 별표로 가려진다. 네트워크 요청 본문은 녹화하지 않는다
+    // (기본값). 실제 녹화는 PostHog 프로젝트 설정에서 Session Replay를 켜야 시작된다.
+    disable_session_recording: false,
+    session_recording: {
+      maskAllInputs: true,
+      maskTextSelector: "*",
+    },
     // identify()를 부르지 않으므로 person profile 없이 익명 이벤트로만 남긴다.
     person_profiles: "identified_only",
   });

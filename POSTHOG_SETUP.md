@@ -87,7 +87,8 @@ PostHog 좌측 **Product analytics → New insight → Funnel**에서:
 
 ## 7. 개인정보 관련 (반영 완료)
 
-- 수집 설정: **쿠키 없음**(localStorage에 익명 식별자만), **autocapture 꺼짐**, **세션 리플레이 꺼짐**, 페이지뷰 수동, 익명(`identify` 미사용).
+- 수집 설정: **쿠키 없음**(localStorage에 익명 식별자만), **autocapture 꺼짐**, **세션 리플레이 켜짐(전체 마스킹 — 입력값·화면 텍스트를 모두 가림)**, 페이지뷰 수동, 익명(`identify` 미사용).
+- **세션 리플레이 활성화:** SDK에는 마스킹과 함께 켜뒀지만(`lib/analytics.ts`의 `disable_session_recording: false` + `session_recording` 마스킹), **PostHog → Settings → Session Replay 에서 "Record user sessions"를 켜야** 실제 녹화가 시작됩니다. 마스킹 덕분에 재생 화면에는 레이아웃·클릭·스크롤·이동만 보이고 브레인덤프·할 일·연락처 같은 텍스트는 별표로 가려집니다. (네트워크 요청 본문 녹화는 켜지 마세요 — API 요청에 원문이 담깁니다.) 확인 시 녹화 하나를 열어 **텍스트가 실제로 가려졌는지** 반드시 검증하세요.
 - `app/privacy/page.tsx`의 처리방침을 이에 맞게 개정했고(1·4·7항 + 시행일), 수탁사에 **PostHog Inc.(미국)**을 명시했습니다. 방침 문안은 필요하면 더 다듬으세요.
 - 원칙: **적으신 내용 자체(브레인덤프·할 일 제목)는 어떤 이벤트에도 담지 않습니다.** 새 이벤트를 추가할 때도 이 원칙을 지켜주세요(`lib/analytics.ts` 상단 주석 참고).
 
